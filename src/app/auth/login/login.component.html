@@ -5,15 +5,15 @@
             <input type="email" name="email" ngModel #email placeholder="Introduce your email"> 
             <label>Password</label>
             <input type="password" name="password" ngModel #password placeholder="Introduce your password"> 
-            <br>
-            <br>
-            <div class="link">
-                <a href="#">I forgot my password</a>
-            </div>
         </div>
-        <br>
+        
         <div class="buttonContainer">
             <button class="formButton" type="submit">Login</button>
+        </div>
+
+        <div class="linkContainer">
+            <a style="font-size: 17px;" class="linkButton" type="button">Forgot My Password</a>
+            <a style="font-size: 17px;" class="linkButton" routerLink="/auth/register" type="button">Register Here</a>
         </div>
     </form>
 </div>

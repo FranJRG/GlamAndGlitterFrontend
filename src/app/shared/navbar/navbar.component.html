@@ -1,14 +1,21 @@
-<div style="margin-left: 210px;" class="navbar-container">
-    <ul>
-        <li><img alt="Logo" class="logo"></li> 
-        <li>Ramon</li>
-        <li>Pepe</li>
-        <li>Services</li>
-        <li>Manolita</li>
-        @if (isLoggued() === false) {
-            <li><a routerLink="/auth/login">Login</a></li>
-        }@else {
-            <li><a (click)="logout()">Logout</a></li>
-        }
-    </ul>
+<div style="margin-left: 210px" class="navbar-container">
+  <ul>
+    <li><img alt="Logo" class="logo" /></li>
+    <li>Services</li>
+    <div class="dropdown">
+      <a class="dropbtn" style="font-weight: bold;">
+        Dropdown
+      </a>
+      <div class="dropdown-content">
+        <a href="#">Link 1</a>
+        <a href="#">Link 2</a>
+        <a href="#">Link 3</a>
+      </div>
+    </div>
+    @if (isLoggued() === false) {
+    <li><a routerLink="/auth/login">Login</a></li>
+    }@else {
+    <li><a (click)="logout()">Logout</a></li>
+    }
+  </ul>
 </div>

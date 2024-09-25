@@ -48,20 +48,24 @@ input:focus {
     outline: none;
 }
 
-.link {
-    text-align: right;
-    margin-top: 10px;
+.linkContainer {
+    display: flex;
+    justify-content: space-between; /* Espacio entre los botones */
+    margin-top: 15px; /* Espacio entre el botón de login y este contenedor */
 }
 
-.link a {
-    color: coral;
-    text-decoration: none;
-    font-size: 16px;
-    transition: color 0.3s;
+.linkButton {
+    background-color: transparent; /* Fondo transparente */
+    color: #007bff; /* Color del texto */
+    border: none; /* Sin borde */
+    text-decoration: underline; /* Subrayado para indicar un enlace */
+    font-size: 16px; /* Tamaño de fuente */
+    cursor: pointer; /* Cambia el cursor al pasar el mouse */
+    transition: color 0.3s; /* Transición para el color */
 }
 
-.link a:hover {
-    color: #da6d46;
+.linkButton:hover {
+    color: #0056b3; /* Color al pasar el mouse */
 }
 
 .buttonContainer {
