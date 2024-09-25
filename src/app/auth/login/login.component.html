@@ -1,0 +1,19 @@
+<div class="container">
+    <form #myLoginForm="ngForm" (submit)="login()">
+        <div class="firstsInputs">
+            <label>Email</label>
+            <input type="email" name="email" ngModel #email placeholder="Introduce your email"> 
+            <label>Password</label>
+            <input type="password" name="password" ngModel #password placeholder="Introduce your password"> 
+            <br>
+            <br>
+            <div class="link">
+                <a href="#">I forgot my password</a>
+            </div>
+        </div>
+        <br>
+        <div class="buttonContainer">
+            <button class="formButton" type="submit">Login</button>
+        </div>
+    </form>
+</div>

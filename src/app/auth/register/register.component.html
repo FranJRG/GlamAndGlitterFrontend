@@ -1,0 +1,29 @@
+<h1 align="center"> Register in Glam&Glitter </h1>
+<div class="container">
+    <form [formGroup]="myForm" (submit)="register()">
+        <div class="firstsInputs">
+            <label>Full Name <span class="required">*</span></label>
+            <input type="text" formControlName="name" placeholder="Introduce your full name"> 
+            <br>
+            <label>Email <span class="required">*</span></label>
+            <input type="email" formControlName="email" placeholder="Introduce your email"> 
+            <br>
+        </div>
+        <br>
+        <div class="secondInputs">
+            <label>Phone <span class="required">*</span></label>
+            <input type="tel" formControlName="phone" placeholder="Introduce your phone"> 
+            <br>
+            <label>Password <span class="required">*</span></label>
+            <input type="password" formControlName="password" placeholder="Introduce your password"> 
+            <br>
+            <label>Confirm Password <span class="required">*</span></label>
+            <input type="password" formControlName="confirmPassword" placeholder="Confirm your password"> 
+        </div>
+        <br>
+        <br>
+        <div class="buttonContainer">
+            <button class="formButton" type="submit">Register</button>
+        </div>
+    </form>
+</div>

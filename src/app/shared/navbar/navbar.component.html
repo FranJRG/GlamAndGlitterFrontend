@@ -1,0 +1,14 @@
+<div style="margin-left: 210px;" class="navbar-container">
+    <ul>
+        <li><img alt="Logo" class="logo"></li> 
+        <li>Ramon</li>
+        <li>Pepe</li>
+        <li>Services</li>
+        <li>Manolita</li>
+        @if (isLoggued() === false) {
+            <li><a routerLink="/auth/login">Login</a></li>
+        }@else {
+            <li><a (click)="logout()">Logout</a></li>
+        }
+    </ul>
+</div>
