@@ -30,10 +30,27 @@ export class RegisterComponent {
   myForm:FormGroup = this.fb.group({
     name:['',Validators.required],
     email:['',Validators.required],
-    phone:['',[Validators.required, /*Validators.minLength(9), Validators.maxLength(9)*/]],
+    phone:['',[Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
     password:['',Validators.required],
     confirmPassword:['',Validators.required]
   })
+
+  isInvalidField(field:string){
+    return this.myForm.get(field)?.invalid && this.myForm.get(field)?.touched;
+  }
+
+  get EmailError(){
+    const error = this.myForm.get('email')?.errors
+    let errorMessage = "";
+    
+    if(error){
+      if(error['required']){
+        errorMessage = "Email is required";
+      }
+    }
+
+    return errorMessage;
+  }
 
   register(){
     if(this.myForm.valid){

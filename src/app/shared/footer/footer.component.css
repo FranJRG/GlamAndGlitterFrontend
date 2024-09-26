@@ -1,0 +1,24 @@
+footer {
+  position: relative;
+  bottom: -10px;
+  left: -10px;
+  width: 100%;
+  background-color: #ecedee;
+  color: black;
+  padding: 20px;
+  text-align: center; 
+  margin-top: 30;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.content {
+  height: 1500px;
+  background-color: black;
+  padding: 20px;
+  position: relative; 
+  z-index: 1;
+}

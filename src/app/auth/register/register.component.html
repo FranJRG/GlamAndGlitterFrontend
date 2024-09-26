@@ -7,6 +7,9 @@
             <br>
             <label>Email <span class="required">*</span></label>
             <input type="email" formControlName="email" placeholder="Introduce your email"> 
+            @if (isInvalidField("email")) {
+                <small>{{EmailError}}</small>
+            }
             <br>
         </div>
         <br>
