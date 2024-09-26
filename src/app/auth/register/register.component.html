@@ -3,7 +3,10 @@
     <form [formGroup]="myForm" (submit)="register()">
         <div class="firstsInputs">
             <label>Full Name <span class="required">*</span></label>
-            <input type="text" formControlName="name" placeholder="Introduce your full name"> 
+            <input type="text" formControlName="name" placeholder="Introduce your full name">
+            @if (isInvalidField("name")) {
+                <small>{{NameError}}</small>
+            } 
             <br>
             <label>Email <span class="required">*</span></label>
             <input type="email" formControlName="email" placeholder="Introduce your email"> 
@@ -16,6 +19,9 @@
         <div class="secondInputs">
             <label>Phone <span class="required">*</span></label>
             <input type="tel" formControlName="phone" placeholder="Introduce your phone"> 
+            @if (isInvalidField('phone')) {
+                <small>{{PhoneError}}</small>
+            }
             <br>
             <label>Password <span class="required">*</span></label>
             <input type="password" formControlName="password" placeholder="Introduce your password"> 

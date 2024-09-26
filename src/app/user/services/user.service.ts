@@ -16,9 +16,14 @@ export class UserService {
     return this.http.post<any>(`${this.url}/forgotPassword`,null,{params});
   }
 
-  verifyCode(code:string):Observable<any>{
-    const params = new HttpParams().set("codeToCheck",code);
-    return this.http.post<any>(`${this.url}/verifyCode`,{params});
+  verifyCode(email:string,code:string):Observable<any>{
+    const params = new HttpParams().set("email",email).set("codeToCheck",code);
+    return this.http.post<any>(`${this.url}/verifyCode`,null,{params});
+  }
+
+  changePassword(email:string,password:string):Observable<any>{
+    const params = new HttpParams().set("email",email).set("password",password);
+    return this.http.post<any>(`${this.url}/changePassword`, null, {params});
   }
 
 }

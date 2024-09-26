@@ -14,7 +14,7 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 10px 0;
   z-index: 1000;
-  border-radius: 0px 0px 10px 10px;
+  border-radius: 10px;
 }
 
 ul {

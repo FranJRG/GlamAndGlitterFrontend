@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../services/auth.service';
 import { User } from '../../interfaces/user';
 import { Services } from '../../interfaces/services';
-import { ServiceService } from '../../service/service.service';
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
+import { EmailValidatorService } from '../../shared/validators/email-validator.service';
 
 @Component({
   selector: 'app-register',
@@ -15,10 +17,9 @@ import { ServiceService } from '../../service/service.service';
 export class RegisterComponent {
 
   constructor(private fb:FormBuilder,
-    private authService:AuthService
+    private authService:AuthService,
+    private emailExistService : EmailValidatorService
   ){}
-
-  services!:Services[];
 
   user:Omit<User, "id" | "role" | "notifications"> = {
     name:"",
@@ -28,8 +29,9 @@ export class RegisterComponent {
   }
 
   myForm:FormGroup = this.fb.group({
-    name:['',Validators.required],
-    email:['',Validators.required],
+    name:['',[Validators.required, Validators.minLength(5)]],
+    email:['',[Validators.required,Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$')], 
+                      [this.emailExistService.validate.bind(this.emailExistService)]],
     phone:['',[Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
     password:['',Validators.required],
     confirmPassword:['',Validators.required]
@@ -39,6 +41,36 @@ export class RegisterComponent {
     return this.myForm.get(field)?.invalid && this.myForm.get(field)?.touched;
   }
 
+  get NameError(){
+    const error = this.myForm.get('name')?.errors;
+    let errorMessage = "";
+
+    if(error){
+      if(error['required']){
+        errorMessage = "Name is required";
+      }else if(error['minlength']){
+        errorMessage = "Name min length must be 5";
+      }
+    }
+    return errorMessage;
+  }
+
+  get PhoneError(){
+    const error = this.myForm.get('phone')?.errors;
+    let errorMessage = "";
+
+    if(error){
+      if(error['required']){
+        errorMessage = "Phone is required";
+      }else if(error['minlength']){
+        errorMessage = "Phone min length must be 9";
+      }else if(error['maxlength']){
+        errorMessage = "Phone max length must be 9";
+      }
+    }
+    return errorMessage;
+  }
+
   get EmailError(){
     const error = this.myForm.get('email')?.errors
     let errorMessage = "";
@@ -46,6 +78,10 @@ export class RegisterComponent {
     if(error){
       if(error['required']){
         errorMessage = "Email is required";
+      }else if(error['pattern']){
+        errorMessage = "Email format not valid";
+      }else if(error['existUser']){
+        errorMessage = "This email already exist!";
       }
     }
 
@@ -59,8 +95,23 @@ export class RegisterComponent {
       console.log(this.user);
       try{
         this.authService.registerUser(this.user).subscribe({
-          next: (data) => alert("User created, welcome " + data.name),
-          error: (err) => alert(err.message)
+          next: (data) =>  
+            Toastify({
+            text: "Welcome " + data.name + " login in the app",
+            duration: 3000,
+            gravity: "bottom",
+            position: 'center', 
+            backgroundColor: "linear-gradient(to right, #4CAF50, #2E7D32)", 
+          }).showToast()
+          ,
+          error: (err) => 
+            Toastify({
+              text: "Something go bad: " + err.error.message,
+              duration: 3000, 
+              gravity: "bottom",
+              position: 'center',
+              backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
+            }).showToast()
         })
       }catch(error){
         console.log(error);
