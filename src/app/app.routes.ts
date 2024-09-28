@@ -13,5 +13,9 @@ export const routes: Routes = [
     {
         path:'user',
         loadChildren: () => import("./user/routes").then(mod => mod.routes)
+    },
+    {
+        path:'service',
+        loadChildren: () => import("./service/services/routes").then(mod => mod.routes)
     }
 ];

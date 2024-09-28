@@ -1,1 +1,12 @@
-<p>services works!</p>
+<div class="services-section">
+  <h2>Our Services</h2>
+  <div class="services-grid">
+    @for (service of services; track $index) {
+        <div class="service-card">
+          <img [src]="service.id" alt="{{ service.name }}" />
+          <h3>{{ service.name }}</h3>
+          <p>{{ service.description }}</p>
+        </div>
+    }
+  </div>
+</div>
