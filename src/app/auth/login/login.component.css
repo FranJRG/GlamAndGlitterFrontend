@@ -50,22 +50,22 @@ input:focus {
 
 .linkContainer {
     display: flex;
-    justify-content: space-between; /* Espacio entre los botones */
-    margin-top: 15px; /* Espacio entre el botón de login y este contenedor */
+    justify-content: space-between;
+    margin-top: 15px;
 }
 
 .linkButton {
-    background-color: transparent; /* Fondo transparente */
-    color: #007bff; /* Color del texto */
-    border: none; /* Sin borde */
-    text-decoration: underline; /* Subrayado para indicar un enlace */
-    font-size: 16px; /* Tamaño de fuente */
-    cursor: pointer; /* Cambia el cursor al pasar el mouse */
-    transition: color 0.3s; /* Transición para el color */
+    background-color: transparent;
+    color: #007bff; 
+    border: none;
+    text-decoration: underline;
+    font-size: 16px;
+    cursor: pointer; 
+    transition: color 0.3s;
 }
 
 .linkButton:hover {
-    color: #0056b3; /* Color al pasar el mouse */
+    color: #0056b3;
 }
 
 .buttonContainer {

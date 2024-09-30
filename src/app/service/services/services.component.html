@@ -1,12 +1,49 @@
-<div class="services-section">
-  <h2>Our Services</h2>
-  <div class="services-grid">
-    @for (service of services; track $index) {
-        <div class="service-card">
-          <img [src]="service.id" alt="{{ service.name }}" />
-          <h3>{{ service.name }}</h3>
-          <p>{{ service.description }}</p>
-        </div>
+<h2 align="center">Our Services</h2>
+
+@if(categories){
+<div>
+  <div class="categoryTypes">
+    <div>
+      <input
+        type="radio"
+        id="all"
+        name="category"
+        value="all"
+        (change)="getServices($event)"
+        checked
+      />
+      <label for="all">All Services</label>
+    </div>
+    @for (category of categories; track $index) {
+      <div>
+        <input
+          type="radio"
+          id="{{ category.id }}"
+          name="category"
+          value="{{ category.id }}"
+          (change)="getServices($event)"
+        />
+        <label for="{{ category.id }}">{{ category.name }}</label>
+      </div>
     }
   </div>
 </div>
+
+} @if (services !== []) {
+  <div class="services-section">
+
+  <div class="services-grid">
+    @for (service of services; track $index) {
+    <div class="service-card">
+      <img [src]="service.imageUrl" alt="{{ service.name }}" />
+      <h3 data-toggle="tooltip" data-placement="top" title="{{service.name}}">{{ service.name }} - {{ service.price }} €</h3>
+      <p data-toggle="tooltip" data-placement="top" title="{{service.description}}">{{ service.description }}</p>
+      <p>Duration - {{ service.duration }} minutes</p>
+      <button type="button" class="formButton" >
+        Reserve now!
+      </button>
+    </div>
+    }
+  </div>
+</div>
+}

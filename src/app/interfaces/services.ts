@@ -5,4 +5,6 @@ export interface Services {
   price: number;
   active: boolean;
   category: string;
+  imageUrl:string;
+  duration:string
 }
