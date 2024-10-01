@@ -32,7 +32,7 @@ export class LandingPageComponent implements OnInit {
       next: (data) => (this.services = data),
       error: (err) =>
         Toastify({
-          text: 'We can´t load our services yet: ' + err.error.message,
+          text: 'We can´t load our services yet',
           duration: 3000,
           gravity: 'bottom',
           position: 'center',
@@ -46,7 +46,7 @@ export class LandingPageComponent implements OnInit {
       next: (data) => (this.categories = data),
       error: (err) =>
         Toastify({
-          text: 'We can´t load our services yet: ' + err.error.message,
+          text: 'We can´t load our categories yet',
           duration: 3000,
           gravity: 'bottom',
           position: 'center',

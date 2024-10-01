@@ -24,10 +24,18 @@
             }
             <br>
             <label>Password <span class="required">*</span></label>
-            <input type="password" formControlName="password" placeholder="Introduce your password"> 
+            <input type="password" formControlName="password" placeholder="Introduce your password">
+            @if (isInvalidField("password")) {
+                <small>{{PasswordError}}</small>
+            }
             <br>
             <label>Confirm Password <span class="required">*</span></label>
             <input type="password" formControlName="confirmPassword" placeholder="Confirm your password"> 
+            @if(isInvalidField('confirmPassword')){
+                <small class="form-text text-danger">
+                  The password must be equals
+                </small>
+              }
         </div>
         <br>
         <br>

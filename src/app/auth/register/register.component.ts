@@ -6,6 +6,7 @@ import { Services } from '../../interfaces/services';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import { EmailValidatorService } from '../../shared/validators/email-validator.service';
+import { ValidPasswordService } from '../../shared/validators/valid-password.service';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +19,8 @@ export class RegisterComponent {
 
   constructor(private fb:FormBuilder,
     private authService:AuthService,
-    private emailExistService : EmailValidatorService
+    private emailExistService : EmailValidatorService,
+    private validPassword : ValidPasswordService
   ){}
 
   user:Omit<User, "id" | "role" | "notifications"> = {
@@ -35,7 +37,7 @@ export class RegisterComponent {
     phone:['',[Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
     password:['',Validators.required],
     confirmPassword:['',Validators.required]
-  })
+  }, {validators: [this.validPassword.equalFields('password','confirmPassword')]})
 
   isInvalidField(field:string){
     return this.myForm.get(field)?.invalid && this.myForm.get(field)?.touched;
@@ -52,6 +54,19 @@ export class RegisterComponent {
         errorMessage = "Name min length must be 5";
       }
     }
+    return errorMessage;
+  }
+
+  get PasswordError(){
+    const error = this.myForm.get('password')?.errors;
+    let errorMessage = "";
+    
+    if(error){
+      if(error['required']){
+        errorMessage = "Password is required";
+      }
+    }
+
     return errorMessage;
   }
 
