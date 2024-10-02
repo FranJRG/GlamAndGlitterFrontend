@@ -18,6 +18,9 @@ export class ServicesComponent implements OnInit {
 
   constructor(private serviceService: ServiceService) {}
 
+  /**
+   * Al iniciar el componente de servicios cargaremos todos los servicios existentes y las categorías
+   */
   ngOnInit(): void {
     this.serviceService.getServices().subscribe({
       next: (data) => (this.services = data),
@@ -33,6 +36,13 @@ export class ServicesComponent implements OnInit {
     this.getCategories();
   }
 
+  /**
+   * Método para filtrar servicios por categoría
+   * Este método servirá para buscar los servicios de una categoría
+   * Recibirá un evento haciendo referencia al id de la categoría
+   * Según que sea lo que recibe filtrará por categoría o las buscará todas
+   * @param event 
+   */
   getServices(event: Event) {
     let categoryId = (event.target as HTMLInputElement).value;
     if (categoryId == 'all') {
@@ -62,6 +72,9 @@ export class ServicesComponent implements OnInit {
     }
   }
 
+  /**
+   * Método para obtener todas las categorías
+   */
   getCategories() {
     this.serviceService.getCategories().subscribe({
       next: (data) => (this.categories = data),

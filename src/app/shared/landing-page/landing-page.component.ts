@@ -22,11 +22,17 @@ export class LandingPageComponent implements OnInit {
 
   categorySelected:boolean = false;
 
+  /**
+   * Al cargar la página cargaremos los servicios y las categorías
+   */
   ngOnInit(): void {
     this.getServices();
     this.getCategories();
   }
 
+  /**
+   * Método para obtener todos los servicios de la API
+   */
   getServices(){
     this.serviceService.getRandomServices().subscribe({
       next: (data) => (this.services = data),
@@ -41,6 +47,9 @@ export class LandingPageComponent implements OnInit {
     });
   }
 
+  /**
+   * Método para obtener todas las categorías de la API
+   */
   getCategories(){
     this.serviceService.getCategories().subscribe({
       next: (data) => (this.categories = data),
@@ -55,6 +64,14 @@ export class LandingPageComponent implements OnInit {
     });
   }
 
+  /**
+   * Método para cargar en el formulario de inicio los servicios según la categoría elegida
+   * Rescatamos el id de la categoria como un event
+   * Y con switchMap buscamos los servicios de esa categoría
+   * Nos suscribimos y cargamos dichos servicios y asignamos la varibale booleana a true para mostrar los servicios en el form
+   * Si hay un error alertaremos al usuario
+   * @param event 
+   */
   getServicesByCategory(event:Event){
     const idCategory = (event.target as HTMLSelectElement).value;
 

@@ -15,18 +15,34 @@ export class ServiceService {
   urlRandom:string = "http://localhost:8080/randomServices";
   urlServicesCategory:string = "http://localhost:8080/servicesByCategory";
 
+
+  /**
+   * Método para obtener todos los servicios
+   * @returns 
+   */
   getServices():Observable<Services[]>{
     return this.http.get<Services[]>(this.url);
   }
 
+  /**
+   * Método para obtener servicios de forma aleatoria
+   * @returns 
+   */
   getRandomServices():Observable<Services[]>{
     return this.http.get<Services[]>(this.urlRandom);
   }
 
+  /**
+   * Método para obtener los servicios de una categoría
+   */
   getServicesByCategory(idCategory:string):Observable<Services[]>{
     return this.http.get<Services[]>(`${this.urlServicesCategory}/${idCategory}`);
   }
 
+  /**
+   * Método para obtener todas las categorías
+   * @returns 
+   */
   getCategories():Observable<Category[]>{
     return this.http.get<Category[]>(this.urlCategory);
   }

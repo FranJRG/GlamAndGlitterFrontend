@@ -19,18 +19,38 @@ export class AuthService {
     return { ...this._user } 
   }
 
+  /**
+   * Urls para enviar peticiones a la API
+   */
   url:string = "http://localhost:8080/users/";
   urlLogin:string = "http://localhost:8080/signin";
 
+  /**
+   * Método para registrar un usuario
+   * @param user 
+   * @returns 
+   */
   registerUser(user:Omit<User, "id" | "role" | "notifications">):Observable<User>{
     return this.http.post<User>(`${this.url}`, user);
   }
 
+  /**
+   * En este método almacenaremos el token en el localStorage
+   * @param resp 
+   */
   storage(resp:LoginResponse){
     localStorage.setItem('token',resp.token)
     this._user = resp.user;
   }
 
+  /**
+   * Método para loguearnos
+   * Si el login es válido almacenaremos el token de respuesta en el localStorage
+   * En caso de error mandaremos un mensaje
+   * @param email 
+   * @param password 
+   * @returns 
+   */
   login(email:string, password:string):Observable<Boolean | null>{
     return this.http.post<LoginResponse>(this.urlLogin, {email,password}).pipe(
       tap(resp =>{
@@ -41,6 +61,10 @@ export class AuthService {
     )
   }
 
+  /**
+   * Comprobamos si hay token en el localStorage para saber si el usuario esta logueado en la app
+   * @returns 
+   */
   existToken():boolean {
     const token = localStorage ? localStorage.getItem("token") : null;
     if(token){
@@ -49,6 +73,10 @@ export class AuthService {
     return false
   }
 
+  /**
+   * Método para hacer logout de la app
+   * Eliminamos el token del localStorage y redirigimos al login
+   */
   logout(){
     localStorage.removeItem("token");
     this.router.navigateByUrl("/auth/login");

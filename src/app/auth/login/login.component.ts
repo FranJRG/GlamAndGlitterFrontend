@@ -19,8 +19,17 @@ export class LoginComponent {
     private router:Router
   ){}
 
+  /**
+   * Vinculamos el formulario del html con el del component
+   */
   @ViewChild("myLoginForm")myLoginForm!:NgForm;
 
+  /**
+   * Método para loguearnos en la aplicación
+   * Llamamos al método del servicio para hacer login
+   * Si la respuesta es correcta mandamos un mensaje de bienvenida al usuario y navegamos al landing page
+   * Si hay cualquier error mandamos un mensaje con el error correspondiente
+   */
   login(){
     if(this.myLoginForm.valid){
       const {email,password} = this.myLoginForm.value;
