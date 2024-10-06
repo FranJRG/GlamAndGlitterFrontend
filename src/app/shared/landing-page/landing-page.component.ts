@@ -5,11 +5,12 @@ import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import { Category } from '../../interfaces/category';
 import { of, switchMap } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-landing-page',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.css',
 })

@@ -27,4 +27,12 @@ export class NavbarComponent {
     this.authService.logout();
   }
 
+  /**
+   * Método para comprobar si el usuario esta logueado
+   */
+  existToken():boolean{
+    return this.authService.existToken();
+  }
+
+
 }

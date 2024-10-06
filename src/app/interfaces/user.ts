@@ -5,7 +5,9 @@ export interface User {
     phone:string;
     password:string;
     role:string;
-    notifications:boolean;
+    emailNotifications:boolean;
+    smsNotifications:boolean;
+    calendarNotifications:boolean;
 }
 
 export interface LoginResponse{

@@ -31,7 +31,7 @@ export class RegisterComponent {
   /**
    * Inicializamos un usuario vacío
    */
-  user: Omit<User, 'id' | 'role' | 'notifications'> = {
+  user: Omit<User, 'id' | 'role' | 'emailNotifications' | 'smsNotifications' | 'calendarNotifications'> = {
     name: '',
     email: '',
     phone: '',
@@ -147,8 +147,8 @@ export class RegisterComponent {
    */
   register() {
     if (this.myForm.valid) {
-      const { ...user } = this.myForm.value;
-      this.user = user;
+      const { name,email,phone,password } = this.myForm.value;
+      this.user = { name,email,phone,password };
       this.authService.registerUser(this.user).subscribe({
         next: (data) =>
           Toastify({
@@ -158,14 +158,17 @@ export class RegisterComponent {
             position: 'center',
             backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
           }).showToast(),
-        error: (err) =>
+        error: (err) => {
+          console.error('Error in the request:', err);
           Toastify({
             text: 'Something go bad: ' + err.error.message,
             duration: 3000,
             gravity: 'bottom',
             position: 'center',
             backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
-          }).showToast(),
+          }).showToast()
+
+        }
       });
     }
   }

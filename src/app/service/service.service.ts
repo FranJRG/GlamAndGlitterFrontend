@@ -24,6 +24,14 @@ export class ServiceService {
     return this.http.get<Services[]>(this.url);
   }
 
+    /**
+   * Método para obtener un servicio por su id
+   * @returns 
+   */
+  getService(id:number):Observable<Services>{
+    return this.http.get<Services>(`${this.url}/${id}`);
+  }
+
   /**
    * Método para obtener servicios de forma aleatoria
    * @returns 

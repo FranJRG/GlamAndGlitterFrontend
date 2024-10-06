@@ -39,7 +39,7 @@
       <h3 data-toggle="tooltip" data-placement="top" title="{{service.name}}">{{ service.name }} - {{ service.price }} €</h3>
       <p data-toggle="tooltip" data-placement="top" title="{{service.description}}">{{ service.description }}</p>
       <p>Duration - {{ service.duration }} minutes</p>
-      <button type="button" class="formButton" >
+      <button (click)="goTo(service.id)" type="button" class="formButton" >
         Reserve now!
       </button>
     </div>

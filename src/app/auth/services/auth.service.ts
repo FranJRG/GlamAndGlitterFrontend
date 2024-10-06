@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { LoginResponse, User } from '../../interfaces/user';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class AuthService {
   /**
    * Urls para enviar peticiones a la API
    */
-  url:string = "http://localhost:8080/users/";
+  url:string = "http://localhost:8080/users";
   urlLogin:string = "http://localhost:8080/signin";
 
   /**
@@ -30,8 +31,8 @@ export class AuthService {
    * @param user 
    * @returns 
    */
-  registerUser(user:Omit<User, "id" | "role" | "notifications">):Observable<User>{
-    return this.http.post<User>(`${this.url}`, user);
+  registerUser(user:Omit<User, 'id' | 'role' | 'emailNotifications' | 'smsNotifications' | 'calendarNotifications'>):Observable<User>{
+    return this.http.post<User>(this.url, user);
   }
 
   /**
@@ -71,6 +72,16 @@ export class AuthService {
       return true
     }
     return false
+  }
+
+  getName(): string {
+    const token = localStorage ? localStorage.getItem("token") : null;
+    return token ? (jwtDecode(token) as any).name : ''; 
+  }
+
+  getUserId(): number {
+    const token = localStorage ? localStorage.getItem("token") : null; 
+    return token ? (jwtDecode(token) as any).userid : '';
   }
 
   /**

@@ -2,16 +2,18 @@
   <ul>
     <li><a routerLink="/"><img alt="Logo" src="../../../assets/img/Glam&Glitter.png" class="logo" /></a></li>
     <li><a routerLink="/service/services">Services</a></li>
-    <div class="dropdown">
-      <a class="dropbtn" style="font-weight: bold; font-size: 25px;">
-        Dropdown
-      </a>
-      <div class="dropdown-content">
-        <a href="#">Link 1</a>
-        <a href="#">Link 2</a>
-        <a href="#">Link 3</a>
+    @if (existToken()) {
+      <div class="dropdown">
+        <a class="dropbtn" style="font-weight: bold; font-size: 25px;">
+          Profile
+        </a>
+        <div class="dropdown-content">
+          <a routerLink="/user/profile">Notifications</a>
+          <a href="#">Link 2</a>
+          <a href="#">Link 3</a>
+        </div>
       </div>
-    </div>
+    }
     @if (isLoggued() === false) {
     <li><a routerLink="/auth/login">Login</a></li>
     }@else {

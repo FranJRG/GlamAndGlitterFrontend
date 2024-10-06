@@ -1,0 +1,71 @@
+<div class="container">
+  <div class="contact-section">
+    <div class="form-container">
+      <h3>Reserve now <small>(Opening time 9:00, closing time 21:00)</small></h3>
+      <form [formGroup]="myForm">
+        <div class="form-row">
+          <label for="email">Your Email</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        @if (id != 0) {
+          <div class="form-row">
+            <label for="service">Selected Service</label>
+            <input
+              type="text"
+              id="service"
+              name="service"
+              value="{{ service.name }}"
+              readonly
+            />
+          </div>
+        }@else {
+          <div class="form-row">
+            <label for="category">Select Category</label>
+            <select id="category" name="category" (change)="getServicesByCategory($event)">
+                <option selected disabled> ---------Select a category---------</option>
+                @for (category of categories; track $index) {
+                  <option [value]="category.id">{{category.name}}</option>
+                }
+            </select>
+          </div>
+          @if (categorySelected) {
+            <div class="form-row">
+              <label for="service">Select Service</label>
+              <select id="service" name="service">
+                  <option selected disabled> ---------Select a service---------</option>
+                  @for (service of filterServices; track $index) {
+                    <option [value]="service.id">{{service.name}}  -  {{service.price}}€</option>
+                  }
+              </select>
+            </div>
+          }
+        }
+
+        <div class="form-row">
+          <label for="date">Day</label>
+          <input type="date" id="date" name="date" required formControlName="date" (change)="checkCite()"/>
+        </div>
+
+        <div class="form-row">
+          <label for="hour">Hour</label>
+          <input
+            type="time"
+            id="hour"
+            name="hour"
+            min="09:00"
+            max="21:00"
+            value="09:00"
+            formControlName="time"
+            (change)="checkCite()"
+          />
+          @if (isInvalidField('time')) {
+              <small>{{ TimeError }}</small>
+          }
+        </div>
+        <div class="form-row full-width">
+          <button type="submit">Send</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

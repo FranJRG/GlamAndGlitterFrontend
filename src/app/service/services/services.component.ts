@@ -4,6 +4,7 @@ import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import { Services } from '../../interfaces/services';
 import { Category } from '../../interfaces/category';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-services',
@@ -16,7 +17,9 @@ export class ServicesComponent implements OnInit {
   services!: Services[];
   categories!: Category[];
 
-  constructor(private serviceService: ServiceService) {}
+  constructor(private serviceService: ServiceService,
+    private router:Router
+  ) {}
 
   /**
    * Al iniciar el componente de servicios cargaremos todos los servicios existentes y las categorías
@@ -87,5 +90,9 @@ export class ServicesComponent implements OnInit {
           backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
         }).showToast(),
     });
+  }
+
+  goTo(id:number){
+    this.router.navigateByUrl(`cite/bookCite/${id}`);
   }
 }

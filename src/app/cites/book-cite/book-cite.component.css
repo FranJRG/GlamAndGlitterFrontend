@@ -1,0 +1,120 @@
+.container {
+  max-width: 1400px; /* Incremento del ancho del contenedor */
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ecedee;
+  padding: 60px; /* Más padding para darle más espacio al formulario */
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 800px; /* Aumenta el tamaño máximo del formulario */
+}
+
+.form-container h3 {
+  font-size: 2rem; /* Aumentar el tamaño del título */
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px; /* Más espacio entre los campos */
+}
+
+form .form-row {
+  display: flex;
+  flex-direction: column;
+}
+
+form label {
+  margin-bottom: 10px;
+  font-size: 1.3rem; /* Aumentar el tamaño de las etiquetas */
+  font-weight: bold;
+  color: #333;
+}
+
+form input {
+  padding: 15px; /* Aumentar el padding de los inputs */
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px; /* Más redondeado */
+  font-size: 18px; /* Aumentar el tamaño del texto de los inputs */
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus {
+  border-color: #6c63ff;
+  box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+  outline: none;
+}
+
+form button {
+  padding: 15px 30px; /* Hacer el botón más grande */
+  background-color: rgb(130, 27, 249);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  grid-column: span 2; /* El botón ocupa las dos columnas */
+  font-size: 18px; /* Tamaño del texto del botón */
+}
+
+form button:hover {
+  background-color: rgb(54, 13, 78);
+  transform: translateY(-2px); 
+}
+
+form button:active {
+  transform: translateY(0);
+}
+
+select {
+  width: 100%;
+  padding: 15px; /* Aumentar el tamaño de los select */
+  border-radius: 8px;
+  font-size: 1.2rem;
+}
+
+.full-width {
+  grid-column: span 2;
+}
+
+small{
+  color: red;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+select {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  background-color: #f8f9fa;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+select:focus {
+  border-color: #6c63ff;
+  box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+  outline: none;
+}
+
+select.error {
+  border-color: red;
+}
