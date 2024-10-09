@@ -81,7 +81,12 @@ export class AuthService {
 
   getUserId(): number {
     const token = localStorage ? localStorage.getItem("token") : null; 
-    return token ? (jwtDecode(token) as any).userid : '';
+    return token ? (jwtDecode(token) as any).userId : '';
+  }
+
+  getRole(): string {
+    const token = localStorage ? localStorage.getItem("token") : null; 
+    return token ? (jwtDecode(token) as any).role : '';
   }
 
   /**

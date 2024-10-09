@@ -16,6 +16,8 @@ import { AsyncValidator } from '@angular/forms';
 import { CheckCiteService } from '../../shared/validators/check-cite.service';
 import { Category } from '../../interfaces/category';
 import { of, switchMap } from 'rxjs';
+import { CiteService } from '../services/cite.service';
+import { Cite } from '../../interfaces/cite';
 
 @Component({
   selector: 'app-book-cite',
@@ -36,8 +38,15 @@ export class BookCiteComponent implements OnInit {
   constructor(
     private serviceService: ServiceService,
     private fb: FormBuilder,
-    private checkCiteService: CheckCiteService
+    private checkCiteService: CheckCiteService,
+    private citeService:CiteService
   ) {}
+
+  cite:Omit<Cite, "id"> = {
+    day:new Date(),
+    startTime: "",
+    idService:0
+  }
 
   ngOnInit(): void {
     if(this.id != 0){
@@ -57,20 +66,20 @@ export class BookCiteComponent implements OnInit {
   }
 
   myForm: FormGroup = this.fb.group({
-    date: [null],
-    time: [null],
+    day: [null],
+    startTime: [null],
     idService: [this.id],
   });
 
   checkCite() {
-    const date = this.myForm.get('date')?.value;
-    const time = this.myForm.get('time')?.value;
+    const day = this.myForm.get('day')?.value;
+    const startTime = this.myForm.get('startTime')?.value;
 
-    this.checkCiteService.validate(date, time).subscribe((result) => {
+    this.checkCiteService.validate(day, startTime, startTime+this.service.duration).subscribe((result) => {
       if (result) {
-        this.myForm.get('time')?.setErrors({ existCite: true });
+        this.myForm.get('startTime')?.setErrors({ existCite: true });
       } else {
-        this.myForm.get('time')?.setErrors(null);
+        this.myForm.get('startTime')?.setErrors(null);
       }
     });
   }
@@ -88,7 +97,7 @@ export class BookCiteComponent implements OnInit {
    * Los siguientes métodos servirán para obtener el tipo de error que tiene un campo y mostrar un mensaje en cada caso
    */
   get TimeError() {
-    const error = this.myForm.get('time')?.errors;
+    const error = this.myForm.get('startTime')?.errors;
     let errorMessage = '';
   
     if (error) {
@@ -143,5 +152,33 @@ export class BookCiteComponent implements OnInit {
           backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
         }).showToast(),
     })
+  }
+
+  bookCite(){
+    if(this.myForm.valid){
+      const { ...cite } = this.myForm.value;
+      this.cite = cite;
+      this.cite.startTime = this.cite.startTime + ":00";
+      this.cite.idService = this.service.id;
+      console.log(this.cite)
+      this.citeService.addCite(this.cite).subscribe({
+        next : (data) => 
+          Toastify({
+            text: 'Appointment successfully added, check your future appointments!',
+            duration: 3000,
+            gravity: 'bottom',
+            position: 'center',
+            backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
+          }).showToast(),
+        error : (err) => 
+          Toastify({
+            text: 'We can´t load our services yet: ' + err.error.message,
+            duration: 3000,
+            gravity: 'bottom',
+            position: 'center',
+            backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+          }).showToast(),
+      })
+    }
   }
 }

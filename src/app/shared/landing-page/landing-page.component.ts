@@ -6,6 +6,7 @@ import 'toastify-js/src/toastify.css';
 import { Category } from '../../interfaces/category';
 import { of, switchMap } from 'rxjs';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -15,7 +16,9 @@ import { RouterLink } from '@angular/router';
   styleUrl: './landing-page.component.css',
 })
 export class LandingPageComponent implements OnInit {
-  constructor(private serviceService: ServiceService) {}
+  constructor(private serviceService: ServiceService,
+    private authService:AuthService
+  ) {}
 
   services!: Services[];
   categories!: Category[];
@@ -29,6 +32,10 @@ export class LandingPageComponent implements OnInit {
   ngOnInit(): void {
     this.getServices();
     this.getCategories();
+  }
+
+  isLoggued():boolean{
+    return this.authService.existToken();
   }
 
   /**

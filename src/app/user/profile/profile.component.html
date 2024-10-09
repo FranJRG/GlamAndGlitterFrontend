@@ -1,1 +1,31 @@
-<p>profile works!</p>
+@if (user) {
+  <div class="container">
+    <div class="notification-settings">
+      <h3 style="font-size: 50px; color: #2c3e50; margin-bottom: 20px">
+        Notification Settings
+      </h3>
+  
+      <label class="custom-checkbox">
+        <input type="checkbox" name="emailNotifications" [(ngModel)]="emailNotifications" [checked]="user.emailNotifications"/>
+        <span class="checkmark"></span>
+        Enable Email Notifications
+      </label>
+  
+      <label class="custom-checkbox">
+        <input type="checkbox" name="smsNotifications" [(ngModel)]="smsNotifications" [checked]="user.smsNotifications"/>
+        <span class="checkmark"></span>
+        Enable SMS Notifications
+      </label>
+  
+      <label class="custom-checkbox">
+        <input type="checkbox" name="calendarNotification" [(ngModel)]="calendarNotifications" [checked]="user.calendarNotifications"/>
+        <span class="checkmark"></span>
+        Sync with Google Calendar
+      </label>
+  
+      <button (click)="manageNotifications()">
+          Confirm changes
+      </button>
+    </div>
+  </div>
+}

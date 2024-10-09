@@ -3,7 +3,11 @@
   <div class="firstMessage">
     <span>Welcome to your beauty salon</span>
     <br />
-    <a routerLink="cite/bookCite/0">Book now</a>
+    @if (isLoggued()) {
+      <a routerLink="cite/bookCite/0">Book now</a>
+    }@else {
+      <a routerLink="auth/login">Book now</a>
+    }
   </div>
 </div>
 

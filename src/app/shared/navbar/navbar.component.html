@@ -9,7 +9,9 @@
         </a>
         <div class="dropdown-content">
           <a routerLink="/user/profile">Notifications</a>
-          <a href="#">Link 2</a>
+          @if (getRole() === "admin") {
+            <a routerLink="/user/pendingReserves">Pending reserves</a>
+          }
           <a href="#">Link 3</a>
         </div>
       </div>

@@ -34,5 +34,11 @@ export class NavbarComponent {
     return this.authService.existToken();
   }
 
+  /**
+   * Método para obtener el role
+   */
+  getRole():string{
+    return this.authService.getRole();
+  }
 
 }
