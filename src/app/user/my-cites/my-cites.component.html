@@ -1,0 +1,22 @@
+@if (reserves.length > 0) {
+<div class="container">
+  @for (reserve of reserves; track $index) {
+  <div class="reserve-card">
+    <div class="reserve-day">{{ reserve.day }}</div>
+    @for (service of services; track $index) { @if (service.id === reserve.idService) {
+    <div class="reserve-service">{{ service.name }}</div>
+    } }
+    <div class="reserve-button">
+      <button class="button auto-assign">
+        Modify Cite
+      </button>
+      <button class="button manual-assign">Cancel Cite</button>
+    </div>
+  </div>
+  }
+</div>
+}@else {
+<div class="container">
+  <div class="alert-card">No cites booked</div>
+</div>
+}

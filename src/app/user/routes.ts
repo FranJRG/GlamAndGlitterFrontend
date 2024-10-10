@@ -2,6 +2,7 @@ import { Routes } from "@angular/router";
 import { ForgotPasswordComponent } from "./forgot-password/forgot-password.component";
 import { ProfileComponent } from "./profile/profile.component";
 import { PendingReservesComponent } from "./pending-reserves/pending-reserves.component";
+import { MyCitesComponent } from "./my-cites/my-cites.component";
 
 export const routes:Routes = [
     {
@@ -15,5 +16,9 @@ export const routes:Routes = [
     {
         path:'pendingReserves',
         component:PendingReservesComponent
+    },
+    {
+        path:'myCites',
+        component:MyCitesComponent
     }
 ]

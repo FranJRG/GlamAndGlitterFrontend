@@ -17,6 +17,10 @@ export class CiteService {
     return this.http.get<Cite[]>(`${this.url}/pendingCites`);
   }
 
+  getUserCites(id:number):Observable<Cite[]>{
+    return this.http.get<Cite[]>(`${this.url}/myCites/${id}`);
+  }
+
   addCite(cite:Omit<Cite, "id">):Observable<Cite>{
     return this.http.post<Cite>(`${this.url}/addCite`, cite);
   }

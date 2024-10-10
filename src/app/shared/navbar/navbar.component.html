@@ -11,6 +11,8 @@
           <a routerLink="/user/profile">Notifications</a>
           @if (getRole() === "admin") {
             <a routerLink="/user/pendingReserves">Pending reserves</a>
+          }@else if (getRole() === "user") {
+            <a routerLink="/user/myCites">My cites</a>
           }
           <a href="#">Link 3</a>
         </div>
