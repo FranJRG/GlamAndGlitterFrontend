@@ -8,6 +8,7 @@ import { ServiceService } from '../../service/service.service';
 import { Cite } from '../../interfaces/cite';
 import { Services } from '../../interfaces/services';
 import { AuthService } from '../../auth/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-cites',
@@ -60,6 +61,27 @@ export class MyCitesComponent {
             backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
           }).showToast()
       })
+    })
+  }
+
+  deleteCite(id:number){
+    this.citeService.deleteCite(id).subscribe({
+      next : (data) => 
+        Toastify({
+          text: 'Appointment for date: ' + data.day + " deleted succesfully",
+          duration: 3000,
+          gravity: 'bottom',
+          position: 'center',
+          backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
+        }).showToast(),
+      error : (err) => 
+        Toastify({
+          text: "Something go bad: " + err.error.message,
+          duration: 3000, 
+          gravity: "bottom",
+          position: 'center',
+          backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
+        }).showToast()
     })
   }
 

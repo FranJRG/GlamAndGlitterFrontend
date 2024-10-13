@@ -1,0 +1,38 @@
+@if (cite) {
+    <div class="container">
+      <div class="contact-section">
+        <div class="form-container">
+          <form>
+            <div class="form-row">
+              <label for="service">Cite id</label>
+              <input type="text" id="service" name="service" value="{{cite.id}}" readonly />
+            </div>
+    
+            <div class="form-row">
+              <label for="day">Day</label>
+              <input type="date" id="day" name="day" value="{{cite.day}}" required readonly />
+            </div>
+    
+            <div class="form-row">
+              <label for="hour">Hour</label>
+              <input type="time" id="hour" name="hour" value="{{cite.startTime}}" readonly />
+            </div>
+    
+            <div class="form-row full-width">
+              <label>Workers</label>
+              <div id="workers-list" class="workers-container">
+                @for (worker of workers; track $index) {
+                <div class="worker-item">
+                  {{ worker.name }}
+                </div>
+                }
+              </div>
+            </div>
+            <div class="form-row full-width">
+              <button type="submit">Send</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+}

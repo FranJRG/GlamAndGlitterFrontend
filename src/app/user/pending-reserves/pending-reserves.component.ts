@@ -7,6 +7,7 @@ import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import { Services } from '../../interfaces/services';
 import { ServiceService } from '../../service/service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pending-reserves',
@@ -17,11 +18,12 @@ import { ServiceService } from '../../service/service.service';
 })
 export class PendingReservesComponent implements OnInit{
   
-  pendingReserves!:Cite[];
+  pendingReserves:Cite[] = [];
   services:Services[] = [];
   
   constructor(private citeService:CiteService,
-    private serviceService:ServiceService
+    private serviceService:ServiceService,
+    private router:Router
   ){}
 
 
@@ -33,7 +35,7 @@ export class PendingReservesComponent implements OnInit{
     this.citeService.getPendingCites().subscribe({
       next : (data) => {
         this.pendingReserves = data;
-        this.getServicesByCites(this.pendingReserves);
+        //this.getServicesByCites(this.pendingReserves);
       },
       error : (err) => 
         Toastify({
@@ -84,5 +86,9 @@ export class PendingReservesComponent implements OnInit{
           backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
         }).showToast()
     })
+  }
+
+  selectWorker(id:number){
+    this.router.navigateByUrl(`user/workers/${id}`)
   }
 }

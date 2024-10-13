@@ -3,14 +3,16 @@
   @for (reserve of reserves; track $index) {
   <div class="reserve-card">
     <div class="reserve-day">{{ reserve.day }}</div>
-    @for (service of services; track $index) { @if (service.id === reserve.idService) {
-    <div class="reserve-service">{{ service.name }}</div>
-    } }
+    @for (service of services; track $index) { 
+      @if (service.id === reserve.idService) {
+        <div class="reserve-service">{{ service.name }}</div>
+      }
+  }
     <div class="reserve-button">
       <button class="button auto-assign">
         Modify Cite
       </button>
-      <button class="button manual-assign">Cancel Cite</button>
+      <button class="button manual-assign" (click)="deleteCite(reserve.id)">Cancel Cite</button>
     </div>
   </div>
   }

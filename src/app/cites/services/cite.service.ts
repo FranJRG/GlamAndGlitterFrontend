@@ -13,6 +13,10 @@ export class CiteService {
 
   private url:string = "http://localhost:8080";
 
+  getCite(id:number):Observable<Cite>{
+    return this.http.get<Cite>(`${this.url}/cite/${id}`);
+  }
+
   getPendingCites():Observable<Cite[]>{
     return this.http.get<Cite[]>(`${this.url}/pendingCites`);
   }
@@ -31,6 +35,14 @@ export class CiteService {
     .set("idWorker", idWorker ? idWorker.toString() : '');
 
     return this.http.post<any>(`${this.url}/setWorker`,null,{params})
+  }
+
+  getWorkers(id:number):Observable<User[]>{
+    return this.http.get<User[]>(`${this.url}/workers/${id}`);
+  }
+
+  deleteCite(id:number):Observable<Cite>{
+    return this.http.delete<Cite>(`${this.url}/cancelCite/${id}`);
   }
 
 }
