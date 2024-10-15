@@ -52,4 +52,25 @@ export class WorkersComponent implements OnInit{
   }
 
 
+  setWorker(id:number){
+    this.citeService.setWorker(this.id,id).subscribe({
+      next : (data) => 
+        Toastify({
+          text: 'Worker assined is ' + data.name,
+          duration: 4000,
+          gravity: 'bottom',
+          position: 'center',
+          backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
+        }).showToast(),
+      error : (err) => 
+        Toastify({
+          text: "Something go bad: " + err.error.message,
+          duration: 3000, 
+          gravity: "bottom",
+          position: 'center',
+          backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
+        }).showToast()
+    })
+  }
+
 }

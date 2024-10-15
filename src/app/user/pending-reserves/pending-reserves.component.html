@@ -3,9 +3,7 @@
       @for (reserve of pendingReserves; track $index) {
       <div class="reserve-card">
         <div class="reserve-day">{{ reserve.day }}</div>
-        @for (service of services; track $index) { @if (service.id === reserve.idService) {
-        <div class="reserve-service">{{ service.name }}</div>
-        } }
+        <div class="reserve-service">{{ getServiceName(reserve.idService) }}</div>
         <div class="reserve-button">
           <button class="button auto-assign" (click)="setWorker(reserve.id)">
             Auto Assign

@@ -30,7 +30,7 @@
           @if (categorySelected) {
             <div class="form-row">
               <label for="service">Select Service</label>
-              <select id="service" name="service">
+              <select id="service" name="service" (change)="setService($event)">
                   <option selected disabled> ---------Select a service---------</option>
                   @for (service of filterServices; track $index) {
                       <option value="{{service.id}}">{{service.name}}  -  {{service.price}}€</option>

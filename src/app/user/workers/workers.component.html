@@ -22,7 +22,7 @@
               <label>Workers</label>
               <div id="workers-list" class="workers-container">
                 @for (worker of workers; track $index) {
-                <div class="worker-item">
+                <div class="worker-item" (click)="setWorker(worker.id)">
                   {{ worker.name }}
                 </div>
                 }

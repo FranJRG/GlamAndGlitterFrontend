@@ -93,6 +93,15 @@ export class BookCiteComponent implements OnInit {
     return this.myForm.get(field)?.invalid && this.myForm.get(field)?.touched;
   }
 
+  setService(event:Event) {
+    let serviceId = parseInt((event.target as HTMLSelectElement).value);
+    const selectedService = this.filterServices.find(service => service.id === serviceId);
+    if (selectedService) {
+      this.service = selectedService;
+      this.myForm.patchValue({ idService: this.service.id });
+    }
+  }
+
   /**
    * Los siguientes métodos servirán para obtener el tipo de error que tiene un campo y mostrar un mensaje en cada caso
    */
@@ -160,7 +169,6 @@ export class BookCiteComponent implements OnInit {
       this.cite = cite;
       this.cite.startTime = this.cite.startTime + ":00";
       this.cite.idService = this.service.id;
-      console.log(this.cite)
       this.citeService.addCite(this.cite).subscribe({
         next : (data) => 
           Toastify({

@@ -35,7 +35,7 @@ export class PendingReservesComponent implements OnInit{
     this.citeService.getPendingCites().subscribe({
       next : (data) => {
         this.pendingReserves = data;
-        //this.getServicesByCites(this.pendingReserves);
+        this.getServicesByCites(this.pendingReserves);
       },
       error : (err) => 
         Toastify({
@@ -62,6 +62,11 @@ export class PendingReservesComponent implements OnInit{
           }).showToast()
       })
     })
+  }
+
+  getServiceName(idService: number): string {
+    const service = this.services.find(service => service.id === idService);
+    return service ? service.name : 'Servicio no encontrado';
   }
 
   setWorker(idCite:number,idWorker?:number){
