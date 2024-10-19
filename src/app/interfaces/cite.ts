@@ -3,4 +3,5 @@ export interface Cite {
     day:Date;
     startTime:string;
     idService:number
+    username:string
 }

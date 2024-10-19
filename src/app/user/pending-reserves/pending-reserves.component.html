@@ -2,17 +2,14 @@
     <div class="container">
       @for (reserve of pendingReserves; track $index) {
       <div class="reserve-card">
-        <div class="reserve-day">{{ reserve.day }}</div>
+        <div class="reserve-day">{{ reserve.day }} - {{reserve.username}}</div>
         <div class="reserve-service">{{ getServiceName(reserve.idService) }}</div>
         <div class="reserve-button">
-          <button class="button auto-assign" (click)="setWorker(reserve.id)">
-            Auto Assign
-          </button>
           <button
             class="button manual-assign"
             (click)="selectWorker(reserve.id)"
           >
-            Manual Assign
+            Change worker
           </button>
         </div>
       </div>

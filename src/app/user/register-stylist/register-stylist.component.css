@@ -1,0 +1,162 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1{
+    font-size: 45px;
+}
+
+label{
+    font-size: 18px;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    min-height: calc(100vh - 120px);
+    padding-top: 25px;
+    gap: 5px;
+}
+
+form {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    padding: 30px;
+    width: 45%;
+    max-width: 500px;
+    transition: all 0.3s ease;
+    margin-bottom: 70px;
+}
+
+.firstsInputs, .secondInputs {
+    display: flex;
+    flex-direction: column; 
+    gap: 12px; 
+}
+
+label {
+    font-weight: bold;
+    color: #333; 
+}
+
+.required {
+    color: red;
+}
+
+input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus {
+    border-color: #6c63ff;
+    box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+    outline: none;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.formButton {
+    background-color: rgb(130, 27, 249);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    height: 50px;
+    width: 100%; 
+    font-size: 18px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.formButton:hover {
+    background-color: rgb(54, 13, 78);
+    transform: translateY(-2px); 
+}
+
+.formButton:active {
+    transform: translateY(0);
+}
+
+small{
+    color: red;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.centered-form {
+    align-self: center; 
+}
+
+.day-list {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.day-list div {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    user-select: none; /* Evita la selección de texto al hacer clic */
+}
+
+.day-list div:hover {
+    background-color: #f0f0f0;
+}
+
+.day-list .selected {
+    background-color: #6c63ff;
+    color: white;
+    border-color: #6c63ff;
+}
+
+select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 100%;
+}
+
+select:focus {
+    border-color: #6c63ff;
+    box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+    outline: none;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.formButton {
+    background-color: rgb(130, 27, 249);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    height: 50px;
+    width: 100%;
+    font-size: 18px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.formButton:hover {
+    background-color: rgb(54, 13, 78);
+    transform: translateY(-2px);
+}
+
+.formButton:active {
+    transform: translateY(0);
+}

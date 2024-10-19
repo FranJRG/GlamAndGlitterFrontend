@@ -15,6 +15,10 @@ export class UserService {
   getUserById(id:number):Observable<User>{
     return this.http.get<User>(`${this.url}/user/${id}`);
   }
+
+  findByUserWithoutSchedule():Observable<User[]>{
+    return this.http.get<User[]>(`${this.url}/userWithoutSchedule`);
+  }
    
   /**
    * Método para enviar el mensaje de olvido de contraseña

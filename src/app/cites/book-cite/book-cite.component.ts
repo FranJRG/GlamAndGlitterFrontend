@@ -42,7 +42,7 @@ export class BookCiteComponent implements OnInit {
     private citeService:CiteService
   ) {}
 
-  cite:Omit<Cite, "id"> = {
+  cite:Omit<Cite, "id" | "username"> = {
     day:new Date(),
     startTime: "",
     idService:0

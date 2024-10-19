@@ -51,7 +51,6 @@ export class WorkersComponent implements OnInit{
     })
   }
 
-
   setWorker(id:number){
     this.citeService.setWorker(this.id,id).subscribe({
       next : (data) => 
