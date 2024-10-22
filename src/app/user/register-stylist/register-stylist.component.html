@@ -1,31 +1,51 @@
 <div class="container">
-
-    <form class="centered-form" style="width: 200%;">
+  @if (!evening) {
+  <form class="centered-form" style="width: 200%" (ngSubmit)="createSchedule()">
+    <div class="daysOfWeek">
+      <label>Select a Day for Mornings <span class="required">*</span></label>
+      <br />
+      <br />
+      <div class="day-list" style="width: 200%">
+        <div
+          *ngFor="let day of daysOfWeek"
+          (click)="toggleDaySelection(day)"
+          [class.selected]="selectedDays.includes(day)"
+        >
+          {{ day }}
+        </div>
+      </div>
+      <br />
+    </div>
+    <br />
+    <div class="buttonContainer">
+      <button class="formButton" type="submit">
+        Submit
+      </button>
+    </div>
+  </form>
+  }@else {
+    <form class="centered-form" style="width: 200%">
         <div class="daysOfWeek">
-            <label>Select a Day <span class="required">*</span></label>
-            <br>
-            <br>
-            <div class="day-list" style="width: 200%;">
-                <div *ngFor="let day of daysOfWeek"
-                (click)="toggleDaySelection(day)"
-                [class.selected]="selectedDays.includes(day)">
-                    {{ day }}
-                </div>
+          <label>Select a Days for Evenings <span class="required">*</span></label>
+          <br />
+          <br />
+          <div class="day-list" style="width: 200%">
+            <div
+              *ngFor="let day of daysOfWeek"
+              (click)="toggleDaySelection(day)"
+              [class.selected]="selectedDays.includes(day)"
+            >
+              {{ day }}
             </div>
-            <br>
-            <label>Select Turn <span class="required">*</span></label>
-            <br>
-            <br>
-            <select [(ngModel)]="turn" name="turn">
-                <option value="0" disabled selected>-----Select turn-----</option>
-                <option value="Morning">Morning</option>
-                <option value="Evening">Evening</option>
-            </select>
+          </div>
+          <br />
         </div>
-        <br>
+        <br />
         <div class="buttonContainer">
-            <button class="formButton" type="submit" (click)="setKey(this.turn)">Submit</button>
+          <button class="formButton" type="submit">
+            Submit
+          </button>
         </div>
-    </form>
-
+      </form>
+  }
 </div>

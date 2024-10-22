@@ -5,6 +5,7 @@ import { UserService } from '../services/user.service';
 import { User } from '../../interfaces/user';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -16,7 +17,9 @@ import 'toastify-js/src/toastify.css';
 })
 export class PendingSchedulesComponent implements OnInit{
 
-  constructor(private userService:UserService){}
+  constructor(private userService:UserService,
+            private router:Router
+  ){}
 
   users:User[] = [];
 
@@ -32,6 +35,10 @@ export class PendingSchedulesComponent implements OnInit{
           backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
         }).showToast()
     })
+  }
+
+  completeSchedule(id:number){
+    this.router.navigateByUrl(`user/completeSchedule/${id}`)
   }
 
 }

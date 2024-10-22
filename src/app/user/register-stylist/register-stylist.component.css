@@ -160,3 +160,10 @@ select:focus {
 .formButton:active {
     transform: translateY(0);
 }
+
+.turns{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

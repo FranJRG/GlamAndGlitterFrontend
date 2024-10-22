@@ -1,1 +1,20 @@
-<p>pending-schedules works!</p>
+@if (users.length > 0) {
+<div class="container">
+  @for (user of users; track $index) {
+  <div class="reserve-card">
+    <div class="reserve-day">Id - {{ user.id }}</div>
+    <div class="reserve-day"> Email - {{ user.email }}</div>
+    <div class="reserve-day">Name - {{ user.name }}</div>
+    <div class="reserve-button">
+      <button class="button manual-assign" (click)="completeSchedule(user.id)">
+        Asign schedule
+      </button>
+    </div>
+  </div>
+  }
+</div>
+}@else {
+<div class="container">
+  <div class="alert-card">Well done admin, all workers can work!</div>
+</div>
+}
