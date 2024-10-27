@@ -17,7 +17,6 @@ import { User } from '../../interfaces/user';
 export class ProfileComponent implements OnInit{
 
   emailNotifications!:boolean;
-  smsNotifications!:boolean ;
   calendarNotifications!:boolean;
   user!:User;
 
@@ -31,7 +30,6 @@ export class ProfileComponent implements OnInit{
       next:(data) => {
         this.user = data
         this.emailNotifications = data.emailNotifications;
-        this.smsNotifications = data.smsNotifications;
         this.calendarNotifications = data.calendarNotifications;
       },
       error: (err) => 
@@ -46,7 +44,7 @@ export class ProfileComponent implements OnInit{
   }
 
   manageNotifications(){
-    this.userService.manageNotifications(this.emailNotifications,this.smsNotifications,this.calendarNotifications).subscribe({
+    this.userService.manageNotifications(this.emailNotifications,this.calendarNotifications).subscribe({
       next : (data) =>  
         Toastify({
         text: "Notifications managed!",

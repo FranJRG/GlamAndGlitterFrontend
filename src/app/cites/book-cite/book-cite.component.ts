@@ -169,6 +169,7 @@ export class BookCiteComponent implements OnInit {
       this.cite = cite;
       this.cite.startTime = this.cite.startTime + ":00";
       this.cite.idService = this.service.id;
+      console.log(this.cite);
       this.citeService.addCite(this.cite).subscribe({
         next : (data) => 
           Toastify({

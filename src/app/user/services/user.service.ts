@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../../interfaces/user';
+import { EmployeeSchedule } from '../../interfaces/EmployeeSchedule';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,11 @@ export class UserService {
 
   findByUserWithoutSchedule():Observable<User[]>{
     return this.http.get<User[]>(`${this.url}/userWithoutSchedule`);
+  }
+
+  setSchedule(id:number, day:string, turn:string):Observable<EmployeeSchedule[]>{
+    const params = new HttpParams().set("day",day).set("turn",turn);
+    return this.http.post<any>(`${this.url}/setSchedule/${id}`,null,{params});
   }
    
   /**
@@ -52,10 +58,9 @@ export class UserService {
     return this.http.post<any>(`${this.url}/changePassword`, null, {params});
   }
 
-  manageNotifications(emailNotifications:boolean,smsNotifications:boolean,calendarNotifications:boolean):Observable<any>{
+  manageNotifications(emailNotifications:boolean,calendarNotifications:boolean):Observable<any>{
     const params = new HttpParams()
         .set("emailNotifications", emailNotifications)
-        .set("smsNotifications", smsNotifications)
         .set("calendarNotifications", calendarNotifications);
 
     return this.http.post<any>(`${this.url}/activateNotifications`,null, { params });

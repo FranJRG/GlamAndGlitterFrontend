@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
+import { UserService } from '../services/user.service';
+import { EmployeeSchedule } from '../../interfaces/EmployeeSchedule';
 
 @Component({
   selector: 'app-register-stylist',
@@ -12,6 +14,10 @@ import 'toastify-js/src/toastify.css';
   styleUrl: './register-stylist.component.css',
 })
 export class RegisterStylistComponent {
+
+  constructor(private userService:UserService){}
+
+  @Input()id:number = 0;
 
   daysOfWeek: string[] = [ //Array con los dias de la semana laborables
     'Monday',
@@ -32,7 +38,7 @@ export class RegisterStylistComponent {
     if(!this.evening){ //Cambiamos el turno en funcion de la seleccion del turno que estemos
       turn = "Morning"
     }else{
-      turn = "evening"
+      turn = "Afternoon"
     }
     this.keys.forEach((key)=>{
       this.stylistSchedule.set(key,turn); //Por cada key que hayamos almacenado le asignamos el turno (Morning o Evening)
@@ -60,10 +66,31 @@ export class RegisterStylistComponent {
   }
 
   createSchedule(){
+    this.stylistSchedule.forEach((turn,day) => {
+      this.userService.setSchedule(this.id,day,turn).subscribe({
+        next : (data) => {
+          console.log(data)
+          Toastify({
+            text: 'Schedule assigned, go to work!',
+            duration: 3000,
+            gravity: 'bottom',
+            position: 'center',
+            backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
+          }).showToast()
+        },
+        error : (err) => 
+          Toastify({
+            text: "Something go bad: " + err.error.message,
+            duration: 3000, 
+            gravity: "bottom",
+            position: 'center',
+            backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
+          }).showToast()
+      })
+    })
     this.evening = true;
     this.stylistSchedule.clear();
     this.selectedDays = [];
     this.keys = [];
-    console.log(this.stylistSchedule);
   }
 }
