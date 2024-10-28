@@ -33,6 +33,7 @@ export class BookCiteComponent implements OnInit {
   filterServices!:Services[];
 
   categorySelected:boolean = false;
+  @Input() serviceId: number = 0;
   @Input() id: number = 0;
 
   constructor(
@@ -49,8 +50,8 @@ export class BookCiteComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(this.id != 0){
-      this.serviceService.getService(this.id).subscribe({
+    if(this.serviceId != 0 && this.serviceId != undefined){
+      this.serviceService.getService(this.serviceId).subscribe({
         next: (data) => (this.service = data),
         error: (err) =>
           Toastify({
@@ -62,13 +63,36 @@ export class BookCiteComponent implements OnInit {
           }).showToast(),
       });
     }
+    if(this.id != 0 && this.id != undefined){
+      this.getCite();
+    }
     this.getCategories();
+  }
+
+  getCite(){
+    this.citeService.getCite(this.id).subscribe({
+      next : (data) => {
+        this.myForm.setValue({
+            day:data.day,
+            startTime:data.startTime,
+            idService:data.idService
+          })
+      },
+      error : (err) => 
+        Toastify({
+          text: 'Something go bad : ' + err.error.message,
+          duration: 3000,
+          gravity: 'bottom',
+          position: 'center',
+          backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+        }).showToast(),
+    })
   }
 
   myForm: FormGroup = this.fb.group({
     day: [null],
     startTime: [null],
-    idService: [this.id],
+    idService: [this.serviceId],
   });
 
   checkCite() {

@@ -20,10 +20,12 @@ import { Router } from '@angular/router';
 export class MyCitesComponent {
   reserves:Cite[] = [];
   services:Services[] = [];
+  date:Date = new Date();
   
   constructor(private citeService:CiteService,
     private serviceService:ServiceService,
-    private authService:AuthService
+    private authService:AuthService,
+    private router:Router
   ){}
 
   ngOnInit(): void {
@@ -83,6 +85,10 @@ export class MyCitesComponent {
           backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
         }).showToast()
     })
+  }
+
+  editReserve(id:number){
+    this.router.navigateByUrl(`/cite/updateCite/${id}`);
   }
 
 }

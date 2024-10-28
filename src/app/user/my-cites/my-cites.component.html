@@ -9,10 +9,12 @@
       }
   }
     <div class="reserve-button">
-      <button class="button auto-assign">
+      <button (click)="editReserve(reserve.id)" class="button auto-assign">
         Modify Cite
       </button>
-      <button class="button manual-assign" (click)="deleteCite(reserve.id)">Cancel Cite</button>
+      @if (reserve.day < date) {
+        <button class="button manual-assign" (click)="deleteCite(reserve.id)">Cancel Cite</button>
+      }
     </div>
   </div>
   }
