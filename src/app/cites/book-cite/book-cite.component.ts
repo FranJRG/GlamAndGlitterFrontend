@@ -31,6 +31,7 @@ export class BookCiteComponent implements OnInit {
   services!:Services[];
   categories!:Category[];
   filterServices!:Services[];
+  idServiceCite = 0;
 
   categorySelected:boolean = false;
   @Input() serviceId: number = 0;
@@ -50,33 +51,29 @@ export class BookCiteComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(this.serviceId != 0 && this.serviceId != undefined){
-      this.serviceService.getService(this.serviceId).subscribe({
-        next: (data) => (this.service = data),
-        error: (err) =>
-          Toastify({
-            text: 'Something go bad: ' + err.error.message,
-            duration: 3000,
-            gravity: 'bottom',
-            position: 'center',
-            backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
-          }).showToast(),
-      });
-    }
     if(this.id != 0 && this.id != undefined){
       this.getCite();
     }
+    if(this.serviceId != 0 && this.serviceId != undefined){
+      this.getService(this.serviceId);
+    }
+
     this.getCategories();
   }
 
   getCite(){
     this.citeService.getCite(this.id).subscribe({
       next : (data) => {
+        this.cite = data
+        const date = new Date(data.day); // La fecha en UTC (de la API)
+        const localDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()+1);
+        const fechaFormateada = `${localDate.getFullYear()}-${(localDate.getMonth() + 1).toString().padStart(2, '0')}-${localDate.getDate().toString().padStart(2, '0')}`;
         this.myForm.setValue({
-            day:data.day,
-            startTime:data.startTime,
+            day:fechaFormateada,
+            startTime:data.startTime.replace(":00",""),
             idService:data.idService
-          })
+        })
+        this.getService(data.idService);
       },
       error : (err) => 
         Toastify({
@@ -87,6 +84,20 @@ export class BookCiteComponent implements OnInit {
           backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
         }).showToast(),
     })
+  }
+  
+  getService(idService:number){
+    this.serviceService.getService(idService).subscribe({
+      next: (data) => (this.service = data),
+      error: (err) =>
+        Toastify({
+          text: 'Something go bad: ' + err.error.message,
+          duration: 3000,
+          gravity: 'bottom',
+          position: 'center',
+          backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+        }).showToast(),
+    });
   }
 
   myForm: FormGroup = this.fb.group({
@@ -187,13 +198,39 @@ export class BookCiteComponent implements OnInit {
     })
   }
 
+  modifyCite(){
+    if(this.myForm.valid){
+      const { ...cite } = this.myForm.value;
+      this.cite = cite;
+      this.cite.startTime = this.cite.startTime.length === 8 ? ""  : this.cite.startTime + ":00";
+      this.cite.idService = this.service.id;
+      this.citeService.updateCite(this.id, this.cite).subscribe({
+        next : (data) => 
+          Toastify({
+            text: 'Appointment successfully updated, check your appointments!',
+            duration: 3000,
+            gravity: 'bottom',
+            position: 'center',
+            backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
+          }).showToast(),
+        error: (err) => 
+          Toastify({
+            text: 'We can´t load our services yet: ' + err.error.message,
+            duration: 3000,
+            gravity: 'bottom',
+            position: 'center',
+            backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+          }).showToast()
+      })
+    }
+  }
+
   bookCite(){
     if(this.myForm.valid){
       const { ...cite } = this.myForm.value;
       this.cite = cite;
       this.cite.startTime = this.cite.startTime + ":00";
       this.cite.idService = this.service.id;
-      console.log(this.cite);
       this.citeService.addCite(this.cite).subscribe({
         next : (data) => 
           Toastify({

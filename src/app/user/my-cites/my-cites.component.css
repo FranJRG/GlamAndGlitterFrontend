@@ -64,6 +64,14 @@
   background-color: #d35400;
 }
 
+.rating{
+  background-color: #ba68c8;
+}
+
+.rating:hover{
+  background-color: #84458f;
+}
+
 .alert-card {
   background-color: #d9a5e1;
   color: #6a1b9a;

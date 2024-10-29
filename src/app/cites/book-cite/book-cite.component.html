@@ -4,19 +4,21 @@
       <h3>
         Reserve now <small>(Opening time 9:00, closing time 21:00)</small>
       </h3>
-      <form [formGroup]="myForm" (submit)="bookCite()">
-        @if (serviceId != 0 && serviceId != undefined) { @if (service) {
-        <div class="form-row">
-          <label for="service">Selected Service</label>
-          <input
-            type="text"
-            id="service"
-            name="service"
-            value="{{ service.name }}"
-            readonly
-          />
-        </div>
-        } }@else {
+      <form [formGroup]="myForm">
+        @if (serviceId != 0 && serviceId != undefined) { 
+          @if (service) {
+          <div class="form-row">
+            <label for="service">Selected Service</label>
+            <input
+              type="text"
+              id="service"
+              name="service"
+              value="{{ service.name }}"
+              readonly
+            />
+          </div>
+        } 
+      }@else {
         <div class="form-row">
           <label for="category">Select Category</label>
           <select
@@ -33,20 +35,36 @@
           </select>
         </div>
         @if (categorySelected) {
-        <div class="form-row">
-          <label for="service">Select Service</label>
-          <select id="service" name="service" (change)="setService($event)">
-            <option selected disabled>
-              ---------Select a service---------
-            </option>
-            @for (service of filterServices; track $index) {
-            <option value="{{ service.id }}">
-              {{ service.name }} - {{ service.price }}€
-            </option>
+          <div class="form-row">
+            <label for="service">Select Service</label>
+            <select id="service" name="service" (change)="setService($event)">
+              <option selected disabled>
+                ---------Select a service---------
+              </option>
+              @for (service of filterServices; track $index) {
+              <option value="{{ service.id }}">
+                {{ service.name }} - {{ service.price }}€
+              </option>
+              }
+            </select>
+          </div>
+        }@else {
+          @if (id != 0 && id != undefined) {
+            @if (service) {
+              <div class="form-row">
+                <label for="service">Selected Service</label>
+                <input
+                  type="text"
+                  id="service"
+                  name="service"
+                  value="{{service.name}}"
+                  readonly
+                />
+              </div>
             }
-          </select>
-        </div>
-        } }
+          }
+        } 
+      }
 
         <div class="form-row">
           <label for="day">Day</label>
@@ -76,9 +94,15 @@
           <small>{{ TimeError }}</small>
           }
         </div>
-        <div class="form-row full-width">
-          <button type="submit">Send</button>
-        </div>
+        @if (this.id != 0 && this.id != undefined) {
+          <div class="form-row full-width">
+            <button type="submit" (click)="modifyCite()">Update</button>
+          </div>
+        }@else {
+          <div class="form-row full-width">
+            <button type="submit" (click)="bookCite()">Confirm Cite</button>
+          </div>
+        }
       </form>
     </div>
   </div>

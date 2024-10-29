@@ -23,7 +23,6 @@ export class CheckCiteService {
     return this.http.get<any[]>(`${this.url}?date=${date}&time=${time + ":00"}&endTime=${endTime}:00`)
     .pipe(
       map(resp => {
-        console.log(resp)
         return resp.length > 0 ? {existCite : true} : null 
       }),
       catchError(err => {

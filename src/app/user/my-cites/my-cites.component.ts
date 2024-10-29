@@ -87,8 +87,21 @@ export class MyCitesComponent {
     })
   }
 
+  getFormattedDate(date:string):string{
+    const newDate = new Date(date);
+    const day = newDate.getDate()+1;
+    const fechaFormateada = `${newDate.getFullYear()}-${(newDate.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    return fechaFormateada;
+  }
+
   editReserve(id:number){
     this.router.navigateByUrl(`/cite/updateCite/${id}`);
+  }
+
+  isPastDate(date:string){
+    let dateService = new Date(this.getFormattedDate(date));
+    let actualDate = new Date();
+    return dateService < actualDate;
   }
 
 }

@@ -2,18 +2,24 @@
 <div class="container">
   @for (reserve of reserves; track $index) {
   <div class="reserve-card">
-    <div class="reserve-day">{{ reserve.day }}</div>
+    <div class="reserve-day">{{ getFormattedDate(reserve.day.toString()) }}</div>
     @for (service of services; track $index) { 
       @if (service.id === reserve.idService) {
         <div class="reserve-service">{{ service.name }}</div>
       }
   }
     <div class="reserve-button">
-      <button (click)="editReserve(reserve.id)" class="button auto-assign">
-        Modify Cite
-      </button>
-      @if (reserve.day < date) {
-        <button class="button manual-assign" (click)="deleteCite(reserve.id)">Cancel Cite</button>
+      @if (!isPastDate(reserve.day.toString())) {
+        <button (click)="editReserve(reserve.id)" class="button auto-assign">
+          Modify Cite
+        </button>
+        <button class="button manual-assign" (click)="deleteCite(reserve.id)">
+          Cancel Cite
+        </button>
+      }@else {
+        <button class="button rating">
+          Add rating
+        </button>
       }
     </div>
   </div>

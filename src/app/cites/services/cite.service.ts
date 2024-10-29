@@ -41,6 +41,10 @@ export class CiteService {
     return this.http.get<User[]>(`${this.url}/workers/${id}`);
   }
 
+  updateCite(id:number, cite:Omit<Cite, "id" | "username">):Observable<Cite>{
+    return this.http.put<Cite>(`${this.url}/modifyCite/${id}`,cite);
+  }
+
   deleteCite(id:number):Observable<Cite>{
     return this.http.delete<Cite>(`${this.url}/cancelCite/${id}`);
   }
