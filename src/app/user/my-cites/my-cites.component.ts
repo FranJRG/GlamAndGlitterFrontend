@@ -28,10 +28,17 @@ export class MyCitesComponent {
     private router:Router
   ){}
 
+  /**
+   * Cargamos las citas al iniciar la página
+   */
   ngOnInit(): void {
     this.getPendingCites();
   }
 
+  /**
+   * Método para obtener las citas del usuario logueado
+   * Si hay algun error notificamos al usuario
+   */
   getPendingCites(){
     let id = this.authService.getUserId();
     this.citeService.getUserCites(id).subscribe({
@@ -50,6 +57,12 @@ export class MyCitesComponent {
     })
   }
 
+  /**
+   * Obtenemos los servicios de las citas del usuario
+   * Recorremos el array de citas y cargamos los servicios que haya 
+   * Si hay cualquier error mostramos mensaje de error
+   * @param cites 
+   */
   getServicesByCites(cites:Cite[]){
     cites.forEach((cite) => {
       this.serviceService.getService(cite.idService).subscribe({
@@ -66,6 +79,12 @@ export class MyCitesComponent {
     })
   }
 
+  /**
+   * Método para cancelar una cita
+   * Si se puede eliminar mostraremos un mensaje de confirmado
+   * Si hay algun error mostraremos el mensaje correspondiente
+   * @param id 
+   */
   deleteCite(id:number){
     this.citeService.deleteCite(id).subscribe({
       next : (data) => 
@@ -87,6 +106,11 @@ export class MyCitesComponent {
     })
   }
 
+  /**
+   * Método para obtener una fecha formateada en formato HH:mm:ss de java time
+   * @param date 
+   * @returns 
+   */
   getFormattedDate(date:string):string{
     const newDate = new Date(date);
     const day = newDate.getDate()+1;
@@ -94,10 +118,19 @@ export class MyCitesComponent {
     return fechaFormateada;
   }
 
+  /**
+   * Método para llevar al usuario a la ruta para modificar una cita
+   * @param id 
+   */
   editReserve(id:number){
     this.router.navigateByUrl(`/cite/updateCite/${id}`);
   }
 
+  /**
+   * Método que comprueba si una cita es pasada o aún no
+   * @param date 
+   * @returns 
+   */
   isPastDate(date:string){
     let dateService = new Date(this.getFormattedDate(date));
     let actualDate = new Date();

@@ -27,7 +27,7 @@ export class RegisterStylistComponent {
     'Friday',
   ];
 
-  evening:boolean = false //Dejaremos un turn por defecto
+  evening:boolean = false //Dejaremos un turn por defecto a false
   keys:string[] = [] //Almacenamos las claves, es decir los dias seleccionados
 
   selectedDays: string[] = [];
@@ -65,6 +65,11 @@ export class RegisterStylistComponent {
     console.log(this.stylistSchedule);
   }
 
+  /**
+   * Método para crear un horario de un trabajador
+   * Le pasamos el id del trabajador el dia y el turno 
+   * Recorremos el mapa donde almacenamos la key (turno) y el value (dia)
+   */
   createSchedule(){
     this.stylistSchedule.forEach((turn,day) => {
       this.userService.setSchedule(this.id,day,turn).subscribe({
@@ -88,6 +93,7 @@ export class RegisterStylistComponent {
           }).showToast()
       })
     })
+    //Establecemos la bandera a true para cambiar el turno del horario y limpiamos el mapa las keys y los dias seleccionados
     this.evening = true;
     this.stylistSchedule.clear();
     this.selectedDays = [];

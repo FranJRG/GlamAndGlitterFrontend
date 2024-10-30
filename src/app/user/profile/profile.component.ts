@@ -24,6 +24,10 @@ export class ProfileComponent implements OnInit{
     private authService:AuthService
   ){}
 
+  /**
+   * Al iniciar la página cargamos los datos del usuario y seteamos las notificaciones
+   * Si hay cualquier error alertamos al usuario
+   */
   ngOnInit(): void {
     let userId = this.getUserId();
     this.userService.getUserById(userId).subscribe({
@@ -43,6 +47,10 @@ export class ProfileComponent implements OnInit{
     })
   }
 
+  /**
+   * Método para activar o desactivar las notificaciones 
+   * Mostramos mensaje de éxito o error en funcion de lo que sea necesario
+   */
   manageNotifications(){
     this.userService.manageNotifications(this.emailNotifications,this.calendarNotifications).subscribe({
       next : (data) =>  
@@ -64,6 +72,10 @@ export class ProfileComponent implements OnInit{
     })
   }
 
+  /**
+   * Método para obtener el id del usuario logueado
+   * @returns 
+   */
   getUserId():number{
     return this.authService.getUserId();
   }

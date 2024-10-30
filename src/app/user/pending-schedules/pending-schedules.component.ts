@@ -23,6 +23,10 @@ export class PendingSchedulesComponent implements OnInit{
 
   users:User[] = [];
 
+  /**
+   * Al cargar la página cargaremos todos los trabajadores que no tengan horario aún
+   * Si tenemos cualquier error alertaremos al usuario
+   */
   ngOnInit(): void {
     this.userService.findByUserWithoutSchedule().subscribe({
       next : (data) => this.users = data,
@@ -37,6 +41,7 @@ export class PendingSchedulesComponent implements OnInit{
     })
   }
 
+  //Método para llevar a la ruta para añadir un horario al trabajador
   completeSchedule(id:number){
     this.router.navigateByUrl(`user/completeSchedule/${id}`)
   }

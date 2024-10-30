@@ -27,10 +27,17 @@ export class PendingReservesComponent implements OnInit{
   ){}
 
 
+  /**
+   * Al cargar la página mostramos las citas pendientes
+   */
   ngOnInit(): void {
     this.getPendingCites();
   }
 
+  /**
+   * Método para cargar las citas pendientens
+   * Si hay algun error al cargar las citas pendientes mostramos el error correspondiente
+   */
   getPendingCites(){
     this.citeService.getPendingCites().subscribe({
       next : (data) => {
@@ -48,6 +55,12 @@ export class PendingReservesComponent implements OnInit{
     })
   }
 
+  /**
+   * Obtenemos los servicios de las citas pendientes
+   * Recorremos el array de citas y cargamos los servicios que haya 
+   * Si hay cualquier error mostramos mensaje de error
+   * @param cites 
+   */
   getServicesByCites(cites:Cite[]){
     cites.forEach((cite) => {
       this.serviceService.getService(cite.idService).subscribe({
@@ -64,11 +77,23 @@ export class PendingReservesComponent implements OnInit{
     })
   }
 
+  /**
+   * Método para obtener el nombre del servicio
+   * Buscamos el servicio en el array de servicios
+   * @param idService 
+   * @returns 
+   */
   getServiceName(idService: number): string {
     const service = this.services.find(service => service.id === idService);
     return service ? service.name : 'Servicio no encontrado';
   }
 
+  /**
+   * Método para establecer el trabajador a la cita 
+   * Si hay cualquier error alertamos al usuario
+   * @param idCite 
+   * @param idWorker 
+   */
   setWorker(idCite:number,idWorker?:number){
     this.citeService.setWorker(idCite,idWorker).subscribe({
       next : (data) => {
@@ -93,6 +118,10 @@ export class PendingReservesComponent implements OnInit{
     })
   }
 
+  /**
+   * Método para navegar a la ruta que selecciona el trabajador
+   * @param id 
+   */
   selectWorker(id:number){
     this.router.navigateByUrl(`user/workers/${id}`)
   }

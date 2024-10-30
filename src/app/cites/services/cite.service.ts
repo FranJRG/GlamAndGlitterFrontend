@@ -13,22 +13,47 @@ export class CiteService {
 
   private url:string = "http://localhost:8080";
 
+  /**
+   * Método para obtener una cita por su id
+   * @param id 
+   * @returns 
+   */
   getCite(id:number):Observable<Cite>{
     return this.http.get<Cite>(`${this.url}/cite/${id}`);
   }
 
+  /**
+   * Método para obtener las citas pendientes
+   * @returns 
+   */
   getPendingCites():Observable<Cite[]>{
     return this.http.get<Cite[]>(`${this.url}/cites`);
   }
 
+  /**
+   * Método para obtener las citas de un usuario
+   * @param id 
+   * @returns 
+   */
   getUserCites(id:number):Observable<Cite[]>{
     return this.http.get<Cite[]>(`${this.url}/myCites/${id}`);
   }
 
+  /**
+   * Método para añadir una cita
+   * @param cite 
+   * @returns 
+   */
   addCite(cite:Omit<Cite, "id" | "username">):Observable<Cite>{
     return this.http.post<Cite>(`${this.url}/addCite`, cite);
   }
 
+  /**
+   * Método para establecer un trabajador a una cita 
+   * @param idCite 
+   * @param idWorker 
+   * @returns 
+   */
   setWorker(idCite:number, idWorker?:number):Observable<User>{
     const params = new HttpParams()
     .set("idCite",idCite)
@@ -37,14 +62,30 @@ export class CiteService {
     return this.http.post<any>(`${this.url}/setWorker`,null,{params})
   }
 
+  /**
+   * Método para obtener trabajadores por un id
+   * @param id 
+   * @returns 
+   */
   getWorkers(id:number):Observable<User[]>{
     return this.http.get<User[]>(`${this.url}/workers/${id}`);
   }
 
+  /**
+   * Método para actualizar una cita
+   * @param id 
+   * @param cite 
+   * @returns 
+   */
   updateCite(id:number, cite:Omit<Cite, "id" | "username">):Observable<Cite>{
     return this.http.put<Cite>(`${this.url}/modifyCite/${id}`,cite);
   }
 
+  /**
+   * Método para cancelar una cita
+   * @param id 
+   * @returns 
+   */
   deleteCite(id:number):Observable<Cite>{
     return this.http.delete<Cite>(`${this.url}/cancelCite/${id}`);
   }

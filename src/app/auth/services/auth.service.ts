@@ -74,16 +74,28 @@ export class AuthService {
     return false
   }
 
+  /**
+   * Método para obtener el nombre del usuario del token
+   * @returns 
+   */
   getName(): string {
     const token = localStorage ? localStorage.getItem("token") : null;
     return token ? (jwtDecode(token) as any).name : ''; 
   }
 
+  /**
+   * Método para obtener el id del usuario del token
+   * @returns 
+   */
   getUserId(): number {
     const token = localStorage ? localStorage.getItem("token") : null; 
     return token ? (jwtDecode(token) as any).userId : '';
   }
 
+  /**
+   * Método para obtener el rol del usuario del token
+   * @returns 
+   */
   getRole(): string {
     const token = localStorage ? localStorage.getItem("token") : null; 
     return token ? (jwtDecode(token) as any).role : '';

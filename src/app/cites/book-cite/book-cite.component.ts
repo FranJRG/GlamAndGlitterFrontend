@@ -27,6 +27,9 @@ import { Cite } from '../../interfaces/cite';
   styleUrl: './book-cite.component.css',
 })
 export class BookCiteComponent implements OnInit {
+  /**
+   * Variables para este componente
+   */
   service!: Services;
   services!:Services[];
   categories!:Category[];
@@ -50,6 +53,10 @@ export class BookCiteComponent implements OnInit {
     idService:0
   }
 
+  /**
+   * Al cargar la página si hay un id cargamos la cita y si hay un id de servicio cargamos el servicio
+   * Mostramos las categorias
+   */
   ngOnInit(): void {
     if(this.id != 0 && this.id != undefined){
       this.getCite();
@@ -61,19 +68,26 @@ export class BookCiteComponent implements OnInit {
     this.getCategories();
   }
 
+  /**
+   * Método para obtener la cita
+   * Le pasamos un id y si la cita existe cargamos los datos en el formulario
+   * Mostramos un mensaje de error en caso de no existir o algun error
+   */
   getCite(){
     this.citeService.getCite(this.id).subscribe({
       next : (data) => {
         this.cite = data
+        //Formateamos la fecha ya que angular le resta un dia a la que trae la api
         const date = new Date(data.day); // La fecha en UTC (de la API)
         const localDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()+1);
         const fechaFormateada = `${localDate.getFullYear()}-${(localDate.getMonth() + 1).toString().padStart(2, '0')}-${localDate.getDate().toString().padStart(2, '0')}`;
+        //Seteamos los valores de la peticion a los del formulario
         this.myForm.setValue({
             day:fechaFormateada,
-            startTime:data.startTime.replace(":00",""),
+            startTime:data.startTime.replace(":00",""), //Formateamos la fecha para que sea válida en tipo Time de la api
             idService:data.idService
         })
-        this.getService(data.idService);
+        this.getService(data.idService); //Obtenemos el servicio de la api
       },
       error : (err) => 
         Toastify({
@@ -86,6 +100,11 @@ export class BookCiteComponent implements OnInit {
     })
   }
   
+  /**
+   * Método para obtener el servicio
+   * Le pasamos un id y buscamos el servicio por ese id
+   * @param idService 
+   */
   getService(idService:number){
     this.serviceService.getService(idService).subscribe({
       next: (data) => (this.service = data),
@@ -100,20 +119,28 @@ export class BookCiteComponent implements OnInit {
     });
   }
 
+  //Formulario para reservar una cita
   myForm: FormGroup = this.fb.group({
     day: [null],
     startTime: [null],
     idService: [this.serviceId],
   });
 
+  /**
+   * Método para comprobar si la cita es válida
+   * Pasaremos el campo day y startTime del formulario
+   */
   checkCite() {
     const day = this.myForm.get('day')?.value;
     const startTime = this.myForm.get('startTime')?.value;
 
+    //Al método validate de checkCiteService le pasamos el endTime que es la suma del comienzo y la duracion del servicio
     this.checkCiteService.validate(day, startTime, startTime+this.service.duration).subscribe((result) => {
       if (result) {
+        //Si obtenemos respuesta seteamos los errores a true
         this.myForm.get('startTime')?.setErrors({ existCite: true });
       } else {
+        //Si no seteamos los errores a null
         this.myForm.get('startTime')?.setErrors(null);
       }
     });
@@ -128,6 +155,12 @@ export class BookCiteComponent implements OnInit {
     return this.myForm.get(field)?.invalid && this.myForm.get(field)?.touched;
   }
 
+  /**
+   * Método para actualizar el listado de servicios
+   * Recibimos el evento del formulario en este caso es un id y obtenemos el servicio seleccionado en la lista de servicios filtrados
+   * Actualizamos el campo service tanto en el objeto service como en el formulario
+   * @param event 
+   */
   setService(event:Event) {
     let serviceId = parseInt((event.target as HTMLSelectElement).value);
     const selectedService = this.filterServices.find(service => service.id === serviceId);
@@ -152,6 +185,10 @@ export class BookCiteComponent implements OnInit {
     return errorMessage;
   }
 
+  /**
+   * Método para obtener el listado de categorias
+   * Mostramos mensaje de error en caso de algo ir mal
+   */
   getCategories(){
     this.serviceService.getCategories().subscribe({
       next: (data) => (this.categories = data),
@@ -198,10 +235,19 @@ export class BookCiteComponent implements OnInit {
     })
   }
 
+  /**
+   * Método para actualizar una cita
+   * Convertimos los datos necesarios para la respuesta de la api
+   * Asignamos el idService a la cita 
+   * Mostramos mensaje de éxito o error a la cita
+   */
   modifyCite(){
     if(this.myForm.valid){
       const { ...cite } = this.myForm.value;
       this.cite = cite;
+      //Si la longitud del startTime es 8 es decir HH:mm:ss no hacemos nada si no le ponemos :00 para darle formato
+      //Esto lo hacemos debido a que al recoger la cita de la api la hora viene formateada y si no la cambiamos 
+      //no habria que añadir el :00
       this.cite.startTime = this.cite.startTime.length === 8 ? ""  : this.cite.startTime + ":00";
       this.cite.idService = this.service.id;
       this.citeService.updateCite(this.id, this.cite).subscribe({
@@ -225,11 +271,17 @@ export class BookCiteComponent implements OnInit {
     }
   }
 
+  /**
+   * Método para reservar una cita
+   * Obtenemos los datos del formulario
+   * Le damos formato al startTime ya que la api espera un tipo Time y asignamos el id del servicio a la cita
+   * Mostramos mensaje de éxito o error en caso de la respuesta de la api
+   */
   bookCite(){
     if(this.myForm.valid){
       const { ...cite } = this.myForm.value;
       this.cite = cite;
-      this.cite.startTime = this.cite.startTime + ":00";
+      this.cite.startTime = this.cite.startTime + ":00"; //Damos formato a la cita HH:mm:ss
       this.cite.idService = this.service.id;
       this.citeService.addCite(this.cite).subscribe({
         next : (data) => 

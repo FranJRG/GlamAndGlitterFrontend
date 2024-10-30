@@ -13,16 +13,32 @@ export class UserService {
 
   url:string = "http://localhost:8080";
 
+  /**
+   * Método para obtener un usuario por su id
+   * @param id 
+   * @returns 
+   */
   getUserById(id:number):Observable<User>{
     return this.http.get<User>(`${this.url}/user/${id}`);
   }
 
+  /**
+   * Método para obtener los trabajadores que no tienen horario de trabajo
+   * @returns 
+   */
   findByUserWithoutSchedule():Observable<User[]>{
     return this.http.get<User[]>(`${this.url}/userWithoutSchedule`);
   }
 
+  /**
+   * Método para establecer un horario a un trabajador
+   * @param id 
+   * @param day 
+   * @param turn 
+   * @returns 
+   */  
   setSchedule(id:number, day:string, turn:string):Observable<EmployeeSchedule[]>{
-    const params = new HttpParams().set("day",day).set("turn",turn);
+    const params = new HttpParams().set("day",day).set("turn",turn); //Parámetros necesarios
     return this.http.post<any>(`${this.url}/setSchedule/${id}`,null,{params});
   }
    
@@ -58,8 +74,14 @@ export class UserService {
     return this.http.post<any>(`${this.url}/changePassword`, null, {params});
   }
 
+  /**
+   * Método para manegar las notificaciones que queremos recibir de la app
+   * @param emailNotifications 
+   * @param calendarNotifications 
+   * @returns 
+   */
   manageNotifications(emailNotifications:boolean,calendarNotifications:boolean):Observable<any>{
-    const params = new HttpParams()
+    const params = new HttpParams() //Parámetros necesarios para la api
         .set("emailNotifications", emailNotifications)
         .set("calendarNotifications", calendarNotifications);
 

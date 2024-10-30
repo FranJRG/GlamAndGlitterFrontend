@@ -26,6 +26,10 @@ export class WorkersComponent implements OnInit{
 
   ){}
 
+  /**
+   * Cargamos los trabajadores disponibles para esa cita
+   * Cargamos la cita a la que le queremos cambiar el trabajador
+   */
   ngOnInit(): void {
     this.citeService.getWorkers(this.id).subscribe({
       next : (data) => this.workers = data,
@@ -51,6 +55,12 @@ export class WorkersComponent implements OnInit{
     })
   }
 
+  /**
+   * Método para establecer un trabajador a una cita
+   * Le pasamos el id de la cita y el id del trabajador
+   * Mostramos mensaje de éxito o error según sea necesario
+   * @param id 
+   */
   setWorker(id:number){
     this.citeService.setWorker(this.id,id).subscribe({
       next : (data) => 
