@@ -89,7 +89,7 @@ export class MyCitesComponent {
     this.citeService.deleteCite(id).subscribe({
       next : (data) => 
         Toastify({
-          text: 'Appointment for date: ' + data.day + " deleted succesfully",
+          text: 'Appointment for date: ' + this.getFormattedDate(data.day.toString()) + " deleted succesfully",
           duration: 3000,
           gravity: 'bottom',
           position: 'center',
