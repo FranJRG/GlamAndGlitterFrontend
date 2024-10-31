@@ -9,6 +9,7 @@
         </a>
         <div class="dropdown-content">
           <a routerLink="/user/profile">Notifications</a>
+          <a routerLink="/calendar/myCalendar">Calendar</a>
           @if (getRole() === "admin") {
             <a routerLink="/user/pendingReserves">Pending reserves</a>
           }@else if (getRole() === "user") {

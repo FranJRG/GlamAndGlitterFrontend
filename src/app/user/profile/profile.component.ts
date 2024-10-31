@@ -6,6 +6,8 @@ import { AuthService } from '../../auth/services/auth.service';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import { User } from '../../interfaces/user';
+import { GoogleCalendarService } from '../../shared/services/google-calendar.service';
+import { GoogleService } from '../../shared/services/google.service';
 
 @Component({
   selector: 'app-profile',
@@ -18,10 +20,13 @@ export class ProfileComponent implements OnInit{
 
   emailNotifications!:boolean;
   calendarNotifications!:boolean;
+  events: any[] = [];
   user!:User;
 
   constructor(private userService:UserService,
-    private authService:AuthService
+    private authService:AuthService,
+    private calendarService:GoogleCalendarService,
+    private googleService: GoogleService,
   ){}
 
   /**
@@ -53,14 +58,20 @@ export class ProfileComponent implements OnInit{
    */
   manageNotifications(){
     this.userService.manageNotifications(this.emailNotifications,this.calendarNotifications).subscribe({
-      next : (data) =>  
+      next : (data) =>  {
         Toastify({
         text: "Notifications managed!",
         duration: 3000,
         gravity: "bottom",
         position: 'center', 
         backgroundColor: "linear-gradient(to right, #4CAF50, #2E7D32)", 
-        }).showToast(),
+        }).showToast()
+        if(this.calendarNotifications == true){
+          this.login();
+        }else if(this.calendarNotifications == false){
+          this.logout();
+        }
+      },
       error : (err) =>
         Toastify({
           text: "Something go bad: " + err.error.message,
@@ -70,6 +81,26 @@ export class ProfileComponent implements OnInit{
           backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
         }).showToast()
     })
+  }
+
+  login() {
+    this.googleService.initializeGoogleAuth();
+  }
+
+  syncEvents(token: string) {
+    this.calendarService.getEvents(token).subscribe({
+      next: (data) => {
+        this.events = data.items; // Aquí almacenas los eventos
+        console.log('Eventos sincronizados:', data.items);
+      },
+      error: (error) => {
+        console.error('Error al obtener eventos:', error);
+      },
+    });
+  }
+
+  logout() {
+    this.googleService.signOut();
   }
 
   /**
