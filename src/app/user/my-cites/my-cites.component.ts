@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Toastify from 'toastify-js';
@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
   templateUrl: './my-cites.component.html',
   styleUrl: './my-cites.component.css'
 })
-export class MyCitesComponent {
+export class MyCitesComponent implements OnInit{
   reserves:Cite[] = [];
   services:Services[] = [];
   date:Date = new Date();
@@ -87,14 +87,16 @@ export class MyCitesComponent {
    */
   deleteCite(id:number){
     this.citeService.deleteCite(id).subscribe({
-      next : (data) => 
+      next : (data) => {
+        this.reserves = this.reserves.filter(cite => cite.id !== id);
         Toastify({
           text: 'Appointment for date: ' + this.getFormattedDate(data.day.toString()) + " deleted succesfully",
           duration: 3000,
           gravity: 'bottom',
           position: 'center',
           backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
-        }).showToast(),
+        }).showToast()
+      },
       error : (err) => 
         Toastify({
           text: "Something go bad: " + err.error.message,
