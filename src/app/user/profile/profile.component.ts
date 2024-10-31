@@ -7,7 +7,6 @@ import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import { User } from '../../interfaces/user';
 import { GoogleCalendarService } from '../../shared/services/google-calendar.service';
-import { GoogleService } from '../../shared/services/google.service';
 
 @Component({
   selector: 'app-profile',
@@ -25,8 +24,7 @@ export class ProfileComponent implements OnInit{
 
   constructor(private userService:UserService,
     private authService:AuthService,
-    private calendarService:GoogleCalendarService,
-    private googleService: GoogleService,
+    private calendarService:GoogleCalendarService
   ){}
 
   /**
@@ -84,23 +82,11 @@ export class ProfileComponent implements OnInit{
   }
 
   login() {
-    this.googleService.initializeGoogleAuth();
-  }
-
-  syncEvents(token: string) {
-    this.calendarService.getEvents(token).subscribe({
-      next: (data) => {
-        this.events = data.items; // Aquí almacenas los eventos
-        console.log('Eventos sincronizados:', data.items);
-      },
-      error: (error) => {
-        console.error('Error al obtener eventos:', error);
-      },
-    });
+    this.calendarService.initializeGoogleAuth();
   }
 
   logout() {
-    this.googleService.signOut();
+    this.calendarService.signOut();
   }
 
   /**

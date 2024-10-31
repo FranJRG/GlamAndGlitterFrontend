@@ -18,6 +18,7 @@ import { Category } from '../../interfaces/category';
 import { of, switchMap } from 'rxjs';
 import { CiteService } from '../services/cite.service';
 import { Cite } from '../../interfaces/cite';
+import { GoogleCalendarService } from '../../shared/services/google-calendar.service';
 
 @Component({
   selector: 'app-book-cite',
@@ -44,7 +45,8 @@ export class BookCiteComponent implements OnInit {
     private serviceService: ServiceService,
     private fb: FormBuilder,
     private checkCiteService: CheckCiteService,
-    private citeService:CiteService
+    private citeService:CiteService,
+    private calendarService:GoogleCalendarService
   ) {}
 
   cite:Omit<Cite, "id" | "username"> = {
@@ -284,14 +286,16 @@ export class BookCiteComponent implements OnInit {
       this.cite.startTime = this.cite.startTime + ":00"; //Damos formato a la cita HH:mm:ss
       this.cite.idService = this.service.id;
       this.citeService.addCite(this.cite).subscribe({
-        next : (data) => 
+        next : (data) => {
           Toastify({
             text: 'Appointment successfully added, check your future appointments!',
             duration: 3000,
             gravity: 'bottom',
             position: 'center',
             backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
-          }).showToast(),
+          }).showToast()
+          this.createCalendarEvent(data);
+        },
         error : (err) => 
           Toastify({
             text: 'Something go bad: ' + err.error.message,
@@ -303,4 +307,47 @@ export class BookCiteComponent implements OnInit {
       })
     }
   }
+
+   /**
+   * Método para crear un evento en Google Calendar
+   * @param data - Datos de la cita para crear el evento
+   */
+   createCalendarEvent(data: any) {
+    const event = {
+      summary: 'Cita Reservada', // Cambia esto si quieres usar un título más específico
+      location: 'Sevilla',
+      description: `Cita para el servicio: ${this.service.name}`,
+      start: {
+        dateTime: `${this.myForm.value.day}T${this.cite.startTime}`,
+        timeZone: 'Europa/Madrid' // Cambia a tu zona horaria
+      },
+      end: {
+        dateTime: `${this.myForm.value.day}T${data.startTime+this.service.duration}`,
+        timeZone:  'Europa/Madrid'
+      },
+    };
+
+    this.calendarService.createCalendarEvent(event).subscribe({
+      next: (response) => {
+        Toastify({
+          text: 'Event added to calendar succesfully',
+          duration: 3000,
+          gravity: 'bottom',
+          position: 'center',
+          backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
+        }).showToast()
+      },
+      error: (err) => {
+        console.error('Error al crear el evento en Google Calendar:', err);
+        Toastify({
+          text: 'Error al crear el evento en Google Calendar',
+          duration: 3000,
+          gravity: 'bottom',
+          position: 'center',
+          backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+        }).showToast();
+      }
+    });
+  }
+
 }
