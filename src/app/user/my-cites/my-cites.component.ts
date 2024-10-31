@@ -113,7 +113,7 @@ export class MyCitesComponent {
    */
   getFormattedDate(date:string):string{
     const newDate = new Date(date);
-    const day = newDate.getDate()+1;
+    const day = newDate.getDate()  + 1  > 31 ? 1 : newDate.getDate() + 1;
     const fechaFormateada = `${newDate.getFullYear()}-${(newDate.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
     return fechaFormateada;
   }

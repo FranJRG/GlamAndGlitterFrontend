@@ -261,7 +261,7 @@ export class BookCiteComponent implements OnInit {
           }).showToast(),
         error: (err) => 
           Toastify({
-            text: 'We can´t load our services yet: ' + err.error.message,
+            text: 'Something go bad: ' + err.error.message,
             duration: 3000,
             gravity: 'bottom',
             position: 'center',
@@ -294,7 +294,7 @@ export class BookCiteComponent implements OnInit {
           }).showToast(),
         error : (err) => 
           Toastify({
-            text: 'We can´t load our services yet: ' + err.error.message,
+            text: 'Something go bad: ' + err.error.message,
             duration: 3000,
             gravity: 'bottom',
             position: 'center',

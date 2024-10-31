@@ -1,5 +1,5 @@
 .container {
-  max-width: 1200px;
+  max-width: 700px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -19,6 +19,7 @@
   font-size: 50px;
   color: #2c3e50;
   margin-bottom: 20px;
+  margin-top: -5px;
 }
 
 .notification-settings label {
@@ -70,3 +71,17 @@
   transform: rotate(45deg);
 }
 
+.formButton {
+  background-color: rgb(130, 27, 249);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  height: 50px;
+  font-size: 18px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.formButton:hover {
+  background-color: rgb(54, 13, 78);
+  transform: translateY(-2px);
+}
