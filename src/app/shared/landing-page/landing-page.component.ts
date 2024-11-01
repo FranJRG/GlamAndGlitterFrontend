@@ -7,6 +7,8 @@ import { Category } from '../../interfaces/category';
 import { of, switchMap } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../auth/services/auth.service';
+import { UserService } from '../../user/services/user.service';
+import { GoogleCalendarService } from '../services/google-calendar.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -16,6 +18,7 @@ import { AuthService } from '../../auth/services/auth.service';
   styleUrl: './landing-page.component.css',
 })
 export class LandingPageComponent implements OnInit {
+  
   constructor(private serviceService: ServiceService,
     private authService:AuthService
   ) {}
@@ -37,6 +40,8 @@ export class LandingPageComponent implements OnInit {
   isLoggued():boolean{
     return this.authService.existToken();
   }
+
+
 
   /**
    * Método para obtener todos los servicios de la API

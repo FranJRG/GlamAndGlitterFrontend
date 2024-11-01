@@ -19,6 +19,7 @@ import { of, switchMap } from 'rxjs';
 import { CiteService } from '../services/cite.service';
 import { Cite } from '../../interfaces/cite';
 import { GoogleCalendarService } from '../../shared/services/google-calendar.service';
+import { addMinutes, formatISO } from 'date-fns';
 
 @Component({
   selector: 'app-book-cite',
@@ -32,12 +33,12 @@ export class BookCiteComponent implements OnInit {
    * Variables para este componente
    */
   service!: Services;
-  services!:Services[];
-  categories!:Category[];
-  filterServices!:Services[];
+  services!: Services[];
+  categories!: Category[];
+  filterServices!: Services[];
   idServiceCite = 0;
 
-  categorySelected:boolean = false;
+  categorySelected: boolean = false;
   @Input() serviceId: number = 0;
   @Input() id: number = 0;
 
@@ -45,29 +46,36 @@ export class BookCiteComponent implements OnInit {
     private serviceService: ServiceService,
     private fb: FormBuilder,
     private checkCiteService: CheckCiteService,
-    private citeService:CiteService,
-    private calendarService:GoogleCalendarService
+    private citeService: CiteService,
+    private calendarService: GoogleCalendarService
   ) {}
 
-  cite:Omit<Cite, "id" | "username"> = {
-    day:new Date(),
-    startTime: "",
-    idService:0
-  }
+  cite: Omit<Cite, 'id' | 'username'> = {
+    day: new Date(),
+    startTime: '',
+    idService: 0,
+  };
 
   /**
    * Al cargar la página si hay un id cargamos la cita y si hay un id de servicio cargamos el servicio
    * Mostramos las categorias
    */
   ngOnInit(): void {
-    if(this.id != 0 && this.id != undefined){
+    if (this.id != 0 && this.id != undefined) {
       this.getCite();
     }
-    if(this.serviceId != 0 && this.serviceId != undefined){
+    if (this.serviceId != 0 && this.serviceId != undefined) {
       this.getService(this.serviceId);
     }
-
+    this.loadEvents();
     this.getCategories();
+  }
+
+  loadEvents() {
+    this.calendarService.getCalendarEvents().subscribe({
+      next: (data) => console.log('Eventos del calendario:', data),
+      error: (err) => console.log('Error al obtener eventos:', err),
+    });
   }
 
   /**
@@ -75,23 +83,34 @@ export class BookCiteComponent implements OnInit {
    * Le pasamos un id y si la cita existe cargamos los datos en el formulario
    * Mostramos un mensaje de error en caso de no existir o algun error
    */
-  getCite(){
+  getCite() {
     this.citeService.getCite(this.id).subscribe({
-      next : (data) => {
-        this.cite = data
+      next: (data) => {
+        this.cite = data;
         //Formateamos la fecha ya que angular le resta un dia a la que trae la api
         const date = new Date(data.day); // La fecha en UTC (de la API)
-        const localDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()+1);
-        const fechaFormateada = `${localDate.getFullYear()}-${(localDate.getMonth() + 1).toString().padStart(2, '0')}-${localDate.getDate().toString().padStart(2, '0')}`;
+        const localDate = new Date(
+          date.getUTCFullYear(),
+          date.getUTCMonth(),
+          date.getUTCDate() + 1
+        );
+        const fechaFormateada = `${localDate.getFullYear()}-${(
+          localDate.getMonth() + 1
+        )
+          .toString()
+          .padStart(2, '0')}-${localDate
+          .getDate()
+          .toString()
+          .padStart(2, '0')}`;
         //Seteamos los valores de la peticion a los del formulario
         this.myForm.setValue({
-            day:fechaFormateada,
-            startTime:data.startTime.replace(":00",""), //Formateamos la fecha para que sea válida en tipo Time de la api
-            idService:data.idService
-        })
+          day: fechaFormateada,
+          startTime: data.startTime.replace(':00', ''), //Formateamos la fecha para que sea válida en tipo Time de la api
+          idService: data.idService,
+        });
         this.getService(data.idService); //Obtenemos el servicio de la api
       },
-      error : (err) => 
+      error: (err) =>
         Toastify({
           text: 'Something go bad : ' + err.error.message,
           duration: 3000,
@@ -99,15 +118,15 @@ export class BookCiteComponent implements OnInit {
           position: 'center',
           backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
         }).showToast(),
-    })
+    });
   }
-  
+
   /**
    * Método para obtener el servicio
    * Le pasamos un id y buscamos el servicio por ese id
-   * @param idService 
+   * @param idService
    */
-  getService(idService:number){
+  getService(idService: number) {
     this.serviceService.getService(idService).subscribe({
       next: (data) => (this.service = data),
       error: (err) =>
@@ -137,15 +156,17 @@ export class BookCiteComponent implements OnInit {
     const startTime = this.myForm.get('startTime')?.value;
 
     //Al método validate de checkCiteService le pasamos el endTime que es la suma del comienzo y la duracion del servicio
-    this.checkCiteService.validate(day, startTime, startTime+this.service.duration).subscribe((result) => {
-      if (result) {
-        //Si obtenemos respuesta seteamos los errores a true
-        this.myForm.get('startTime')?.setErrors({ existCite: true });
-      } else {
-        //Si no seteamos los errores a null
-        this.myForm.get('startTime')?.setErrors(null);
-      }
-    });
+    this.checkCiteService
+      .validate(day, startTime, startTime + this.service.duration)
+      .subscribe((result) => {
+        if (result) {
+          //Si obtenemos respuesta seteamos los errores a true
+          this.myForm.get('startTime')?.setErrors({ existCite: true });
+        } else {
+          //Si no seteamos los errores a null
+          this.myForm.get('startTime')?.setErrors(null);
+        }
+      });
   }
 
   /**
@@ -161,11 +182,13 @@ export class BookCiteComponent implements OnInit {
    * Método para actualizar el listado de servicios
    * Recibimos el evento del formulario en este caso es un id y obtenemos el servicio seleccionado en la lista de servicios filtrados
    * Actualizamos el campo service tanto en el objeto service como en el formulario
-   * @param event 
+   * @param event
    */
-  setService(event:Event) {
+  setService(event: Event) {
     let serviceId = parseInt((event.target as HTMLSelectElement).value);
-    const selectedService = this.filterServices.find(service => service.id === serviceId);
+    const selectedService = this.filterServices.find(
+      (service) => service.id === serviceId
+    );
     if (selectedService) {
       this.service = selectedService;
       this.myForm.patchValue({ idService: this.service.id });
@@ -178,7 +201,7 @@ export class BookCiteComponent implements OnInit {
   get TimeError() {
     const error = this.myForm.get('startTime')?.errors;
     let errorMessage = '';
-  
+
     if (error) {
       if (error['existCite']) {
         errorMessage = 'Cite not available at this time';
@@ -191,7 +214,7 @@ export class BookCiteComponent implements OnInit {
    * Método para obtener el listado de categorias
    * Mostramos mensaje de error en caso de algo ir mal
    */
-  getCategories(){
+  getCategories() {
     this.serviceService.getCategories().subscribe({
       next: (data) => (this.categories = data),
       error: (err) =>
@@ -211,49 +234,52 @@ export class BookCiteComponent implements OnInit {
    * Y con switchMap buscamos los servicios de esa categoría
    * Nos suscribimos y cargamos dichos servicios y asignamos la varibale booleana a true para mostrar los servicios en el form
    * Si hay un error alertaremos al usuario
-   * @param event 
+   * @param event
    */
-  getServicesByCategory(event:Event){
+  getServicesByCategory(event: Event) {
     const idCategory = (event.target as HTMLSelectElement).value;
 
-    this.serviceService.getServicesByCategory(idCategory).pipe(
-      switchMap((services) => {
-        return services.length > 0 ? of(services) : of([]);
-      })
-    )
-    .subscribe({
-      next : (data) => {
-        this.filterServices = data 
-        this.categorySelected = true
-      },
-      error : (err) => 
-        Toastify({
-          text: 'We can´t load our services yet: ' + err.error.message,
-          duration: 3000,
-          gravity: 'bottom',
-          position: 'center',
-          backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
-        }).showToast(),
-    })
+    this.serviceService
+      .getServicesByCategory(idCategory)
+      .pipe(
+        switchMap((services) => {
+          return services.length > 0 ? of(services) : of([]);
+        })
+      )
+      .subscribe({
+        next: (data) => {
+          this.filterServices = data;
+          this.categorySelected = true;
+        },
+        error: (err) =>
+          Toastify({
+            text: 'We can´t load our services yet: ' + err.error.message,
+            duration: 3000,
+            gravity: 'bottom',
+            position: 'center',
+            backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+          }).showToast(),
+      });
   }
 
   /**
    * Método para actualizar una cita
    * Convertimos los datos necesarios para la respuesta de la api
-   * Asignamos el idService a la cita 
+   * Asignamos el idService a la cita
    * Mostramos mensaje de éxito o error a la cita
    */
-  modifyCite(){
-    if(this.myForm.valid){
+  modifyCite() {
+    if (this.myForm.valid) {
       const { ...cite } = this.myForm.value;
       this.cite = cite;
       //Si la longitud del startTime es 8 es decir HH:mm:ss no hacemos nada si no le ponemos :00 para darle formato
-      //Esto lo hacemos debido a que al recoger la cita de la api la hora viene formateada y si no la cambiamos 
+      //Esto lo hacemos debido a que al recoger la cita de la api la hora viene formateada y si no la cambiamos
       //no habria que añadir el :00
-      this.cite.startTime = this.cite.startTime.length === 8 ? ""  : this.cite.startTime + ":00";
+      this.cite.startTime =
+        this.cite.startTime.length === 8 ? '' : this.cite.startTime + ':00';
       this.cite.idService = this.service.id;
       this.citeService.updateCite(this.id, this.cite).subscribe({
-        next : (data) => 
+        next: (data) =>
           Toastify({
             text: 'Appointment successfully updated, check your appointments!',
             duration: 3000,
@@ -261,15 +287,15 @@ export class BookCiteComponent implements OnInit {
             position: 'center',
             backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
           }).showToast(),
-        error: (err) => 
+        error: (err) =>
           Toastify({
             text: 'Something go bad: ' + err.error.message,
             duration: 3000,
             gravity: 'bottom',
             position: 'center',
             backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
-          }).showToast()
-      })
+          }).showToast(),
+      });
     }
   }
 
@@ -279,24 +305,24 @@ export class BookCiteComponent implements OnInit {
    * Le damos formato al startTime ya que la api espera un tipo Time y asignamos el id del servicio a la cita
    * Mostramos mensaje de éxito o error en caso de la respuesta de la api
    */
-  bookCite(){
-    if(this.myForm.valid){
+  bookCite() {
+    if (this.myForm.valid) {
       const { ...cite } = this.myForm.value;
       this.cite = cite;
-      this.cite.startTime = this.cite.startTime + ":00"; //Damos formato a la cita HH:mm:ss
+      this.cite.startTime = this.cite.startTime + ':00'; //Damos formato a la cita HH:mm:ss
       this.cite.idService = this.service.id;
       this.citeService.addCite(this.cite).subscribe({
-        next : (data) => {
+        next: (data) => {
           Toastify({
             text: 'Appointment successfully added, check your future appointments!',
             duration: 3000,
             gravity: 'bottom',
             position: 'center',
             backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
-          }).showToast()
+          }).showToast();
           this.createCalendarEvent(data);
         },
-        error : (err) => 
+        error: (err) =>
           Toastify({
             text: 'Something go bad: ' + err.error.message,
             duration: 3000,
@@ -304,38 +330,49 @@ export class BookCiteComponent implements OnInit {
             position: 'center',
             backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
           }).showToast(),
-      })
+      });
     }
   }
 
-   /**
+  /**
    * Método para crear un evento en Google Calendar
    * @param data - Datos de la cita para crear el evento
    */
-   createCalendarEvent(data: any) {
+  createCalendarEvent(data: any) {
+    const startDateTime = new Date(`${this.cite.day}T${this.cite.startTime}`);
+    const endDateTime = addMinutes(startDateTime, parseInt(this.service.duration));
     const event = {
-      summary: 'Cita Reservada', // Cambia esto si quieres usar un título más específico
+      summary: this.service.name,
       location: 'Sevilla',
-      description: `Cita para el servicio: ${this.service.name}`,
+      description: 'Reserva de cita',
       start: {
-        dateTime: `${this.myForm.value.day}T${this.cite.startTime}`,
-        timeZone: 'Europa/Madrid' // Cambia a tu zona horaria
+        dateTime: formatISO(startDateTime), // Hora de inicio en formato ISO sin desplazamiento
+        timeZone: 'Europe/Madrid', // Zona horaria correcta
       },
       end: {
-        dateTime: `${this.myForm.value.day}T${data.startTime+this.service.duration}`,
-        timeZone:  'Europa/Madrid'
+        dateTime: formatISO(endDateTime), // Hora de fin en formato ISO sin desplazamiento
+        timeZone: 'Europe/Madrid', // Zona horaria correcta
+      },
+      attendees: [
+        { email: 'correo@example.com' }, // Lista de asistentes
+      ],
+      reminders: {
+        useDefault: false,
+        overrides: [
+          { method: 'email', minutes: 24 * 60 },
+          { method: 'popup', minutes: 10 },
+        ],
       },
     };
-
     this.calendarService.createCalendarEvent(event).subscribe({
-      next: (response) => {
+      next: (data) => {
         Toastify({
           text: 'Event added to calendar succesfully',
           duration: 3000,
           gravity: 'bottom',
           position: 'center',
           backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
-        }).showToast()
+        }).showToast();
       },
       error: (err) => {
         console.error('Error al crear el evento en Google Calendar:', err);
@@ -346,8 +383,7 @@ export class BookCiteComponent implements OnInit {
           position: 'center',
           backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
         }).showToast();
-      }
+      },
     });
   }
-
 }

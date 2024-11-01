@@ -5,6 +5,8 @@ import { AuthService } from '../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
+import { UserService } from '../../user/services/user.service';
+import { GoogleCalendarService } from '../../shared/services/google-calendar.service';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +18,8 @@ import 'toastify-js/src/toastify.css';
 export class LoginComponent {
 
   constructor(private authService:AuthService,
+    private userService:UserService,
+    private calendarService:GoogleCalendarService,
     private router:Router
   ){}
 
@@ -36,6 +40,15 @@ export class LoginComponent {
       this.authService.login(email,password).subscribe(
         resp => {
           if(resp == true) {
+            if(this.getUserId() != 0 && this.getUserId() != undefined){
+              this.userService.getUserById(this.getUserId()).subscribe({
+                next : (data) => {
+                  if(data.calendarNotifications){
+                    this.calendarService.initializeTokenClient();
+                  }
+                }
+              })
+            }
             this.router.navigateByUrl("/")
             Toastify({
               text: "Welcome " + email,
@@ -56,6 +69,10 @@ export class LoginComponent {
         }
       )
     }
+  }
+
+  getUserId():number{
+    return this.authService.getUserId();
   }
 
 }

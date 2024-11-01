@@ -82,7 +82,7 @@ export class ProfileComponent implements OnInit{
   }
 
   login() {
-    this.calendarService.initializeGoogleAuth();
+    this.calendarService.initializeTokenClient();
   }
 
   logout() {
