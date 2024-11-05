@@ -1,24 +1,40 @@
 @if (pendingReserves.length > 0) {
-    <div class="container">
+<div class="container">
+  <div class="container-table">
+    <table class="styled-table">
+      <tr>
+        <th>Date</th>
+        <th>User</th>
+        <th>Service</th>
+        <th></th>
+        <th>Actions</th>
+        <th></th>
+      </tr>
       @for (reserve of pendingReserves; track $index) {
-      <div class="reserve-card">
-        <div class="reserve-day">{{ reserve.day }} - {{reserve.username}}</div>
-        <div class="reserve-service">{{ getServiceName(reserve.idService) }}</div>
-        <div class="reserve-button">
-          <button
-            class="button manual-assign"
-            (click)="selectWorker(reserve.id)"
-          >
-            Change worker
+      <tr>
+        <td>{{ reserve.day }}</td>
+        <td>{{ reserve.username }}</td>
+        <td>{{ getServiceName(reserve.idService) }}</td>
+        <td>
+          <button style="background-color: #bcac1f;" (click)="selectWorker(reserve.id)">
+            Modify cite
+            <i class="fas fa-edit" aria-hidden="true"></i>
           </button>
-        </div>
-      </div>
+        </td>
+        <td></td>
+        <td>
+          <button style="background-color: #F44336;" (click)="deleteCite(reserve.id)">
+            Delete cite
+            <i class="fas fa-trash" aria-hidden="true"></i>
+          </button>
+        </td>
+      </tr>
       }
-    </div>
+    </table>
+  </div>
+</div>
 }@else {
-    <div class="container">
-        <div class="alert-card">
-            Work completed, at least at this moment...
-        </div>
-    </div>
+  <div class="container">
+    <div class="alert-card">Work completed, at least at this moment...</div>
+  </div>
 }

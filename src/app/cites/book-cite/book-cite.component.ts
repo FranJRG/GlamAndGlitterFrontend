@@ -20,6 +20,8 @@ import { CiteService } from '../services/cite.service';
 import { Cite } from '../../interfaces/cite';
 import { GoogleCalendarService } from '../../shared/services/google-calendar.service';
 import { addMinutes, formatISO } from 'date-fns';
+import { User } from '../../interfaces/user';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
   selector: 'app-book-cite',
@@ -37,6 +39,9 @@ export class BookCiteComponent implements OnInit {
   categories!: Category[];
   filterServices!: Services[];
   idServiceCite = 0;
+  idEvent:string = ""
+
+  workers!:User[];
 
   categorySelected: boolean = false;
   @Input() serviceId: number = 0;
@@ -47,6 +52,7 @@ export class BookCiteComponent implements OnInit {
     private fb: FormBuilder,
     private checkCiteService: CheckCiteService,
     private citeService: CiteService,
+    private authService:AuthService,
     private calendarService: GoogleCalendarService
   ) {}
 
@@ -54,7 +60,12 @@ export class BookCiteComponent implements OnInit {
     day: new Date(),
     startTime: '',
     idService: 0,
+    eventId : ""
   };
+
+  getRole():string{
+    return this.authService.getRole();
+  }
 
   /**
    * Al cargar la página si hay un id cargamos la cita y si hay un id de servicio cargamos el servicio
@@ -63,6 +74,19 @@ export class BookCiteComponent implements OnInit {
   ngOnInit(): void {
     if (this.id != 0 && this.id != undefined) {
       this.getCite();
+      this.citeService.getWorkers(this.id).subscribe({
+        next : (data) => {
+          this.workers = data
+        },
+        error : (err) => 
+          Toastify({
+            text: "Something go bad: " + err.error.message,
+            duration: 3000, 
+            gravity: "bottom",
+            position: 'center',
+            backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
+          }).showToast()
+      })
     }
     if (this.serviceId != 0 && this.serviceId != undefined) {
       this.getService(this.serviceId);
@@ -144,7 +168,7 @@ export class BookCiteComponent implements OnInit {
   myForm: FormGroup = this.fb.group({
     day: [null],
     startTime: [null],
-    idService: [this.serviceId],
+    idService: [this.serviceId]
   });
 
   /**
@@ -311,8 +335,10 @@ export class BookCiteComponent implements OnInit {
       this.cite = cite;
       this.cite.startTime = this.cite.startTime + ':00'; //Damos formato a la cita HH:mm:ss
       this.cite.idService = this.service.id;
+      this.createCalendarEvent()
       this.citeService.addCite(this.cite).subscribe({
         next: (data) => {
+          console.log(data)
           Toastify({
             text: 'Appointment successfully added, check your future appointments!',
             duration: 3000,
@@ -320,7 +346,6 @@ export class BookCiteComponent implements OnInit {
             position: 'center',
             backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
           }).showToast();
-          this.createCalendarEvent(data);
         },
         error: (err) =>
           Toastify({
@@ -334,11 +359,42 @@ export class BookCiteComponent implements OnInit {
     }
   }
 
+  setIdEvent(id:string){
+    this.cite.eventId = id;
+  }
+
+    /**
+   * Método para establecer un trabajador a una cita
+   * Le pasamos el id de la cita y el id del trabajador
+   * Mostramos mensaje de éxito o error según sea necesario
+   * @param id 
+   */
+    setWorker(id:number){
+      this.citeService.setWorker(this.id,id).subscribe({
+        next : (data) => 
+          Toastify({
+            text: 'Worker assined is ' + data.name,
+            duration: 4000,
+            gravity: 'bottom',
+            position: 'center',
+            backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
+          }).showToast(),
+        error : (err) => 
+          Toastify({
+            text: "Something go bad: " + err.error.message,
+            duration: 3000, 
+            gravity: "bottom",
+            position: 'center',
+            backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
+          }).showToast()
+      })
+    }
+
   /**
    * Método para crear un evento en Google Calendar
    * @param data - Datos de la cita para crear el evento
    */
-  createCalendarEvent(data: any) {
+  createCalendarEvent():string{
     const startDateTime = new Date(`${this.cite.day}T${this.cite.startTime}`);
     const endDateTime = addMinutes(startDateTime, parseInt(this.service.duration));
     const event = {
@@ -346,11 +402,11 @@ export class BookCiteComponent implements OnInit {
       location: 'Sevilla',
       description: 'Reserva de cita',
       start: {
-        dateTime: formatISO(startDateTime), // Hora de inicio en formato ISO sin desplazamiento
+        dateTime: formatISO(startDateTime), // Hora de inicio en formato ISO
         timeZone: 'Europe/Madrid', // Zona horaria correcta
       },
       end: {
-        dateTime: formatISO(endDateTime), // Hora de fin en formato ISO sin desplazamiento
+        dateTime: formatISO(endDateTime), // Hora de fin en formato ISO
         timeZone: 'Europe/Madrid', // Zona horaria correcta
       },
       attendees: [
@@ -366,6 +422,8 @@ export class BookCiteComponent implements OnInit {
     };
     this.calendarService.createCalendarEvent(event).subscribe({
       next: (data) => {
+        this.setIdEvent(data.id);
+        console.log(this.cite.eventId)
         Toastify({
           text: 'Event added to calendar succesfully',
           duration: 3000,
@@ -375,7 +433,6 @@ export class BookCiteComponent implements OnInit {
         }).showToast();
       },
       error: (err) => {
-        console.error('Error al crear el evento en Google Calendar:', err);
         Toastify({
           text: 'Error al crear el evento en Google Calendar',
           duration: 3000,
@@ -385,5 +442,6 @@ export class BookCiteComponent implements OnInit {
         }).showToast();
       },
     });
+    return ""
   }
 }

@@ -9,24 +9,31 @@ import { Cite } from '../../interfaces/cite';
 import { Services } from '../../interfaces/services';
 import { AuthService } from '../../auth/services/auth.service';
 import { Router } from '@angular/router';
+import { GoogleCalendarService } from '../../shared/services/google-calendar.service';
+import { formatISO } from 'date-fns';
 
 @Component({
   selector: 'app-my-cites',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './my-cites.component.html',
-  styleUrl: './my-cites.component.css'
+  styleUrl: './my-cites.component.css',
 })
-export class MyCitesComponent implements OnInit{
-  reserves:Cite[] = [];
-  services:Services[] = [];
-  date:Date = new Date();
+export class MyCitesComponent implements OnInit {
+  reserves: Cite[] = [];
+  services: Services[] = [];
+  service!: Services;
+  date: Date = new Date();
+
   
-  constructor(private citeService:CiteService,
-    private serviceService:ServiceService,
-    private authService:AuthService,
-    private router:Router
-  ){}
+
+  constructor(
+    private citeService: CiteService,
+    private serviceService: ServiceService,
+    private authService: AuthService,
+    private calendarService: GoogleCalendarService,
+    private router: Router
+  ) {}
 
   /**
    * Cargamos las citas al iniciar la página
@@ -39,104 +46,150 @@ export class MyCitesComponent implements OnInit{
    * Método para obtener las citas del usuario logueado
    * Si hay algun error notificamos al usuario
    */
-  getPendingCites(){
+  getPendingCites() {
     let id = this.authService.getUserId();
     this.citeService.getUserCites(id).subscribe({
-      next : (data) => {
+      next: (data) => {
         this.reserves = data;
         this.getServicesByCites(this.reserves);
       },
-      error : (err) => 
+      error: (err) =>
         Toastify({
-          text: "Something go bad: " + err.error.message,
-          duration: 3000, 
-          gravity: "bottom",
+          text: 'Something go bad: ' + err.error.message,
+          duration: 3000,
+          gravity: 'bottom',
           position: 'center',
-          backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
-        }).showToast()
-    })
+          backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+        }).showToast(),
+    });
   }
 
   /**
    * Obtenemos los servicios de las citas del usuario
-   * Recorremos el array de citas y cargamos los servicios que haya 
+   * Recorremos el array de citas y cargamos los servicios que haya
    * Si hay cualquier error mostramos mensaje de error
-   * @param cites 
+   * @param cites
    */
-  getServicesByCites(cites:Cite[]){
+  getServicesByCites(cites: Cite[]) {
     cites.forEach((cite) => {
       this.serviceService.getService(cite.idService).subscribe({
-        next : (data) => this.services.push(data),
-        error : (err) => 
+        next: (data) => this.services.push(data),
+        error: (err) =>
           Toastify({
-            text: "Something go bad: " + err.error.message,
-            duration: 3000, 
-            gravity: "bottom",
+            text: 'Something go bad: ' + err.error.message,
+            duration: 3000,
+            gravity: 'bottom',
             position: 'center',
-            backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
-          }).showToast()
-      })
-    })
+            backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+          }).showToast(),
+      });
+    });
   }
 
   /**
    * Método para cancelar una cita
    * Si se puede eliminar mostraremos un mensaje de confirmado
    * Si hay algun error mostraremos el mensaje correspondiente
-   * @param id 
+   * @param id
    */
-  deleteCite(id:number){
+  deleteCite(id: number) {
     this.citeService.deleteCite(id).subscribe({
-      next : (data) => {
-        this.reserves = this.reserves.filter(cite => cite.id !== id);
+      next: (data) => {
+        this.reserves = this.reserves.filter((cite) => cite.id !== id);
+        this.deleteEvent(data.eventId);
         Toastify({
-          text: 'Appointment for date: ' + this.getFormattedDate(data.day.toString()) + " deleted succesfully",
+          text:
+            'Appointment for date: ' +
+            this.getFormattedDate(data.day.toString()) +
+            ' deleted succesfully',
           duration: 3000,
           gravity: 'bottom',
           position: 'center',
           backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
-        }).showToast()
+        }).showToast();
       },
-      error : (err) => 
+      error: (err) =>
         Toastify({
-          text: "Something go bad: " + err.error.message,
-          duration: 3000, 
-          gravity: "bottom",
+          text: 'Something go bad: ' + err.error.message,
+          duration: 3000,
+          gravity: 'bottom',
           position: 'center',
-          backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
-        }).showToast()
-    })
+          backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+        }).showToast(),
+    });
+  }
+
+  /**
+   * Método para buscar un evento por su fecha y titulo y eliminarlo
+   */
+  deleteEvent(eventId: string) {
+      this.calendarService.deleteEvent(eventId).subscribe({
+        next : () => {
+          Toastify({
+            text:'Appointment deleted successfully from Calendar',
+            duration: 3000,
+            gravity: 'bottom',
+            position: 'center',
+            backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
+          }).showToast();
+        },
+        error: (err) =>
+          Toastify({
+            text: 'Something go bad deleting the event',
+            duration: 3000,
+            gravity: 'bottom',
+            position: 'center',
+            backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+          }).showToast(),
+      })
   }
 
   /**
    * Método para obtener una fecha formateada en formato HH:mm:ss de java time
-   * @param date 
-   * @returns 
+   * @param date
+   * @returns
    */
-  getFormattedDate(date:string):string{
+  getFormattedDate(date: string): string {
     const newDate = new Date(date);
     newDate.setDate(newDate.getDate() + 1);
-    const fechaFormateada = `${newDate.getFullYear()}-${(newDate.getMonth() + 1).toString().padStart(2, '0')}-${newDate.getDate().toString().padStart(2, '0')}`;
+    const fechaFormateada = `${newDate.getFullYear()}-${(newDate.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}-${newDate.getDate().toString().padStart(2, '0')}`;
     return fechaFormateada;
+  }
+
+  getService(idService: number) {
+    this.serviceService.getService(idService).subscribe({
+      next: (data) => {
+        return data;
+      },
+      error: (err) =>
+        Toastify({
+          text: 'Something go bad: ' + err.error.message,
+          duration: 3000,
+          gravity: 'bottom',
+          position: 'center',
+          backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+        }).showToast(),
+    });
   }
 
   /**
    * Método para llevar al usuario a la ruta para modificar una cita
-   * @param id 
+   * @param id
    */
-  editReserve(id:number){
+  editReserve(id: number) {
     this.router.navigateByUrl(`/cite/updateCite/${id}`);
   }
 
   /**
    * Método que comprueba si una cita es pasada o aún no
-   * @param date 
-   * @returns 
+   * @param date
+   * @returns
    */
-  isPastDate(date:string){
+  isPastDate(date: string) {
     let dateService = new Date(this.getFormattedDate(date));
     let actualDate = new Date();
     return dateService < actualDate;
   }
-
 }

@@ -4,33 +4,64 @@
     <span>Welcome to your beauty salon</span>
     <br />
     @if (isLoggued()) {
-      <a routerLink="cite/bookCite/0">Book now</a>
+    <a (click)="scrollToElement()">Book now</a>
     }@else {
-      <a routerLink="auth/login">Book now</a>
+    <a routerLink="auth/login">Book now</a>
     }
   </div>
 </div>
 
 <div class="container">
-  <div class="contact-section">
+
+  <div class="containerCard text-center my-5">
+    <h2 align="center" style="font-size: 50px; color: #2c3e50">Some of our services</h2>
+    <button type="button" (click)="scrollLeft()" class="arrow-left">&lt;</button>
+    <div class="scroll-containerCard">
+      <div class="row flex-row flex-nowrap" #scrollableContainer>
+        @for (service of services; track $index) {
+          <div class="card" style="width: 20rem; margin: 10px;">
+            <img class="card-img-top" [src]="service.imageUrl" alt="Card image cap" style="height: 200px; object-fit: cover" />
+            <div class="card-body">
+              <h5 class="card-title" data-toggle="tooltip" data-placement="top" title="{{ service.name }}">
+                {{ service.name }}
+              </h5>
+              <p class="card-text" data-toggle="tooltip" data-placement="top" title="{{ service.description }}">
+                {{ service.description }}
+              </p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    <button type="button" (click)="scrollRight()" class="arrow-right">&gt;</button>
+  </div>
+  <br>
+  <br>
+  <div #scrollDown class="contact-section">
     <div class="form-container">
       <h3>Reserve now</h3>
       <form>
         <label for="category">Select Category</label>
-        <select id="category" name="category" (change)="getServicesByCategory($event)">
-            <option selected disabled> ---------Select a category---------</option>
-            @for (category of categories; track $index) {
-              <option [value]="category.id">{{category.name}}</option>
-            }
+        <select
+          id="category"
+          name="category"
+          (change)="getServicesByCategory($event)"
+        >
+          <option selected disabled>---------Select a category---------</option>
+          @for (category of categories; track $index) {
+          <option [value]="category.id">{{ category.name }}</option>
+          }
         </select>
         @if (categorySelected) {
-          <label for="category">Select Service</label>
-          <select id="category" name="category">
-              <option selected disabled> ---------Select a service---------</option>
-              @for (service of filterServices; track $index) {
-                <option [value]="service.id">{{service.name}}  -  {{service.price}}€</option>
-              }
-          </select>
+        <label for="category">Select Service</label>
+        <select id="category" name="category">
+          <option selected disabled>---------Select a service---------</option>
+          @for (service of filterServices; track $index) {
+          <option [value]="service.id">
+            {{ service.name }} - {{ service.price }}€
+          </option>
+          }
+        </select>
         }
 
         <label>Day</label>
@@ -50,45 +81,11 @@
       </form>
     </div>
     <div class="logo-container">
-      <img src="../../../assets/img/Glam_Glitter-removebg-preview.png" alt="Glam&Glitter Logo" />
+      <img
+        src="../../../assets/img/Glam_Glitter-removebg-preview.png"
+        alt="Glam&Glitter Logo"
+      />
     </div>
   </div>
-
-  <div class="containerCard text-center my-5">
-    <h2 align="center" style="font-size: 50px; color: #2c3e50">
-      Some of our services
-    </h2>
-    <div class="scroll-containerCard">
-      <div class="row flex-row flex-nowrap overflow-auto">
-        @for (service of services; track $index) {
-        <div class="card" style="width: 20rem">
-          <img
-            class="card-img-top"
-            [src]="service.imageUrl"
-            alt="Card image cap"
-            style="height: 200px; object-fit: cover"
-          />
-          <div class="card-body">
-            <h5
-              class="card-title"
-              data-toggle="tooltip"
-              data-placement="top"
-              title="{{ service.name }}"
-            >
-              {{ service.name }}
-            </h5>
-            <p
-              class="card-text"
-              data-toggle="tooltip"
-              data-placement="top"
-              title="{{ service.description }}"
-            >
-              {{ service.description }}
-            </p>
-          </div>
-        </div>
-        }
-      </div>
-    </div>
-  </div>
+  
 </div>

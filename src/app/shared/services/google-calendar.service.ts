@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { formatISO } from 'date-fns';
+import { catchError, map, Observable, of } from 'rxjs';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 
@@ -10,6 +11,8 @@ declare const google: any;
   providedIn: 'root'
 })
 export class GoogleCalendarService {
+
+  events:any[] = [];
   private clientId = "127291825317-utahcd35t25ihrj5nl4at620cp1l8d6r.apps.googleusercontent.com";
   private apiUrl = 'https://www.googleapis.com/calendar/v3';
   private scopes = 'https://www.googleapis.com/auth/calendar';
@@ -58,7 +61,16 @@ export class GoogleCalendarService {
       Authorization: `Bearer ${this.token}`,
     });
 
-    return this.http.get(`${this.apiUrl}/calendars/primary/events`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/calendars/primary/events`, { headers }).pipe(
+      map(response => {
+        this.events = response.items || [] ; // Guarda los eventos en allEvents
+        return this.events;
+      }),
+      catchError(error => {
+        console.error('Error al cargar eventos:', error);
+        return of([]);
+      })
+    );;
   }
 
   // Método para crear un nuevo evento en Google Calendar
@@ -75,15 +87,19 @@ export class GoogleCalendarService {
 
     return this.http.post<any>(`${this.apiUrl}/calendars/primary/events`, event);
   }
-  deleteCalendarEvent(eventId: string): Observable<any> {
-    // Asegúrate de que el usuario esté autenticado y tenga el token
-    const token = localStorage.getItem('googleAccessToken');
-    if (!token) {
-      throw new Error("El usuario no está autenticado.");
-    }
 
-    // Realiza la petición DELETE al endpoint correspondiente
-    return this.http.delete(`${this.apiUrl}/calendars/primary/events/${eventId}`);
+  // Método para eliminar un evento por su ID
+  deleteEvent(eventId: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    return this.http.delete(`${this.apiUrl}/calendars/calendarId/events/${eventId}`, { headers }).pipe(
+      catchError(error => {
+        console.error('Error al eliminar evento:', error);
+        return of(null);
+      })
+    );
   }
 
   // Método para cerrar sesión y eliminar el token almacenado

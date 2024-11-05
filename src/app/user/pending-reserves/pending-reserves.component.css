@@ -5,67 +5,47 @@
   padding: 20px;
 }
 
-.reserve-card {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin: 10px;
+.container-table {
+  background-color: #f2f2f2;
   padding: 20px;
-  width: 270px;
-  transition: transform 0.2s;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.reserve-card:hover {
-  transform: scale(1.05);
-}
-
-.reserve-day {
-  display: flex;
-  justify-content: center;
-  font-size: 1.5rem;
-  color: #2c3e50;
-  margin-bottom: 10px;
-}
-
-.reserve-service {
-  display: flex;
-  justify-content: center;
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
   font-size: 1.2rem;
-  color: #7f8c8d;
-  margin-bottom: 15px;
+  background-color: #f7f7f7;
 }
 
-.reserve-button {
-  display: flex;
-  justify-content: center;
-  margin-top: 15px;
+.styled-table th, .styled-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
 }
 
-.button {
-  padding: 10px 15px;
+.styled-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.styled-table tr:hover {
+  background-color: #e0e0e0;
+}
+
+.styled-table button {
+  padding: 8px 16px;
+  background-color: #9c27b0;
+  color: #fff;
   border: none;
   border-radius: 5px;
-  color: white;
   cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
-.auto-assign {
-  background-color: #3498db;
-}
-
-.auto-assign:hover {
-  background-color: #2980b9;
-}
-
-.manual-assign {
-  background-color: #e67e22;
-}
-
-.manual-assign:hover {
-  background-color: #d35400;
+.styled-table button:hover {
+  background-color: #6a1b9a;
 }
 
 .alert-card {

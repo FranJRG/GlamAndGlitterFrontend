@@ -118,11 +118,51 @@ export class PendingReservesComponent implements OnInit{
     })
   }
 
+    /**
+   * Método para obtener una fecha formateada en formato HH:mm:ss de java time
+   * @param date
+   * @returns
+   */
+    getFormattedDate(date: string): string {
+      const newDate = new Date(date);
+      newDate.setDate(newDate.getDate() + 1);
+      const fechaFormateada = `${newDate.getFullYear()}-${(newDate.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${newDate.getDate().toString().padStart(2, '0')}`;
+      return fechaFormateada;
+    }
+
+  deleteCite(id: number) {
+    this.citeService.deleteCite(id).subscribe({
+      next: (data) => {
+        this.pendingReserves = this.pendingReserves.filter((cite) => cite.id !== id);
+        Toastify({
+          text:
+            'Appointment for date: ' +
+            this.getFormattedDate(data.day.toString()) +
+            ' deleted succesfully',
+          duration: 3000,
+          gravity: 'bottom',
+          position: 'center',
+          backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
+        }).showToast();
+      },
+      error: (err) =>
+        Toastify({
+          text: 'Something go bad: ' + err.error.message,
+          duration: 3000,
+          gravity: 'bottom',
+          position: 'center',
+          backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+        }).showToast(),
+    });
+  }
+
   /**
    * Método para navegar a la ruta que selecciona el trabajador
    * @param id 
    */
   selectWorker(id:number){
-    this.router.navigateByUrl(`user/workers/${id}`)
+    this.router.navigateByUrl(`/cite/updateCite/${id}`)
   }
 }

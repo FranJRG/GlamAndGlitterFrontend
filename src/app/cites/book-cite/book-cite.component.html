@@ -94,6 +94,20 @@
           <small>{{ TimeError }}</small>
           }
         </div>
+
+        @if (this.id != 0 && getRole() === "admin") {
+          <div class="form-row full-width">
+            <label>Workers</label>
+            <div>
+              <select>
+                @for (worker of workers; track $index) {
+                  <option value="{{worker.id}}">{{worker.name}}</option>
+                }
+              </select>
+            </div>
+          </div>
+        }
+
         @if (this.id != 0 && this.id != undefined) {
           <div class="form-row full-width">
             <button type="submit" (click)="modifyCite()">Update</button>
@@ -103,6 +117,7 @@
             <button type="submit" (click)="bookCite()">Confirm Cite</button>
           </div>
         }
+
       </form>
     </div>
   </div>

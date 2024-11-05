@@ -5,17 +5,19 @@
         Notification Settings
       </h3>
   
-      <label class="custom-checkbox">
-        <input type="checkbox" name="emailNotifications" [(ngModel)]="emailNotifications" [checked]="user.emailNotifications"/>
-        <span class="checkmark"></span>
-        Enable Email Notifications
-      </label>
-  
-      <label class="custom-checkbox">
-        <input type="checkbox" name="calendarNotification" [(ngModel)]="calendarNotifications" [checked]="user.calendarNotifications"/>
-        <span class="checkmark"></span>
-        Sync with Google Calendar
-      </label>
+      <div class="notifications">
+        <label class="custom-checkbox">
+          <input type="checkbox" name="emailNotifications" [(ngModel)]="emailNotifications" [checked]="user.emailNotifications"/>
+          <span class="checkmark" style="margin-right: 10px;"></span>
+          Enable Email Notifications
+        </label>
+    
+        <label class="custom-checkbox">
+          <input type="checkbox" name="calendarNotification" [(ngModel)]="calendarNotifications" [checked]="user.calendarNotifications"/>
+          <span class="checkmark" style="margin-right: 10px;"></span>
+          Sync with Google Calendar
+        </label>
+      </div>
   
       <button class="formButton" (click)="manageNotifications()">
           Confirm changes

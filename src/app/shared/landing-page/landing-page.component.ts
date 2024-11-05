@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ServiceService } from '../../service/service.service';
 import { Services } from '../../interfaces/services';
 import Toastify from 'toastify-js';
@@ -22,6 +22,23 @@ export class LandingPageComponent implements OnInit {
   constructor(private serviceService: ServiceService,
     private authService:AuthService
   ) {}
+
+  @ViewChild('scrollableContainer', { read: ElementRef }) scrollableContainer!: ElementRef;
+  @ViewChild('scrollDown') targetElement!: ElementRef;
+
+  scrollToElement() {
+    this.targetElement.nativeElement.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  scrollLeft() {
+    const container = this.scrollableContainer.nativeElement;
+    container.scrollBy({ left: -300, behavior: 'smooth' });
+  }
+
+  scrollRight() {
+    const container = this.scrollableContainer.nativeElement;
+    container.scrollBy({ left: 300, behavior: 'smooth' });
+  }
 
   services!: Services[];
   categories!: Category[];

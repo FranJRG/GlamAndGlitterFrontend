@@ -4,4 +4,5 @@ export interface Cite {
     startTime:string;
     idService:number
     username:string
+    eventId:string;
 }

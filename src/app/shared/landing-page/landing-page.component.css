@@ -105,7 +105,7 @@ form button {
 
 form button:hover {
   background-color: rgb(54, 13, 78);
-  transform: translateY(-2px); 
+  transform: translateY(-2px);
 }
 
 form button:active {
@@ -132,7 +132,7 @@ select {
   background-size: 10px;
 }
 
-select:focus{
+select:focus {
   outline: none;
   border-color: #6c63ff;
   box-shadow: 0 0 8px rgba(108, 52, 131, 0.3);
@@ -169,16 +169,11 @@ h3 {
   border-radius: 10px;
 }
 
-.scroll-containerCard {
-  overflow-x: auto;
-  padding: 20px 0;
-  white-space: nowrap;
-}
-
 .row {
   display: flex;
-  gap: 30px;
-  padding: 0 10px;
+  overflow-x: hidden;
+  white-space: nowrap;
+  transition: transform 0.3s ease;
 }
 
 .card {
@@ -228,17 +223,46 @@ h3 {
   text-overflow: ellipsis;
 }
 
-.scroll-containerCard::-webkit-scrollbar {
-  height: 8px;
+.containerCard {
+  position: relative;
 }
 
-.scroll-containerCard::-webkit-scrollbar-track {
-  background: #f5f5f5;
+.row {
+  display: flex;
+  transition: transform 0.3s ease;
 }
 
-.scroll-containerCard::-webkit-scrollbar-thumb {
-  background: #b0bec5;
-  border-radius: 10px;
+.arrow-left,
+.arrow-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #a57db881;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 24px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  z-index: 10;
 }
 
+.arrow-left {
+  left: -30px; 
+}
 
+.arrow-right {
+  right: -30px; 
+}
+
+.arrow-left:hover,
+.arrow-right:hover {
+  background-color: #80628f81;
+  transform: translateY(-50%) scale(1.05);
+}
+
+.arrow-left:active,
+.arrow-right:active {
+  transform: translateY(-50%) scale(1);
+}
