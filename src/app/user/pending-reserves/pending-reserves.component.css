@@ -60,3 +60,28 @@
   font-size: 1.2rem;
   font-weight: bold;
 }
+
+@media only screen and (max-width: 480px) {
+  .styled-table th,
+  .styled-table td {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  .styled-table {
+    width: 100%;
+    display: block;
+    overflow-x: auto;
+  }
+
+  .container-table {
+    padding: 10px;
+    margin-left: 0px;
+    width: 400px;
+  }
+
+  button {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+}

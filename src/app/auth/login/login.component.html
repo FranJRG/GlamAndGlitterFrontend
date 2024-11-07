@@ -1,5 +1,6 @@
 <div class="container">
     <form #myLoginForm="ngForm" (submit)="login()">
+        <h1 align="center">Login in Glam&Glitter</h1>
         <div class="firstsInputs">
             <label>Email</label>
             <input type="email" name="email" ngModel #email placeholder="Introduce your email"> 
@@ -16,4 +17,7 @@
             <a style="font-size: 17px;" class="linkButton" routerLink="/auth/register" type="button">Register Here</a>
         </div>
     </form>
+    <div class="login">
+        <img src="../../../assets/img/LoginBien.png">
+    </div>
 </div>

@@ -2,8 +2,6 @@
   margin-top: 5px !important;
   width: 70%;
   display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: #ecedee;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 10px 0;
@@ -39,7 +37,7 @@ a {
 }
 
 .logo {
-  width: 50px;
+  width: 85px;
   height: auto;
   margin-right: 15px;
 }
@@ -76,6 +74,7 @@ ul li:not(:first-child) {
   z-index: 1;
 }
 
+
 .dropdown-content a {
   float: none;
   color: black;
@@ -102,4 +101,32 @@ ul li:not(:first-child) {
 
 .dropbtn:hover{
     text-decoration: underline;
+}
+
+@media only screen and (max-width: 480px) {
+
+  .navbar-container{
+    margin-left: 2px !important;
+    width: 410px;
+  }
+
+  ul{
+    display: flex;
+    justify-content: center;
+    gap: 0px;
+    padding: 0 10px; 
+  }
+
+  .firstUl{
+    width: 280px;
+  }
+
+  .firstUl img{
+    display: none;
+  }
+
+  li{
+    font-size: 20px;
+  }
+
 }

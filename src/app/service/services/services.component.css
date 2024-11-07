@@ -75,7 +75,7 @@ label {
   position: relative;
   padding: 10px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 20px;
   color: #333;
 }
 
@@ -100,3 +100,11 @@ label {
   transform: translateY(0);
 }
 
+@media only screen and (max-width: 480px) {
+
+  .services-grid{
+    display: grid;
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+  
+}

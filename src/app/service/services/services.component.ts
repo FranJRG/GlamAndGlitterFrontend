@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ServiceService } from '../service.service';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
@@ -13,18 +13,30 @@ import { Router } from '@angular/router';
   templateUrl: './services.component.html',
   styleUrl: './services.component.css',
 })
-export class ServicesComponent implements OnInit {
+export class ServicesComponent implements OnInit, OnChanges {
   services!: Services[];
   categories!: Category[];
+
+  @Input()id = 0;
 
   constructor(private serviceService: ServiceService,
     private router:Router
   ) {}
 
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(this.id != 0 && this.id != undefined){
+      this.getServices(this.id.toString());
+    }
+  }
+
   /**
    * Al iniciar el componente de servicios cargaremos todos los servicios existentes y las categorías
    */
   ngOnInit(): void {
+    if(this.id != 0 && this.id != undefined){
+      this.getServices(this.id.toString());
+    }
     this.serviceService.getServices().subscribe({
       next: (data) => (this.services = data),
       error: (err) =>
@@ -46,8 +58,15 @@ export class ServicesComponent implements OnInit {
    * Según que sea lo que recibe filtrará por categoría o las buscará todas
    * @param event 
    */
-  getServices(event: Event) {
-    let categoryId = (event.target as HTMLInputElement).value;
+  getServices(event: Event | string) {
+    let categoryId: string;
+
+    // Verificamos si el parámetro es un evento o un ID directo
+    if (typeof event === 'string') {
+      categoryId = event; // Si es un string, es un ID
+    } else {
+      categoryId = (event.target as HTMLInputElement).value; //Lo convertimos como evento del html
+    }
     if (categoryId == 'all') {
       this.serviceService.getServices().subscribe({
         next: (data) => (this.services = data),

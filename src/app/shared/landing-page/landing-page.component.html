@@ -37,55 +37,57 @@
   </div>
   <br>
   <br>
-  <div #scrollDown class="contact-section">
-    <div class="form-container">
-      <h3>Reserve now</h3>
-      <form>
-        <label for="category">Select Category</label>
-        <select
-          id="category"
-          name="category"
-          (change)="getServicesByCategory($event)"
-        >
-          <option selected disabled>---------Select a category---------</option>
-          @for (category of categories; track $index) {
-          <option [value]="category.id">{{ category.name }}</option>
+  @if (isLoggued()) {
+    <div #scrollDown class="contact-section">
+      <div class="form-container">
+        <h3>Reserve now</h3>
+        <form>
+          <label for="category">Select Category</label>
+          <select
+            id="category"
+            name="category"
+            (change)="getServicesByCategory($event)"
+          >
+            <option selected disabled>---------Select a category---------</option>
+            @for (category of categories; track $index) {
+            <option [value]="category.id">{{ category.name }}</option>
+            }
+          </select>
+          @if (categorySelected) {
+          <label for="category">Select Service</label>
+          <select id="category" name="category">
+            <option selected disabled>---------Select a service---------</option>
+            @for (service of filterServices; track $index) {
+            <option [value]="service.id">
+              {{ service.name }} - {{ service.price }}€
+            </option>
+            }
+          </select>
           }
-        </select>
-        @if (categorySelected) {
-        <label for="category">Select Service</label>
-        <select id="category" name="category">
-          <option selected disabled>---------Select a service---------</option>
-          @for (service of filterServices; track $index) {
-          <option [value]="service.id">
-            {{ service.name }} - {{ service.price }}€
-          </option>
-          }
-        </select>
-        }
 
-        <label>Day</label>
-        <input type="date" id="date" name="date" required />
+          <label>Day</label>
+          <input type="date" id="date" name="date" required />
 
-        <label>Hour</label>
-        <input
-          type="time"
-          name="hour"
-          id="hour"
-          min="09:00"
-          max="21:00"
-          value="09:00"
+          <label>Hour</label>
+          <input
+            type="time"
+            name="hour"
+            id="hour"
+            min="09:00"
+            max="21:00"
+            value="09:00"
+          />
+
+          <button type="submit">Send</button>
+        </form>
+      </div>
+      <div class="logo-container">
+        <img
+          src="../../../assets/img/Glam_Glitter-removebg-preview.png"
+          alt="Glam&Glitter Logo"
         />
-
-        <button type="submit">Send</button>
-      </form>
+      </div>
     </div>
-    <div class="logo-container">
-      <img
-        src="../../../assets/img/Glam_Glitter-removebg-preview.png"
-        alt="Glam&Glitter Logo"
-      />
-    </div>
-  </div>
+  }
   
 </div>

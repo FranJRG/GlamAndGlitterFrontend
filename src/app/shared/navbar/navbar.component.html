@@ -1,31 +1,42 @@
 <div style="margin-left: 210px" class="navbar-container">
-  <ul>
-    <li><a routerLink="/"><img alt="Logo" src="../../../assets/img/Glam_Glitter-removebg-preview.png" class="logo" /></a></li>
-    <li><a routerLink="/service/services">Services</a></li>
-    @if (existToken()) {
-      <div class="dropdown">
-        <a class="dropbtn" style="font-weight: bold; font-size: 25px;">
-          Profile
-        </a>
-        <div class="dropdown-content">
-          <a routerLink="/user/profile">Notifications</a>
-          <a routerLink="/calendar/myCalendar">Calendar</a>
-          @if (getRole() === "admin") {
-            <a routerLink="/user/pendingReserves">Pending reserves</a>
-          }@else if (getRole() === "user") {
-            <a routerLink="/user/myCites">My cites</a>
-          }
-          @if(getRole() === "admin") {
-            <a routerLink="/user/registerStylist">Register stylist</a>
-            <a routerLink="/user/stylists">Stylist</a>
-          }
+  <ul class="firstUl">
+      <li><a routerLink="/"><img alt="Logo" src="../../../assets/img/Glam_Glitter-removebg-preview.png" class="logo" /></a>G&G</li>
+      <li>
+        <div class="dropdown">
+          <a class="dropbtn" style="font-weight: bold; font-size: 25px;" routerLink="/service/services">Services</a>
+          <div class="dropdown-content">
+            @for (category of categories; track $index) {
+              <a routerLink="/service/services/{{category.id}}">{{category.name}}</a>
+            }
+          </div>
         </div>
-      </div>
-    }
+      </li>
+  </ul>
+  <ul>
     @if (isLoggued() === false) {
-    <li><a routerLink="/auth/login">Login</a></li>
+      <li><a routerLink="/auth/login">Login</a></li>
     }@else {
-    <li><a (click)="logout()">Logout</a></li>
+      @if (existToken()) {
+        <div class="dropdown">
+          <a class="dropbtn" style="font-weight: bold; font-size: 25px;">
+            {{getName()}}
+          </a>
+          <div class="dropdown-content">
+            <a routerLink="/user/profile">Notifications</a>
+            @if (getRole() === "admin") {
+              <a routerLink="/user/pendingReserves">Pending reserves</a>
+            }@else if (getRole() === "user") {
+              <a routerLink="/user/myCites">My cites</a>
+            }
+            @if(getRole() === "admin") {
+              <a routerLink="/user/registerStylist">Register stylist</a>
+              <a routerLink="/user/stylists">Stylist</a>
+              <a routerLink="/user/disabledService">Manage Services</a>
+            }
+          </div>
+        </div>
+      }
+      <li><a style="margin-right: -60px;" (click)="logout()">Logout</a></li>
     }
   </ul>
 </div>

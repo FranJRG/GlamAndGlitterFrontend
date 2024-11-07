@@ -6,6 +6,7 @@ import { MyCitesComponent } from "./my-cites/my-cites.component";
 import { RegisterStylistComponent } from "./register-stylist/register-stylist.component";
 import { RegisterComponent } from "../auth/register/register.component";
 import { PendingSchedulesComponent } from "./pending-schedules/pending-schedules.component";
+import { AllServicesAdminComponent } from "./all-services-admin/all-services-admin.component";
 
 export const routes:Routes = [
     {
@@ -35,5 +36,9 @@ export const routes:Routes = [
     {
         path:'completeSchedule/:id',
         component:RegisterStylistComponent
+    },
+    {
+        path:'disabledService',
+        component:AllServicesAdminComponent
     }
 ]

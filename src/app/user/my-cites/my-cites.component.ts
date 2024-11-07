@@ -182,6 +182,17 @@ export class MyCitesComponent implements OnInit {
     this.router.navigateByUrl(`/cite/updateCite/${id}`);
   }
 
+    /**
+   * Método para obtener el nombre del servicio
+   * Buscamos el servicio en el array de servicios
+   * @param idService 
+   * @returns 
+   */
+    getServiceName(idService: number): string {
+      const service = this.services.find(service => service.id === idService);
+      return service ? service.name : 'Servicio no encontrado';
+    }
+
   /**
    * Método que comprueba si una cita es pasada o aún no
    * @param date

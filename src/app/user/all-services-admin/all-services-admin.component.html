@@ -1,0 +1,38 @@
+<h1 align="center">Manage Services</h1>
+<div class="centerSearch">
+    <input type="text" (input)="filterServicesByName()" [(ngModel)]="name" name="name" placeholder="Search services...">
+</div>
+<div class="container">
+  <div class="container-table">
+    <table class="styled-table">
+      <tr>
+        <th>Category</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Active</th>
+        <th></th>
+        <th>Actions</th>
+        <th></th>
+      </tr>
+      @for (service of filterServices; track $index) {
+      <tr>
+        <td>{{ service.category }}</td>
+        <td>{{ service.name }}</td>
+        <td>{{ service.description }}</td>
+        <td>{{ service.active === true ? "Yes" : "No" }}</td>
+        <td></td>
+        <td>
+          <button
+            (click)="disabledService(service.id)"
+            style="background-color: #bcac1f"
+          >
+            Disabled/Enabled Service
+            <i class="fas fa-edit" aria-hidden="true"></i>
+          </button>
+        </td>
+        <td></td>
+      </tr>
+      }
+    </table>
+  </div>
+</div>

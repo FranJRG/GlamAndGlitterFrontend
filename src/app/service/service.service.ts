@@ -10,6 +10,7 @@ import { Category } from '../interfaces/category';
 export class ServiceService {
 
   constructor(private http:HttpClient) { }
+  urlBasic:string = "http://localhost:8080";
   url:string = "http://localhost:8080/services";
   urlCategory:string = "http://localhost:8080/categories"
   urlRandom:string = "http://localhost:8080/randomServices";
@@ -53,5 +54,9 @@ export class ServiceService {
    */
   getCategories():Observable<Category[]>{
     return this.http.get<Category[]>(this.urlCategory);
+  }
+
+  disabledService(id:number):Observable<Services>{
+    return this.http.put<Services>(`${this.urlBasic}/disabledService/${id}`,null);
   }
 }

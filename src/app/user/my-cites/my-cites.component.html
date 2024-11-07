@@ -1,30 +1,50 @@
 @if (reserves.length > 0) {
+
 <div class="container">
-  @for (reserve of reserves; track $index) {
-  <div class="reserve-card">
-    <div class="reserve-day">{{ getFormattedDate(reserve.day.toString()) }}</div>
-    @for (service of services; track $index) { 
-      @if (service.id === reserve.idService) {
-        <div class="reserve-service">{{ service.name }}</div>
+  <div class="container-table">
+    <table class="styled-table">
+      <tr>
+        <th>Date</th>
+        <th>User</th>
+        <th>Service</th>
+        <th></th>
+        <th>Actions</th>
+        <th></th>
+      </tr>
+      @for (reserve of reserves; track $index) {
+      <tr>
+        <td>{{ reserve.day }}</td>
+        <td>{{ reserve.username }}</td>
+        <td>{{ getServiceName(reserve.idService) }}</td>
+        @if (!isPastDate(reserve.day.toString())) {
+          <td>
+            <button (click)="editReserve(reserve.id)" style="background-color: #bcac1f;">
+              Modify Cite
+              <i class="fas fa-edit" aria-hidden="true"></i>
+            </button>
+          </td>
+          <td></td>
+          <td>
+            <button (click)="deleteCite(reserve.id)"  style="background-color: #F44336;">
+              Cancel Cite
+              <i class="fas fa-trash" aria-hidden="true"></i>
+            </button>
+          </td>
+        }@else {
+          <td></td>
+          <td>
+            <button class="button rating">
+              Add rating
+            </button>
+          </td>
+          <td></td>
+        }
+      </tr>
       }
-  }
-    <div class="reserve-button">
-      @if (!isPastDate(reserve.day.toString())) {
-        <button (click)="editReserve(reserve.id)" class="button auto-assign">
-          Modify Cite
-        </button>
-        <button class="button manual-assign" (click)="deleteCite(reserve.id)">
-          Cancel Cite
-        </button>
-      }@else {
-        <button class="button rating">
-          Add rating
-        </button>
-      }
-    </div>
+    </table>
   </div>
-  }
 </div>
+
 }@else {
 <div class="container">
   <div class="alert-card">No cites booked</div>

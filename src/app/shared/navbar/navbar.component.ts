@@ -1,6 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../auth/services/auth.service';
+import { ServiceService } from '../../service/service.service';
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
+import { Category } from '../../interfaces/category';
 
 @Component({
   selector: 'app-navbar',
@@ -9,9 +13,40 @@ import { AuthService } from '../../auth/services/auth.service';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit{
 
-  constructor(private authService:AuthService){}
+  categories!: Category[];
+  isMenuOpen = false;
+
+  constructor(private authService:AuthService,
+    private serviceService:ServiceService
+  ){}
+
+
+  ngOnInit(): void {
+    this.getCategories();
+  }
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+    /**
+   * Método para obtener todas las categorías
+   */
+    getCategories() {
+      this.serviceService.getCategories().subscribe({
+        next: (data) => (this.categories = data),
+        error: (err) =>
+          Toastify({
+            text: 'We can´t load our categories yet',
+            duration: 3000,
+            gravity: 'bottom',
+            position: 'center',
+            backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+          }).showToast(),
+      });
+    }
 
   /**
    * Método para saber si el usuario esta logueado
@@ -25,6 +60,10 @@ export class NavbarComponent {
    */
   logout(){
     this.authService.logout();
+  }
+
+  getName():string{
+    return this.authService.getName();
   }
 
   /**

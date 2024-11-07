@@ -11,6 +11,11 @@ body {
     height: 100vh;
 }
 
+img{
+    width: 550px;
+    height: 550px;
+}
+
 form {
     background-color: #ffffff;
     border-radius: 12px;
@@ -93,4 +98,22 @@ input:focus {
 
 .formButton:active {
     transform: translateY(0);
+}
+
+@media only screen and (max-width: 480px) {
+    .container{
+        display: grid;
+    }
+
+    form{
+        margin-left:53px;
+        margin-top: 15px;
+        width: 60%;
+    }
+
+    img{
+        margin-left:53px;
+        width: 80%;
+        height: 350px;
+    }
 }
