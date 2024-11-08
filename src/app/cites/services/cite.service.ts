@@ -11,7 +11,7 @@ export class CiteService {
 
   constructor(private http:HttpClient) { }
 
-  private url:string = "http://localhost:8080";
+  private url:string = "https://glamandglitter.onrender.com";
 
   /**
    * Método para obtener una cita por su id

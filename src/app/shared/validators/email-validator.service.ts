@@ -11,7 +11,7 @@ export class EmailValidatorService implements AsyncValidator{
 
   constructor(private http:HttpClient) { }
 
-  url:string = "http://localhost:8080";
+  url:string = "https://glamandglitter.onrender.com";
 
   /**
    * Validador asincrono para comprobar si existe un usuario por un email

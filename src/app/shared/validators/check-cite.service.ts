@@ -12,7 +12,7 @@ export class CheckCiteService {
 
   constructor(private http:HttpClient) { }
 
-  url:string = "http://localhost:8080/checkCite";
+  url:string = "https://glamandglitter.onrender.com/checkCite";
 
   /**
    * Validador para comprobar si las fechas y horarios de una cita son válidos
