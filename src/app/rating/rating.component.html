@@ -1,0 +1,30 @@
+<p>rating works!</p>
+<div class="container">
+  <div class="card">
+    <p>¡You are in the rating section! Please leave your comment and rating.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="valoracion">
+    <div class="estrellas">
+      <ng-container *ngFor="let estrella of [1, 2, 3, 4, 5]; let i = index">
+        <i
+          class="estrella"
+          [ngClass]="{ 'estrella-seleccionada': i < punctuacion }"
+          (click)="seleccionarPuntuacion(i + 1)"
+          >&#9733;</i
+        >
+      </ng-container>
+    </div>
+    <br />
+    <textarea [(ngModel)]="message" placeholder="Write a message..."></textarea>
+    <br />
+    <button (click)="sendRating()">Enviar Valoración</button>
+  </div>
+  <img
+    alt="emoji rating image"
+    loading="lazy"
+    src="../../assets/img/RatingEmoji.png"
+  />
+</div>

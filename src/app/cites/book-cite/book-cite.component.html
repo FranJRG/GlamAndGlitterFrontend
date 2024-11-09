@@ -8,7 +8,7 @@
         @if (serviceId != 0 && serviceId != undefined) { 
           @if (service) {
           <div class="form-row">
-            <label for="service">Selected Service</label>
+            <label for="service">Service</label>
             <input
               type="text"
               id="service"
@@ -52,7 +52,7 @@
           @if (id != 0 && id != undefined) {
             @if (service) {
               <div class="form-row">
-                <label for="service">Selected Service</label>
+                <label for="service">Service</label>
                 <input
                   type="text"
                   id="service"
@@ -95,7 +95,7 @@
           }
         </div>
 
-        @if (this.id != 0 && getRole() === "admin") {
+        @if (this.id != 0 && this.id != undefined && getRole() === "admin") {
           <div class="form-row full-width">
             <label>Workers</label>
             <div>
@@ -121,4 +121,16 @@
       </form>
     </div>
   </div>
+  @if (ratings != [] && ratings.length > 0) {
+  <div class="ratingSection">
+    <h2 align="center">Ratings</h2>
+      @for (rating of ratings; track $index) {
+        <div class="rating">
+          <p><b>Punctuation</b> : {{rating.punctuation}}</p>
+          <p>{{rating.message}}</p>
+        </div>
+        <hr>
+      }
+    </div>
+  }
 </div>

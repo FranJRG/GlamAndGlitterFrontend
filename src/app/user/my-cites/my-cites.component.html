@@ -17,27 +17,33 @@
         <td>{{ reserve.username }}</td>
         <td>{{ getServiceName(reserve.idService) }}</td>
         @if (!isPastDate(reserve.day.toString())) {
-          <td>
-            <button (click)="editReserve(reserve.id)" style="background-color: #bcac1f;">
-              Modify Cite
-              <i class="fas fa-edit" aria-hidden="true"></i>
-            </button>
-          </td>
-          <td></td>
-          <td>
-            <button (click)="deleteCite(reserve.id)"  style="background-color: #F44336;">
-              Cancel Cite
-              <i class="fas fa-trash" aria-hidden="true"></i>
-            </button>
-          </td>
+        <td>
+          <button
+            (click)="editReserve(reserve.id)"
+            style="background-color: #bcac1f"
+          >
+            Modify Cite
+            <i class="fas fa-edit" aria-hidden="true"></i>
+          </button>
+        </td>
+        <td></td>
+        <td>
+          <button
+            (click)="deleteCite(reserve.id)"
+            style="background-color: #f44336"
+          >
+            Cancel Cite
+            <i class="fas fa-trash" aria-hidden="true"></i>
+          </button>
+        </td>
         }@else {
-          <td></td>
-          <td>
-            <button class="button rating">
-              Add rating
-            </button>
-          </td>
-          <td></td>
+        <td></td>
+        <td>
+          <button class="button rating" (click)="addRating(reserve.id)">
+            Add rating
+          </button>
+        </td>
+        <td></td>
         }
       </tr>
       }

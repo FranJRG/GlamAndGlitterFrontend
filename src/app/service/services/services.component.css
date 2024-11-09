@@ -100,11 +100,44 @@ label {
   transform: translateY(0);
 }
 
+select {
+  width: 80%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  background-color: #f8f9fa;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+select option{
+  width: 10px;
+  font-size: 18px;
+}
+
+select:focus {
+  border-color: #6c63ff;
+  box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+  outline: none;
+}
+
+.categoriesSelect{
+  display: none;
+}
+
 @media only screen and (max-width: 480px) {
 
   .services-grid{
     display: grid;
     grid-template-columns: repeat(1, 1fr) !important;
+  }
+
+  .categoriesSelect{
+    display: block;
+  }
+
+  .categoryDiv{
+    display: none;
   }
   
 }

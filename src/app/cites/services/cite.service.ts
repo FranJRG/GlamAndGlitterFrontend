@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Cite } from '../../interfaces/cite';
 import { Observable } from 'rxjs';
 import { User } from '../../interfaces/user';
+import { Services } from '../../interfaces/services';
+import { Rating } from '../../interfaces/rating';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,7 @@ export class CiteService {
 
   constructor(private http:HttpClient) { }
 
-  private url:string = "https://glamandglitter.onrender.com";
+  private url:string = "http://localhost:8080";
 
   /**
    * Método para obtener una cita por su id
@@ -69,6 +71,13 @@ export class CiteService {
    */
   getWorkers(id:number):Observable<User[]>{
     return this.http.get<User[]>(`${this.url}/workers/${id}`);
+  }
+
+  /**
+   * Método para obtener las valoraciones de un servicio
+   */
+  getRatingService(id:number):Observable<Rating[]>{
+    return this.http.get<Rating[]>(`${this.url}/ratings/${id}`);
   }
 
   /**
