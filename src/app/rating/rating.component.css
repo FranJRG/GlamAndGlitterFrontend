@@ -1,0 +1,107 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  animation: fadeInAnimation 2s ease-out forwards;
+  opacity: 0;
+  background-color: #ecedee;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  margin-top: 20px;
+  text-align: center;
+  width: 90%;
+  max-width: 500px;
+}
+
+.card p {
+  margin: 0;
+  font-size: 17px;
+  color: #333;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.valoracion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+  margin: 50px;
+  padding: 20px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  background-color: #ecedee;
+}
+
+.estrellas {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.estrella {
+  font-size: 40px;
+  cursor: pointer;
+  color: #93979b;
+  transition: color 0.2s;
+}
+
+.estrella-seleccionada {
+  color: gold;
+}
+
+textarea {
+  width: 90%;
+  max-width: 100%;
+  height: 100px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+  resize: none;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  font-size: 18px;
+  font-family: serif;
+}
+
+textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+img {
+  width: 500px;
+  height: 500px;
+}

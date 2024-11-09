@@ -203,4 +203,8 @@ export class MyCitesComponent implements OnInit {
     let actualDate = new Date();
     return dateService < actualDate;
   }
+
+  addRating(id:number){
+    this.router.navigateByUrl(`/rating/addRating/${id}`)
+  }
 }

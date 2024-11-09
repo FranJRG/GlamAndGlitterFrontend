@@ -22,6 +22,7 @@ import { GoogleCalendarService } from '../../shared/services/google-calendar.ser
 import { addMinutes, formatISO } from 'date-fns';
 import { User } from '../../interfaces/user';
 import { AuthService } from '../../auth/services/auth.service';
+import { Rating } from '../../interfaces/rating';
 
 @Component({
   selector: 'app-book-cite',
@@ -35,6 +36,7 @@ export class BookCiteComponent implements OnInit {
    * Variables para este componente
    */
   service!: Services;
+  ratings : Rating[] = []
   services!: Services[];
   categories!: Category[];
   filterServices!: Services[];
@@ -90,16 +92,23 @@ export class BookCiteComponent implements OnInit {
     }
     if (this.serviceId != 0 && this.serviceId != undefined) {
       this.getService(this.serviceId);
+      this.getRatingsService(this.serviceId);
     }
-    this.loadEvents();
     this.getCategories();
   }
 
-  loadEvents() {
-    this.calendarService.getCalendarEvents().subscribe({
-      next: (data) => console.log('Eventos del calendario:', data),
-      error: (err) => console.log('Error al obtener eventos:', err),
-    });
+  getRatingsService(id:number){
+    this.citeService.getRatingService(id).subscribe({
+      next : (data) => this.ratings = data,
+      error : (err) =>
+        Toastify({
+          text: 'Failed to get the ratings : ' + err.error.message,
+          duration: 3000,
+          gravity: 'bottom',
+          position: 'center',
+          backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+        }).showToast()
+    })
   }
 
   /**
@@ -215,6 +224,7 @@ export class BookCiteComponent implements OnInit {
     );
     if (selectedService) {
       this.service = selectedService;
+      this.getRatingsService(this.service.id);
       this.myForm.patchValue({ idService: this.service.id });
     }
   }

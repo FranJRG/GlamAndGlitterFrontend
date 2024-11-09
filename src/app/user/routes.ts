@@ -7,6 +7,8 @@ import { RegisterStylistComponent } from "./register-stylist/register-stylist.co
 import { RegisterComponent } from "../auth/register/register.component";
 import { PendingSchedulesComponent } from "./pending-schedules/pending-schedules.component";
 import { AllServicesAdminComponent } from "./all-services-admin/all-services-admin.component";
+import { jwtGuard } from "../shared/guards/jwt.guard";
+import { adminGuard } from "../shared/guards/admin.guard";
 
 export const routes:Routes = [
     {
@@ -15,30 +17,37 @@ export const routes:Routes = [
     },
     {
         path:'profile',
-        component:ProfileComponent
+        component:ProfileComponent,
+        canMatch:[jwtGuard]
     },
     {
         path:'pendingReserves',
-        component:PendingReservesComponent
+        component:PendingReservesComponent,
+        canMatch:[adminGuard]
     },
     {
         path:'myCites',
-        component:MyCitesComponent
+        component:MyCitesComponent,
+        canMatch:[jwtGuard]
     },
     {
         path:'registerStylist',
-        component:RegisterComponent
+        component:RegisterComponent,
+        canMatch:[adminGuard]
     },
     {
         path:'stylists',
-        component:PendingSchedulesComponent
+        component:PendingSchedulesComponent,
+        canMatch:[adminGuard]
     },
     {
         path:'completeSchedule/:id',
-        component:RegisterStylistComponent
+        component:RegisterStylistComponent,
+        canMatch:[adminGuard]
     },
     {
         path:'disabledService',
-        component:AllServicesAdminComponent
+        component:AllServicesAdminComponent,
+        canMatch:[adminGuard]
     }
 ]

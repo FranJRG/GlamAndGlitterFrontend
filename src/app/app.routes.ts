@@ -21,5 +21,9 @@ export const routes: Routes = [
     {
         path:'cite',
         loadChildren: () => import("./cites/routes").then(mod => mod.routes)
+    },
+    {
+        path:'rating',
+        loadChildren: () => import("./rating/routes").then(mod => mod.routes)
     }
 ];
