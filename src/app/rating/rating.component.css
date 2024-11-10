@@ -105,3 +105,23 @@ img {
   width: 500px;
   height: 500px;
 }
+
+@media only screen and (max-width: 480px) {
+
+  .container{
+    display: grid;
+    gap: 0px;
+  }
+  
+  .valoracion{
+    margin-left: 45px !important;
+    width: 350px;
+  }
+
+  img{
+    margin-left: 40px !important;
+    width: 390px;
+    height: 400px;
+  }
+
+}

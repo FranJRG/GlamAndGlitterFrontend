@@ -91,3 +91,23 @@
   background-color: rgb(54, 13, 78);
   transform: translateY(-2px);
 }
+
+@media only screen and (max-width: 480px) {
+
+  .container{
+    display: grid;
+  }
+
+  .notifications{
+    display: grid;
+  }
+
+  .notification-settings{
+    text-align: center;
+  }
+
+  label{
+    font-size: 1.3rem !important;
+  }
+
+}
