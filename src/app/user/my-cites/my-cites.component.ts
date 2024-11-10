@@ -25,6 +25,8 @@ export class MyCitesComponent implements OnInit {
   service!: Services;
   date: Date = new Date();
 
+  
+
   constructor(
     private citeService: CiteService,
     private serviceService: ServiceService,
@@ -90,11 +92,13 @@ export class MyCitesComponent implements OnInit {
    * Si hay algun error mostraremos el mensaje correspondiente
    * @param id
    */
-  deleteCite(id: number) {
+  deleteCite(id: number,eventId:string) {
     this.citeService.deleteCite(id).subscribe({
       next: (data) => {
         this.reserves = this.reserves.filter((cite) => cite.id !== id);
-        this.deleteEvent(data.eventId);
+        if(eventId != "" && eventId != null){
+          this.deleteEvent(eventId);
+        }
         Toastify({
           text:
             'Appointment for date: ' +
@@ -121,25 +125,25 @@ export class MyCitesComponent implements OnInit {
    * Método para buscar un evento por su fecha y titulo y eliminarlo
    */
   deleteEvent(eventId: string) {
-    this.calendarService.deleteEvent(eventId).subscribe({
-      next: () => {
-        Toastify({
-          text: 'Appointment deleted successfully from Calendar',
-          duration: 3000,
-          gravity: 'bottom',
-          position: 'center',
-          backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
-        }).showToast();
-      },
-      error: (err) =>
-        Toastify({
-          text: 'Something go bad deleting the event',
-          duration: 3000,
-          gravity: 'bottom',
-          position: 'center',
-          backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
-        }).showToast(),
-    });
+      this.calendarService.deleteEvent(eventId).subscribe({
+        next : () => {
+          Toastify({
+            text:'Appointment deleted successfully from Calendar',
+            duration: 3000,
+            gravity: 'bottom',
+            position: 'center',
+            backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
+          }).showToast();
+        },
+        error: (err) =>
+          Toastify({
+            text: 'Something go bad deleting the event',
+            duration: 3000,
+            gravity: 'bottom',
+            position: 'center',
+            backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+          }).showToast(),
+      })
   }
 
   /**
@@ -180,16 +184,16 @@ export class MyCitesComponent implements OnInit {
     this.router.navigateByUrl(`/cite/updateCite/${id}`);
   }
 
-  /**
+    /**
    * Método para obtener el nombre del servicio
    * Buscamos el servicio en el array de servicios
-   * @param idService
-   * @returns
+   * @param idService 
+   * @returns 
    */
-  getServiceName(idService: number): string {
-    const service = this.services.find((service) => service.id === idService);
-    return service ? service.name : 'Servicio no encontrado';
-  }
+    getServiceName(idService: number): string {
+      const service = this.services.find(service => service.id === idService);
+      return service ? service.name : 'Servicio no encontrado';
+    }
 
   /**
    * Método que comprueba si una cita es pasada o aún no
@@ -202,7 +206,7 @@ export class MyCitesComponent implements OnInit {
     return dateService < actualDate;
   }
 
-  addRating(id: number) {
-    this.router.navigateByUrl(`/rating/addRating/${id}`);
+  addRating(id:number){
+    this.router.navigateByUrl(`/rating/addRating/${id}`)
   }
 }

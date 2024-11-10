@@ -10,11 +10,11 @@ import { Category } from '../interfaces/category';
 export class ServiceService {
 
   constructor(private http:HttpClient) { }
-  urlBasic:string = "https://glamandglitter.onrender.com";
-  url:string = "https://glamandglitter.onrender.com/services";
-  urlCategory:string = "https://glamandglitter.onrender.com/categories"
-  urlRandom:string = "https://glamandglitter.onrender.com/randomServices";
-  urlServicesCategory:string = "https://glamandglitter.onrender.com/servicesByCategory";
+  urlBasic:string = "http://localhost:8080";
+  url:string = "http://localhost:8080/services";
+  urlCategory:string = "http://localhost:8080/categories"
+  urlRandom:string = "http://localhost:8080/randomServices";
+  urlServicesCategory:string = "http://localhost:8080/servicesByCategory";
 
 
   /**
@@ -23,6 +23,14 @@ export class ServiceService {
    */
   getServices():Observable<Services[]>{
     return this.http.get<Services[]>(this.url);
+  }
+
+  /**
+   * Método para obtener todos los servicios
+   * @returns 
+   */
+  getServicesActive():Observable<Services[]>{
+    return this.http.get<Services[]>(`${this.urlBasic}/gridServices`);
   }
 
     /**

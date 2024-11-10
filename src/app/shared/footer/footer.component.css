@@ -1,26 +1,14 @@
 footer {
-  position: relative;
-  bottom: -10px;
-  left: -10px;
-  width: 100%;
+  position: absolute;
+  width: 97.49%;
+  margin-bottom: -50px;
   background-color: #ecedee;
   color: black;
   padding: 20px;
-  text-align: center; 
-  margin-top: 30;
-}
-
-.footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.content {
-  height: 1500px;
-  background-color: black;
-  padding: 20px;
-  position: relative; 
-  z-index: 1;
+  text-align: center;
+  margin-left: -10px; 
+  margin-right: -8px;
+  margin-bottom: 0;
 }
 
 

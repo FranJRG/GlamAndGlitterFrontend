@@ -26,7 +26,7 @@
         <label for="{{ category.id }}">{{ category.name }}</label>
       </div>
     }
-    <select name="categories" class="categoriesSelect" id="categories">
+    <select name="categories" class="categoriesSelect" id="categories" (change)="getServices($event)">
       <option value="all">All categories</option>
       @for (category of categories; track $index) {
         <option value="{{category.id}}">{{category.name}}</option>
