@@ -25,6 +25,14 @@ export class ServiceService {
     return this.http.get<Services[]>(this.url);
   }
 
+  /**
+   * Método para obtener todos los servicios
+   * @returns 
+   */
+  getServicesActive():Observable<Services[]>{
+    return this.http.get<Services[]>(`${this.urlBasic}/gridServices`);
+  }
+
     /**
    * Método para obtener un servicio por su id
    * @returns 

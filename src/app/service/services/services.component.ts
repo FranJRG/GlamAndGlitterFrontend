@@ -37,8 +37,10 @@ export class ServicesComponent implements OnInit, OnChanges {
     if(this.id != 0 && this.id != undefined){
       this.getServices(this.id.toString());
     }
-    this.serviceService.getServices().subscribe({
-      next: (data) => (this.services = data),
+    this.serviceService.getServicesActive().subscribe({
+      next: (data) => {
+        this.services = data
+      },
       error: (err) =>
         Toastify({
           text: 'We can´t load our services yet',
@@ -68,7 +70,7 @@ export class ServicesComponent implements OnInit, OnChanges {
       categoryId = (event.target as HTMLInputElement).value; //Lo convertimos como evento del html
     }
     if (categoryId == 'all') {
-      this.serviceService.getServices().subscribe({
+      this.serviceService.getServicesActive().subscribe({
         next: (data) => (this.services = data),
         error: (err) =>
           Toastify({

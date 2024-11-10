@@ -1,22 +1,25 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { formatISO } from 'date-fns';
-import { catchError, map, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 
 declare const google: any;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GoogleCalendarService {
-
-  events:any[] = [];
-  private clientId = "127291825317-utahcd35t25ihrj5nl4at620cp1l8d6r.apps.googleusercontent.com";
+  events: any[] = [];
+  private clientId =
+    '127291825317-utahcd35t25ihrj5nl4at620cp1l8d6r.apps.googleusercontent.com';
   private apiUrl = 'https://www.googleapis.com/calendar/v3';
   private scopes = 'https://www.googleapis.com/auth/calendar';
-  private token:string | null = localStorage.getItem('googleAccessToken') != null ? localStorage.getItem('googleAccessToken') : "";
+  private token: string | null =
+    localStorage.getItem('googleAccessToken') != null
+      ? localStorage.getItem('googleAccessToken')
+      : '';
 
   constructor(private http: HttpClient) {}
 
@@ -31,12 +34,12 @@ export class GoogleCalendarService {
           localStorage.setItem('googleAccessToken', this.token as string);
         } else {
           Toastify({
-            text: "Something go bad with access token",
-            duration: 3000, 
-            gravity: "bottom",
+            text: 'Something go bad with access token',
+            duration: 3000,
+            gravity: 'bottom',
             position: 'center',
-            backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
-          }).showToast()
+            backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+          }).showToast();
         }
       },
     });
@@ -49,63 +52,80 @@ export class GoogleCalendarService {
   getCalendarEvents(): Observable<any> {
     if (!this.token) {
       Toastify({
-        text: "User not autenticated!",
-        duration: 3000, 
-        gravity: "bottom",
+        text: 'User not autenticated!',
+        duration: 3000,
+        gravity: 'bottom',
         position: 'center',
-        backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
-      }).showToast()
+        backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+      }).showToast();
     }
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
 
-    return this.http.get<any>(`${this.apiUrl}/calendars/primary/events`, { headers }).pipe(
-      map(response => {
-        this.events = response.items || [] ; // Guarda los eventos en allEvents
-        return this.events;
-      }),
-      catchError(error => {
-        console.error('Error al cargar eventos:', error);
-        return of([]);
-      })
-    );;
+    return this.http
+      .get<any>(`${this.apiUrl}/calendars/primary/events`, { headers })
+      .pipe(
+        map((response) => {
+          this.events = response.items || []; // Guarda los eventos en allEvents
+          return this.events;
+        }),
+        catchError((error) => {
+          console.error('Error al cargar eventos:', error);
+          return of([]);
+        })
+      );
   }
 
   // Método para crear un nuevo evento en Google Calendar
   createCalendarEvent(event: any): Observable<any> {
     if (!this.token) {
       Toastify({
-        text: "User not autenticated!",
-        duration: 3000, 
-        gravity: "bottom",
+        text: 'User not autenticated!',
+        duration: 3000,
+        gravity: 'bottom',
         position: 'center',
-        backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
-      }).showToast()
+        backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+      }).showToast();
     }
 
-    return this.http.post<any>(`${this.apiUrl}/calendars/primary/events`, event);
+    return this.http.post<any>(`${this.apiUrl}/calendars/primary/events`,event);
   }
 
-  // Método para eliminar un evento por su ID
-  deleteEvent(eventId: string): Observable<any> {
+  //Método para actualizar un evento
+  updateEvent(eventId: string, event: any): Observable<any> {
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`
+      Authorization: `Bearer ${this.token}`,
     });
 
-    return this.http.delete(`${this.apiUrl}/calendars/calendarId/events/${eventId}`, { headers }).pipe(
-      catchError(error => {
-        console.error('Error al eliminar evento:', error);
-        return of(null);
-      })
-    );
+    return this.http.put(`${this.apiUrl}/calendars/primary/events/${eventId}`,event, { headers });
   }
+
+ // Método para eliminar un evento por su ID
+ deleteEvent(eventId: string): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`
+  });
+
+  return this.http.delete(`${this.apiUrl}/calendars/primary/events/${eventId}`, { headers }).pipe(
+    catchError(error => {
+      Toastify({
+        text: 'Something go bad deleting the event!',
+        duration: 3000,
+        gravity: 'bottom',
+        position: 'center',
+        backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+      }).showToast();
+      return of(null);
+    })
+  );
+}
 
   // Método para cerrar sesión y eliminar el token almacenado
   signOut() {
     localStorage.removeItem('googleAccessToken');
     this.token = null;
-    console.log("Sesión cerrada.");
+    console.log('Sesión cerrada.');
   }
 }

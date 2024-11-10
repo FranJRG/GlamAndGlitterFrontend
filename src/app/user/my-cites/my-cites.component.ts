@@ -92,11 +92,13 @@ export class MyCitesComponent implements OnInit {
    * Si hay algun error mostraremos el mensaje correspondiente
    * @param id
    */
-  deleteCite(id: number) {
+  deleteCite(id: number,eventId:string) {
     this.citeService.deleteCite(id).subscribe({
       next: (data) => {
         this.reserves = this.reserves.filter((cite) => cite.id !== id);
-        this.deleteEvent(data.eventId);
+        if(eventId != "" && eventId != null){
+          this.deleteEvent(eventId);
+        }
         Toastify({
           text:
             'Appointment for date: ' +

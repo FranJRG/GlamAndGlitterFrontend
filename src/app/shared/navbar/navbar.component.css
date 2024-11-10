@@ -114,11 +114,12 @@ ul li:not(:first-child) {
     display: flex;
     justify-content: center;
     gap: 0px;
-    padding: 0 10px; 
+    padding: 0px; 
+    margin: 0;
   }
 
   .firstUl{
-    width: 280px;
+    width: 210px;
   }
 
   .firstUl img{
@@ -126,7 +127,7 @@ ul li:not(:first-child) {
   }
 
   li{
-    font-size: 20px;
+    font-size: 19px;
   }
 
 }

@@ -142,3 +142,37 @@ select.error {
   font-size: 1.2rem;
   font-weight: bold;
 }
+
+@media only screen and (max-width: 480px) {
+
+  .container{
+    display: grid;
+    gap: 20px;
+  }
+
+  form{
+    display: block;
+    width: 120px;
+  }
+
+  form input{
+    width: 215px;
+  }
+
+  form button{
+    width: 250px;
+  }
+
+  .ratingSection {
+    margin-left: -2px !important;
+    background-color: #ecedee;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 30px;
+    height: 490px;
+    max-height: 520px;
+    width: 85%;
+    overflow-y: auto;
+  }
+
+}

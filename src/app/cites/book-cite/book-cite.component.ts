@@ -41,13 +41,14 @@ export class BookCiteComponent implements OnInit {
   categories!: Category[];
   filterServices!: Services[];
   idServiceCite = 0;
-  idEvent:string = ""
 
   workers!:User[];
 
   categorySelected: boolean = false;
   @Input() serviceId: number = 0;
   @Input() id: number = 0;
+
+  eventId:string = "";
 
   constructor(
     private serviceService: ServiceService,
@@ -76,19 +77,21 @@ export class BookCiteComponent implements OnInit {
   ngOnInit(): void {
     if (this.id != 0 && this.id != undefined) {
       this.getCite();
-      this.citeService.getWorkers(this.id).subscribe({
-        next : (data) => {
-          this.workers = data
-        },
-        error : (err) => 
-          Toastify({
-            text: "Something go bad: " + err.error.message,
-            duration: 3000, 
-            gravity: "bottom",
-            position: 'center',
-            backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
-          }).showToast()
-      })
+      if(this.authService.getRole() === "admin"){
+        this.citeService.getWorkers(this.id).subscribe({
+          next : (data) => {
+            this.workers = data
+          },
+          error : (err) => 
+            Toastify({
+              text: "Something go bad: " + err.error.message,
+              duration: 3000, 
+              gravity: "bottom",
+              position: 'center',
+              backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
+            }).showToast()
+        })
+      }
     }
     if (this.serviceId != 0 && this.serviceId != undefined) {
       this.getService(this.serviceId);
@@ -304,23 +307,27 @@ export class BookCiteComponent implements OnInit {
    */
   modifyCite() {
     if (this.myForm.valid) {
+      const eventId = this.cite.eventId;
       const { ...cite } = this.myForm.value;
       this.cite = cite;
       //Si la longitud del startTime es 8 es decir HH:mm:ss no hacemos nada si no le ponemos :00 para darle formato
       //Esto lo hacemos debido a que al recoger la cita de la api la hora viene formateada y si no la cambiamos
       //no habria que añadir el :00
-      this.cite.startTime =
-        this.cite.startTime.length === 8 ? '' : this.cite.startTime + ':00';
+      this.cite.startTime = this.cite.startTime.length === 8 ? '' : this.cite.startTime + ':00';
       this.cite.idService = this.service.id;
       this.citeService.updateCite(this.id, this.cite).subscribe({
-        next: (data) =>
+        next: (data) =>{
           Toastify({
             text: 'Appointment successfully updated, check your appointments!',
             duration: 3000,
             gravity: 'bottom',
             position: 'center',
             backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
-          }).showToast(),
+          }).showToast()
+          if(eventId != "" && eventId != null){
+            this.updateCalendarEvent(eventId,this.cite);
+          }
+      },
         error: (err) =>
           Toastify({
             text: 'Something go bad: ' + err.error.message,
@@ -345,10 +352,10 @@ export class BookCiteComponent implements OnInit {
       this.cite = cite;
       this.cite.startTime = this.cite.startTime + ':00'; //Damos formato a la cita HH:mm:ss
       this.cite.idService = this.service.id;
-      this.createCalendarEvent()
+      this.cite.eventId = this.generateBase32HexId();
       this.citeService.addCite(this.cite).subscribe({
         next: (data) => {
-          console.log(data)
+          console.log(data.startTime)
           Toastify({
             text: 'Appointment successfully added, check your future appointments!',
             duration: 3000,
@@ -356,6 +363,7 @@ export class BookCiteComponent implements OnInit {
             position: 'center',
             backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
           }).showToast();
+          this.createCalendarEvent(this.cite.eventId)
         },
         error: (err) =>
           Toastify({
@@ -368,11 +376,6 @@ export class BookCiteComponent implements OnInit {
       });
     }
   }
-
-  setIdEvent(id:string){
-    this.cite.eventId = id;
-  }
-
     /**
    * Método para establecer un trabajador a una cita
    * Le pasamos el id de la cita y el id del trabajador
@@ -400,14 +403,86 @@ export class BookCiteComponent implements OnInit {
       })
     }
 
+    getRandomInt(min:number,max:number):number {
+      return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    generateBase32HexId(length = 16) {
+      // Lista de caracteres válidos en base32hex (a-v, 0-9)
+      const base32hexChars = '0123456789abcdefghijklmnopqrstuvw';
+    
+      // Generar un ID aleatorio de longitud deseada
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += base32hexChars[this.getRandomInt(0, base32hexChars.length)];
+      }
+      
+      return result;
+    }
+    
+
+    /**
+     * Método para actualizar un evento de Google Calendar
+     */
+
+    updateCalendarEvent(eventId:string,cite:Omit<Cite, 'id' | 'username'>){
+        const startDateTime = new Date(`${cite.day}T${cite.startTime}`);
+        const endDateTime = addMinutes(startDateTime, parseInt(this.service.duration));
+        const event = {
+          id:eventId,
+          summary: this.service.name,
+          location: 'Sevilla',
+          description: 'Reserva de cita',
+          start: {
+            dateTime: formatISO(startDateTime), // Hora de inicio en formato ISO
+            timeZone: 'Europe/Madrid', // Zona horaria correcta
+          },
+          end: {
+            dateTime: formatISO(endDateTime), // Hora de fin en formato ISO
+            timeZone: 'Europe/Madrid', // Zona horaria correcta
+          },
+          attendees: [
+            { email: 'correo@example.com' }, // Lista de asistentes
+          ],
+          reminders: {
+            useDefault: false,
+            overrides: [
+              { method: 'email', minutes: 24 * 60 },
+              { method: 'popup', minutes: 10 },
+            ],
+          },
+        };
+        this.calendarService.updateEvent(eventId,event).subscribe({
+          next: (data) => {
+            Toastify({
+              text: 'Event updated succesfully',
+              duration: 3000,
+              gravity: 'bottom',
+              position: 'center',
+              backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
+            }).showToast();
+          },
+          error: (err) => {
+            Toastify({
+              text: 'Something go bad updating the event in Google Calendar',
+              duration: 3000,
+              gravity: 'bottom',
+              position: 'center',
+              backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+            }).showToast();
+          },
+        });
+    }
+
   /**
    * Método para crear un evento en Google Calendar
    * @param data - Datos de la cita para crear el evento
    */
-  createCalendarEvent():string{
+  createCalendarEvent(id:string){
     const startDateTime = new Date(`${this.cite.day}T${this.cite.startTime}`);
     const endDateTime = addMinutes(startDateTime, parseInt(this.service.duration));
     const event = {
+      id: id,
       summary: this.service.name,
       location: 'Sevilla',
       description: 'Reserva de cita',
@@ -432,8 +507,6 @@ export class BookCiteComponent implements OnInit {
     };
     this.calendarService.createCalendarEvent(event).subscribe({
       next: (data) => {
-        this.setIdEvent(data.id);
-        console.log(this.cite.eventId)
         Toastify({
           text: 'Event added to calendar succesfully',
           duration: 3000,
@@ -444,7 +517,7 @@ export class BookCiteComponent implements OnInit {
       },
       error: (err) => {
         Toastify({
-          text: 'Error al crear el evento en Google Calendar',
+          text: 'Something go bad creating the event in Google Calendar',
           duration: 3000,
           gravity: 'bottom',
           position: 'center',
@@ -452,6 +525,5 @@ export class BookCiteComponent implements OnInit {
         }).showToast();
       },
     });
-    return ""
   }
 }
