@@ -1,0 +1,169 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+}
+
+.card {
+  animation: fadeInAnimation 2s ease-out forwards;
+  opacity: 0;
+  background-color: #ecedee;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  margin-top: 20px;
+  text-align: center;
+  width: 90%;
+  max-width: 500px;
+}
+
+.card p {
+  margin: 0;
+  font-size: 17px;
+  color: #333;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.container-table {
+  background-color: #f2f2f2;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 1.2rem;
+  background-color: #f7f7f7;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.styled-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.styled-table tr:hover {
+  background-color: #e0e0e0;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  font-family: serif;
+  font-size: 18px;
+  padding: 8px 16px;
+  width: 50%;
+  background-color: #9c27b0;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #6a1b9a;
+}
+
+.alert-card {
+  background-color: #d9a5e1;
+  color: #6a1b9a;
+  border: 1px solid #ba68c8;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 5px 0;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  text-align: center;
+}
+
+.styled-select {
+  background-color: #f0f0f0;
+  color: #333;
+  font-size: 14px;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 8px;
+  width: 80%;
+  box-sizing: border-box;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  padding-right: 30px;
+}
+
+.styled-select:hover {
+  outline: none;
+  background-color: #aaaaaa;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.styled-select option {
+  font-family: serif;
+  font-size: 18px;
+  background-color: #ffffff;
+  padding: 8px;
+}
+
+.styled-select::-ms-expand {
+  display: none;
+}
+
+@media only screen and (max-width: 480px) {
+  .styled-table th,
+  .styled-table td {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  .styled-table {
+    width: 100%;
+    display: block;
+    overflow-x: auto;
+  }
+
+  .container-table {
+    padding: 10px;
+    margin-left: 0px;
+    width: 400px;
+  }
+
+  button {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+}

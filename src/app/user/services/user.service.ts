@@ -11,7 +11,7 @@ export class UserService {
 
   constructor(private http:HttpClient) { }
 
-  url:string = "https://glamandglitter.onrender.com";
+  url:string = "http://localhost:8080";
 
   /**
    * Método para obtener un usuario por su id
@@ -20,6 +20,14 @@ export class UserService {
    */
   getUserById(id:number):Observable<User>{
     return this.http.get<User>(`${this.url}/user/${id}`);
+  }
+
+  /**
+   * Método para obtener todos los trabajadores
+   * @returns 
+   */
+  getWorkers():Observable<User[]>{
+    return this.http.get<User[]>(`${this.url}/allWorkers`);
   }
 
   /**
