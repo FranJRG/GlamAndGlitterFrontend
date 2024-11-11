@@ -23,6 +23,14 @@ export class UserService {
   }
 
   /**
+   * Método para obtener todos los trabajadores
+   * @returns 
+   */
+  getWorkers():Observable<User[]>{
+    return this.http.get<User[]>(`${this.url}/allWorkers`);
+  }
+
+  /**
    * Método para obtener los trabajadores que no tienen horario de trabajo
    * @returns 
    */

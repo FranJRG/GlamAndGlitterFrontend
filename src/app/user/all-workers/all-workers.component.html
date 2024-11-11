@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="container-table">
+    <table class="styled-table">
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th></th>
+        <th>Actions</th>
+        <th></th>
+      </tr>
+      @for (user of users; track $index) {
+      <tr>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.phone}}</td>
+        <td></td>
+        <td>
+          <button
+            (click)="editSchedule(user.id)"
+            style="background-color: #bcac1f"
+          >
+            Change Schedule
+            <i class="fas fa-edit" aria-hidden="true"></i>
+          </button>
+        </td>
+        <td></td>
+      </tr>
+      }
+    </table>
+  </div>
+</div>

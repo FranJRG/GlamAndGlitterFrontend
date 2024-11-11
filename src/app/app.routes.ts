@@ -25,5 +25,9 @@ export const routes: Routes = [
     {
         path:'rating',
         loadChildren: () => import("./rating/routes").then(mod => mod.routes)
+    },
+    {
+        path:'schedule',
+        loadChildren: () => import("./employeeSchedule/routes").then(mod => mod.routes)
     }
 ];

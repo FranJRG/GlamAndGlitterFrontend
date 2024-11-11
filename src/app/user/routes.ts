@@ -9,6 +9,7 @@ import { PendingSchedulesComponent } from "./pending-schedules/pending-schedules
 import { AllServicesAdminComponent } from "./all-services-admin/all-services-admin.component";
 import { jwtGuard } from "../shared/guards/jwt.guard";
 import { adminGuard } from "../shared/guards/admin.guard";
+import { AllWorkersComponent } from "./all-workers/all-workers.component";
 
 export const routes:Routes = [
     {
@@ -46,8 +47,13 @@ export const routes:Routes = [
         canMatch:[adminGuard]
     },
     {
-        path:'disabledService',
+        path:'manageServices',
         component:AllServicesAdminComponent,
+        canMatch:[adminGuard]
+    },
+    {
+        path:'allWorkersAdmin',
+        component:AllWorkersComponent,
         canMatch:[adminGuard]
     }
 ]

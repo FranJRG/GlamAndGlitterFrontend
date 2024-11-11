@@ -49,7 +49,7 @@ export class AllServicesAdminComponent implements OnInit{
       },
       error : (err) => 
         Toastify({
-          text: 'Something go bad disabled the service',
+          text: 'Something go bad disabled the service '  + err.error.message,
           duration: 3000,
           gravity: 'bottom',
           position: 'center',
