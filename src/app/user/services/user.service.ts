@@ -11,7 +11,7 @@ export class UserService {
 
   constructor(private http:HttpClient) { }
 
-  url:string = "http://localhost:8080";
+  url:string = "https://glamandglitter.onrender.com";
 
   /**
    * Método para obtener un usuario por su id
