@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class RatingService {
 
-  url:string = "http://localhost:8080";
+  url:string = "https://glamandglitter.onrender.com";
 
   constructor(private http:HttpClient) { }
 
