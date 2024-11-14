@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Services } from '../../interfaces/services';
 import { ServiceService } from '../../service/service.service';
 import Toastify from 'toastify-js';
@@ -23,6 +23,7 @@ import { addMinutes, formatISO } from 'date-fns';
 import { User } from '../../interfaces/user';
 import { AuthService } from '../../auth/services/auth.service';
 import { Rating } from '../../interfaces/rating';
+import { UserService } from '../../user/services/user.service';
 
 @Component({
   selector: 'app-book-cite',
@@ -42,7 +43,11 @@ export class BookCiteComponent implements OnInit {
   filterServices!: Services[];
   idServiceCite = 0;
 
+  dateFilter!:string;
+  timeFilter!:string;
+
   workers!:User[];
+  worker!:User;
 
   categorySelected: boolean = false;
   @Input() serviceId: number = 0;
@@ -50,16 +55,19 @@ export class BookCiteComponent implements OnInit {
 
   eventId:string = "";
 
+  idWorker:string = "";
+
   constructor(
     private serviceService: ServiceService,
     private fb: FormBuilder,
     private checkCiteService: CheckCiteService,
     private citeService: CiteService,
+    private userService:UserService,
     private authService:AuthService,
     private calendarService: GoogleCalendarService
   ) {}
 
-  cite: Omit<Cite, 'id' | 'username'> = {
+  cite: Omit<Cite, 'id' | 'username' | 'idWorker'> = {
     day: new Date(),
     startTime: '',
     idService: 0,
@@ -78,19 +86,7 @@ export class BookCiteComponent implements OnInit {
     if (this.id != 0 && this.id != undefined) {
       this.getCite();
       if(this.authService.getRole() === "admin"){
-        this.citeService.getWorkers(this.id).subscribe({
-          next : (data) => {
-            this.workers = data
-          },
-          error : (err) => 
-            Toastify({
-              text: "Something go bad: " + err.error.message,
-              duration: 3000, 
-              gravity: "bottom",
-              position: 'center',
-              backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
-            }).showToast()
-        })
+        this.getWorkers();
       }
     }
     if (this.serviceId != 0 && this.serviceId != undefined) {
@@ -98,6 +94,50 @@ export class BookCiteComponent implements OnInit {
       this.getRatingsService(this.serviceId);
     }
     this.getCategories();
+  }
+
+  setDateFilter(event:Event){
+    let date = (event.target as HTMLInputElement).value;
+    this.dateFilter = date;
+    this.getWorkers(this.dateFilter,this.timeFilter);
+  }
+
+  setTimeFilter(event:Event){
+    let time = (event.target as HTMLInputElement).value;
+    this.timeFilter = time + ":00";
+    this.getWorkers(this.dateFilter,this.timeFilter);
+  }
+
+  getWorkers(dateFilter?:string, timeFilter?:string){
+    this.citeService.getWorkers(this.id,dateFilter,timeFilter).subscribe({
+      next : (data) => {
+        this.workers = data
+      },
+      error : (err) => 
+        Toastify({
+          text: "Something go bad: " + err.error.message,
+          duration: 3000, 
+          gravity: "bottom",
+          position: 'center',
+          backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
+        }).showToast()
+    })
+  }
+
+  getWorkerFromCite(id:number){
+
+    this.userService.getUserById(id).subscribe({
+      next : (data) => this.worker = data,
+      error : (err) => 
+        Toastify({
+          text: 'Failed to get the worker from this cite : ' + err.error.message,
+          duration: 3000,
+          gravity: 'bottom',
+          position: 'center',
+          backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+        }).showToast()
+    })
+
   }
 
   getRatingsService(id:number){
@@ -145,6 +185,7 @@ export class BookCiteComponent implements OnInit {
           idService: data.idService,
         });
         this.getService(data.idService); //Obtenemos el servicio de la api
+        this.getWorkerFromCite(data.idWorker); // Obtenemos el trabajador de la api asociado a esta cita
       },
       error: (err) =>
         Toastify({
@@ -315,7 +356,8 @@ export class BookCiteComponent implements OnInit {
       //no habria que añadir el :00
       this.cite.startTime = this.cite.startTime.length === 8 ? '' : this.cite.startTime + ':00';
       this.cite.idService = this.service.id;
-      this.citeService.updateCite(this.id, this.cite).subscribe({
+      console.log(this.idWorker);
+      this.citeService.updateCite(this.id, this.cite, this.idWorker).subscribe({
         next: (data) =>{
           Toastify({
             text: 'Appointment successfully updated, check your appointments!',
@@ -382,25 +424,9 @@ export class BookCiteComponent implements OnInit {
    * Mostramos mensaje de éxito o error según sea necesario
    * @param id 
    */
-    setWorker(id:number){
-      this.citeService.setWorker(this.id,id).subscribe({
-        next : (data) => 
-          Toastify({
-            text: 'Worker assined is ' + data.name,
-            duration: 4000,
-            gravity: 'bottom',
-            position: 'center',
-            backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
-          }).showToast(),
-        error : (err) => 
-          Toastify({
-            text: "Something go bad: " + err.error.message,
-            duration: 3000, 
-            gravity: "bottom",
-            position: 'center',
-            backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
-          }).showToast()
-      })
+    setWorker(event:Event){
+      const idWorker = (event.target as HTMLInputElement).value;
+      this.idWorker = idWorker;
     }
 
     getRandomInt(min:number,max:number):number {
@@ -425,7 +451,7 @@ export class BookCiteComponent implements OnInit {
      * Método para actualizar un evento de Google Calendar
      */
 
-    updateCalendarEvent(eventId:string,cite:Omit<Cite, 'id' | 'username'>){
+    updateCalendarEvent(eventId:string,cite:Omit<Cite, 'id' | 'username' | 'idWorker'>){
         const startDateTime = new Date(`${cite.day}T${cite.startTime}`);
         const endDateTime = addMinutes(startDateTime, parseInt(this.service.duration));
         const event = {

@@ -74,7 +74,7 @@ form {
 
 form label {
   margin-bottom: 10px;
-  font-size: 1.1rem;
+  font-size: 20px !important;
   font-weight: bold;
   color: #333;
 }
@@ -84,7 +84,7 @@ form input {
   margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  font-size: 16px;
+  font-size: 18px;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
@@ -119,7 +119,7 @@ select {
   border-radius: 6px;
   border: 1px solid #dcdcdc;
   background-color: #fafafa;
-  font-size: 1rem;
+  font-size: 18px;
   color: black;
   box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
@@ -165,8 +165,14 @@ h3 {
 
 .containerCard {
   padding: 20px;
-  background-color: #ecedee;
+  background-color: transparent;
   border-radius: 10px;
+}
+
+.containerCard:hover {
+  .arrow-left,.arrow-right{
+    display: block;
+  }
 }
 
 .row {
@@ -177,7 +183,7 @@ h3 {
 }
 
 .card {
-  background-color: ecedee;
+  background-color: #ecedee;
   border: 1px solid #e0e0e0;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
@@ -237,28 +243,33 @@ h3 {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #a57db881;
+  background-color: #8c8c8c81;
   color: #fff;
   border: none;
+  width: 40px;
+  height: 150px;
   border-radius: 5px;
   padding: 10px 15px;
   cursor: pointer;
   font-size: 24px;
   transition: background-color 0.3s ease, transform 0.2s ease;
   z-index: 10;
+  display: none;
 }
 
 .arrow-left {
-  left: -30px; 
+  left: 20px; 
+  margin-top: 50px;
 }
 
 .arrow-right {
-  right: -30px; 
+  right: 20px; 
+  margin-top: 50px;
 }
 
 .arrow-left:hover,
 .arrow-right:hover {
-  background-color: #80628f81;
+  background-color: #443a4981;
   transform: translateY(-50%) scale(1.05);
 }
 
@@ -284,6 +295,10 @@ h3 {
     margin-left: 20px !important;
   }
 
+  .row{
+    overflow-x: scroll;
+  }
+
   .contact-section{
     width: 242px;
     margin-left: 20px !important;
@@ -295,6 +310,10 @@ h3 {
 
   .contact-section form input{
     width: 220px;
+  }
+
+  .arrow-left,.arrow-right{
+    display: none;
   }
 
 }

@@ -12,7 +12,7 @@ export class RatingService {
 
   constructor(private http:HttpClient) { }
 
-  addRating(rating:Rating):Observable<Rating>{
+  addRating(rating:Omit<Rating, "username">):Observable<Rating>{
     return this.http.post<Rating>(`${this.url}/addRating`, rating);
   }
 }

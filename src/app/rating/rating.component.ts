@@ -20,7 +20,7 @@ export class RatingComponent {
   punctuacion: number = 0;
   @Input()id:number = 0;
 
-  rating:Rating = {
+  rating:Omit<Rating, "username"> = {
     punctuation : 0,
     message : "",
     citeId : this.id

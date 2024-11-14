@@ -76,11 +76,14 @@ export class AllServicesAdminComponent implements OnInit{
   }
 
   filterServicesByName(){
-  if(this.name != "" && this.name != undefined){
-    this.filterServices = this.services.filter((service) => service.name.toUpperCase().includes(this.name.toUpperCase()));
-  }else{
-    this.filterServices = this.services;
-  }
+    if(this.name != "" && this.name != undefined){
+      this.filterServices = this.services.filter((service) => 
+        service.name.toUpperCase().includes(this.name.toUpperCase()) ||
+        service.description.toUpperCase().includes(this.name.toUpperCase())
+      );
+    }else{
+      this.filterServices = this.services;
+    }
   }
 
 }
