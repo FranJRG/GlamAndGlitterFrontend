@@ -4,14 +4,15 @@ import { Rating } from '../../interfaces/rating';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class RatingService {
-  url: string = 'https://glamandglitter.onrender.com';
 
-  constructor(private http: HttpClient) {}
+  url:string = "http://localhost:8080";
 
-  addRating(rating: Rating): Observable<Rating> {
+  constructor(private http:HttpClient) { }
+
+  addRating(rating:Omit<Rating, "username">):Observable<Rating>{
     return this.http.post<Rating>(`${this.url}/addRating`, rating);
   }
 }

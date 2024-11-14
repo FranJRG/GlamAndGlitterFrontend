@@ -75,6 +75,7 @@
             required
             formControlName="day"
             (change)="checkCite()"
+            (change)="setDateFilter($event)"
           />
         </div>
 
@@ -89,6 +90,7 @@
             value="09:00"
             formControlName="startTime"
             (change)="checkCite()"
+            (change)="setTimeFilter($event)"
           />
           @if (isInvalidField('startTime')) {
           <small>{{ TimeError }}</small>
@@ -99,7 +101,12 @@
           <div class="form-row full-width">
             <label>Workers</label>
             <div>
-              <select>
+              <select (change)="setWorker($event)">
+                <option disabled>----Current worker----</option>
+                @if (worker) {
+                  <option value="">{{worker.name}}</option>
+                }
+                <option disabled>----Select new worker----</option>
                 @for (worker of workers; track $index) {
                   <option value="{{worker.id}}">{{worker.name}}</option>
                 }
@@ -123,14 +130,16 @@
   </div>
   @if (ratings != [] && ratings.length > 0) {
   <div class="ratingSection">
-    <h2 align="center">Ratings</h2>
+    <details align="center">
+      <summary>Ratings</summary>
       @for (rating of ratings; track $index) {
         <div class="rating">
-          <p><b>Punctuation</b> : {{rating.punctuation}}</p>
+          <p><b>Punctuation</b> : {{rating.punctuation}} ({{rating.username}})</p>
           <p>{{rating.message}}</p>
         </div>
         <hr>
       }
-    </div>
+    </details>
+  </div>
   }
 </div>

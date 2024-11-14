@@ -20,6 +20,9 @@ export class PendingReservesComponent implements OnInit{
   
   pendingReserves:Cite[] = [];
   services:Services[] = [];
+
+  sortDate:boolean = false
+  isSortDate:boolean = true;
   
   constructor(private citeService:CiteService,
     private serviceService:ServiceService,
@@ -164,5 +167,30 @@ export class PendingReservesComponent implements OnInit{
    */
   selectWorker(id:number){
     this.router.navigateByUrl(`/cite/updateCite/${id}`)
+  }
+
+  /**
+   * Ordenar la tabla por fecha
+   * Llamaremos al boolean para comprobar si es la primera vez que le damos a ordenar (visual html)
+   * Comprobamos si esta ordenado asc o desc (isSortDate) en funcion de lo que nos devuelva ordenamos
+   * Cambiamos el valor de isSortDate para altenar cada vez que el usuario haga click
+   */
+  sortByDate(): void {
+    if (!this.sortDate) {
+      this.sortDate = true;
+    }
+  
+    this.pendingReserves.sort((a, b) => {
+      const dateA = new Date(a.day).getTime();
+      const dateB = new Date(b.day).getTime();
+      
+      if (this.isSortDate) {
+        return dateB - dateA;
+      } else {
+        return dateA - dateB;
+      }
+    });
+  
+    this.isSortDate = !this.isSortDate;
   }
 }

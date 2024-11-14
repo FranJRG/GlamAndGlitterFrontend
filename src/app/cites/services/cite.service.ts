@@ -13,7 +13,7 @@ export class CiteService {
 
   constructor(private http:HttpClient) { }
 
-  private url:string = "https://glamandglitter.onrender.com";
+  private url:string = "http://localhost:8080";
 
   /**
    * Método para obtener una cita por su id
@@ -46,7 +46,7 @@ export class CiteService {
    * @param cite 
    * @returns 
    */
-  addCite(cite:Omit<Cite, "id" | "username">):Observable<Cite>{
+  addCite(cite:Omit<Cite, "id" | "username" | 'idWorker'>):Observable<Cite>{
     return this.http.post<Cite>(`${this.url}/addCite`, cite);
   }
 
@@ -69,8 +69,9 @@ export class CiteService {
    * @param id 
    * @returns 
    */
-  getWorkers(id:number):Observable<User[]>{
-    return this.http.get<User[]>(`${this.url}/workers/${id}`);
+  getWorkers(id:number,dateFilter?:string,timeFilter?:string):Observable<User[]>{
+    const params = new HttpParams().set("dateFilter",dateFilter as string).set("timeFilter",timeFilter as string)
+    return this.http.get<User[]>(`${this.url}/workers/${id}`,{params});
   }
 
   /**
@@ -86,8 +87,9 @@ export class CiteService {
    * @param cite 
    * @returns 
    */
-  updateCite(id:number, cite:Omit<Cite, "id" | "username">):Observable<Cite>{
-    return this.http.put<Cite>(`${this.url}/modifyCite/${id}`,cite);
+  updateCite(id:number, cite:Omit<Cite, "id" | "username" | 'idWorker'>,idWorker?:string):Observable<Cite>{
+    const params = new HttpParams().set("idWorker",idWorker as string);
+    return this.http.put<Cite>(`${this.url}/modifyCite/${id}`,cite, {params});
   }
 
   /**
