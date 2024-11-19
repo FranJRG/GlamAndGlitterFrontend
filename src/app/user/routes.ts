@@ -10,6 +10,7 @@ import { AllServicesAdminComponent } from "./all-services-admin/all-services-adm
 import { jwtGuard } from "../shared/guards/jwt.guard";
 import { adminGuard } from "../shared/guards/admin.guard";
 import { AllWorkersComponent } from "./all-workers/all-workers.component";
+import { AdminPanelComponent } from "./admin-panel/admin-panel.component";
 
 export const routes:Routes = [
     {
@@ -54,6 +55,11 @@ export const routes:Routes = [
     {
         path:'allWorkersAdmin',
         component:AllWorkersComponent,
+        canMatch:[adminGuard]
+    },
+    {
+        path:'adminPanel',
+        component:AdminPanelComponent,
         canMatch:[adminGuard]
     }
 ]

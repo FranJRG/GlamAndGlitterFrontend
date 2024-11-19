@@ -1,0 +1,136 @@
+
+<div class="container">
+  <div class="cardTitle">
+      <p>Welcome to the reports section</p>
+      <small style="color: red; font-size: 15px;">All information will be relative to the last month</small>
+  </div>
+</div>
+
+<div class="pdf-button-container">
+  <button class="generate-pdf-btn" (click)="generatePDF()">Generate report in PDF</button>
+</div>
+
+<div id="reportContainer" class="report-container">
+    <h2 class="report-title">Quotes report 📝</h2>
+
+    <div class="container-table">
+      <table class="styled-table">
+        <tr>
+          <th class="dateOrder" data-toggle="tooltip" data-placement="top" title="Order by date" style="cursor: pointer;" (click)="sortByDate()">
+            Date
+            @if (sortDate) {
+              @if (isSortDate) {
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M182.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8l256 0c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg>
+              }@else {
+                <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M182.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128z"/></svg>
+              }
+            }
+          </th>
+          <th>User</th>
+          <th>Service Reserved</th>
+          <th>Punctuation</th>
+          <th>Message</th>
+          <th>Worker</th>
+        </tr>
+        @for (reserve of lastCites; track $index) {
+        <tr>
+          <td>{{ getFormattedDate(reserve.day.toString()) }}</td>
+          <td>{{ reserve.username }}</td>
+          <td>{{ reserve.serviceName }}</td>
+          <td>{{ reserve.punctuation != 0 ? reserve.punctuation : 'No valorado' }}</td>
+          <td>{{ reserve.comment != null ? reserve.comment : 'No valorado'}}</td>
+          <td>{{ reserve.workerName }}</td>
+        }
+      </table>
+    </div>
+  
+    <h2 class="report-title">Most requested services 📊</h2>
+    <!-- Mostrar el gráfico -->
+    <div class="chart-container">
+      <canvas id="serviceChart"></canvas>
+    </div>
+    
+    <div class="reportVelocimeterContainer">
+      <div class="firstReportContainer">
+        <h4 class="report-title">Average score in the last month 🔢</h4>
+        <div class="graphics">
+          <div class="velocimetro-container">
+            <canvas id="velocimeterChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="secondReportContainer">
+        <h4 class="report-title">Total score from Company 🔢</h4>
+        <div class="graphics">
+          <div class="velocimetro-container">
+            <canvas id="secondVelocimeterChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Mostrar la lista de servicios y porcentajes -->
+    <div *ngIf="serviceSummary.length > 0" class="service-summary">
+      <h3 class="summary-title">Services Summary:</h3>
+      <ul class="summary-list">
+        <li *ngFor="let summary of serviceSummary" class="summary-item">
+          <strong class="service-name">{{ summary.serviceName }}</strong>: 
+          <span class="reservation-count">{{ summary.reservationCount }} {{summary.reservationCount == 1 ? 'solicitud' : 'solicitudes'}}</span>
+          <span style="margin-left: 10px;">
+            <button data-toggle="tooltip" data-placement="top" title="See ratings" class="buttonRating" (click)="getRatingFromService(summary.serviceId)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M512 240c0 114.9-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6C73.6 471.1 44.7 480 16 480c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c0 0 0 0 0 0s0 0 0 0s0 0 0 0c0 0 0 0 0 0l.3-.3c.3-.3 .7-.7 1.3-1.4c1.1-1.2 2.8-3.1 4.9-5.7c4.1-5 9.6-12.4 15.2-21.6c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208z"/></svg>
+            </button>
+          </span>
+        </li>
+      </ul>
+    </div>
+    
+    @if (seeReview) {
+      <div class="containerRatingSection">
+          @for (rating of reviewsFromService; track $index) {
+              <div class="rating-container">
+                  <p class="rating-header">{{rating.punctuation}} <span style="font-style: italic;">({{rating.username}})</span></p>
+                  <p class="rating-message">{{rating.message}}</p>
+              </div>
+              <hr>
+          }
+      </div>
+    }
+
+    <h2 class="report-title">Comparation Ratings ✍️</h2>
+    <div class="smallContainer">
+      <small class="report-small" style="color: red;">We will only show 5 of each one of this month</small>
+    </div>
+    <div class="comparationRatingContainer">
+      @if (bestRatings.length > 0 || worstRatings.length > 0) {
+        <div class="bestRating">
+          @if(bestRatings.length > 0){
+            @for (rating of bestRatings; track $index) {
+              <p><b>{{rating.punctuation}}</b>  ({{rating.username}})</p>
+              <p>{{rating.message}}</p>
+              <hr>
+            }
+          }@else {
+            <div class="alert-card">No good ratings this month yet</div>
+          }
+        </div>
+        <div class="lineSeparator"></div>
+        <div class="worstRatings">
+          @if(worstRatings.length > 0){
+            @for (rating of worstRatings; track $index) {
+              <p><b>{{rating.punctuation}}</b>  ({{rating.username}})</p>
+              <p>{{rating.message}}</p>
+              <hr>
+            }
+          }@else {
+              <div class="alert-card">No bad ratings this month yet</div>
+          }
+        </div>
+      }@else {
+        <div class="alert-card">No reviews this month</div>
+      }
+    </div>
+
+
+</div>
+  

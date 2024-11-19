@@ -35,20 +35,6 @@
   background-color: #e0e0e0;
 }
 
-.styled-table button {
-  padding: 8px 16px;
-  background-color: #9c27b0;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.styled-table button:hover {
-  background-color: #6a1b9a;
-}
-
 .alert-card {
   background-color: #d9a5e1;
   color: #6a1b9a;
@@ -60,6 +46,16 @@
   text-align: center;
   font-size: 1.2rem;
   font-weight: bold;
+}
+
+button{
+  background-color: transparent;
+  border: none;
+}
+
+svg{
+  width: 30px;
+  height: 20px;
 }
 
 @media only screen and (max-width: 480px) {
