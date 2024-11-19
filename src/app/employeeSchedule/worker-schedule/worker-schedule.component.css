@@ -53,7 +53,7 @@
 .styled-table th,
 .styled-table td {
   padding: 12px 15px;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid #ddd;
 }
 
@@ -65,7 +65,7 @@
   background-color: #e0e0e0;
 }
 
-.buttonContainer {
+.buttonContainer{
   display: flex;
   justify-content: center;
 }
@@ -107,18 +107,18 @@ button:hover {
   padding: 10px;
   margin: 5px 0;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-  font-size: 14px;
+  font-size: 14px; 
   text-align: center;
 }
 
 .styled-select {
   background-color: #f0f0f0;
   color: #333;
-  font-size: 14px;
+  font-size: 18px;
   padding: 8px 15px;
   border: none;
   border-radius: 8px;
-  width: 80%;
+  width: 37%;
   box-sizing: border-box;
   background-color: transparent;
   cursor: pointer;
@@ -144,6 +144,7 @@ button:hover {
 }
 
 @media only screen and (max-width: 480px) {
+  
   .styled-table th,
   .styled-table td {
     padding: 8px;

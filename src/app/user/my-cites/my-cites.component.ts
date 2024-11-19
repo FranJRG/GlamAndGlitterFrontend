@@ -25,7 +25,8 @@ export class MyCitesComponent implements OnInit {
   service!: Services;
   date: Date = new Date();
 
-  
+  sortDate:boolean = false
+  isSortDate:boolean = true;
 
   constructor(
     private citeService: CiteService,
@@ -204,6 +205,31 @@ export class MyCitesComponent implements OnInit {
     let dateService = new Date(this.getFormattedDate(date));
     let actualDate = new Date();
     return dateService < actualDate;
+  }
+
+   /**
+   * Ordenar la tabla por fecha
+   * Llamaremos al boolean para comprobar si es la primera vez que le damos a ordenar (visual html)
+   * Comprobamos si esta ordenado asc o desc (isSortDate) en funcion de lo que nos devuelva ordenamos
+   * Cambiamos el valor de isSortDate para altenar cada vez que el usuario haga click
+   */
+   sortByDate(): void {
+    if (!this.sortDate) {
+      this.sortDate = true;
+    }
+  
+    this.reserves.sort((a, b) => {
+      const dateA = new Date(a.day).getTime();
+      const dateB = new Date(b.day).getTime();
+      
+      if (this.isSortDate) {
+        return dateB - dateA;
+      } else {
+        return dateA - dateB;
+      }
+    });
+  
+    this.isSortDate = !this.isSortDate;
   }
 
   addRating(id:number){

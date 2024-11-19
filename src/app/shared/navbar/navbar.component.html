@@ -23,16 +23,11 @@
           </a>
           <div class="dropdown-content">
             <a routerLink="/user/profile">Notifications</a>
-            @if (getRole() === "admin") {
-              <a routerLink="/user/pendingReserves">Pending reserves</a>
-            }@else if (getRole() === "user") {
+            @if (isLoggued()) {
               <a routerLink="/user/myCites">My quotes</a>
             }
             @if(getRole() === "admin") {
-              <a routerLink="/user/registerStylist">Register stylist</a>
-              <a routerLink="/user/stylists">Stylist</a>
-              <a routerLink="/user/manageServices">Manage Services</a>
-              <a routerLink="/user/allWorkersAdmin">Manage Workers</a>
+              <a routerLink="/user/adminPanel">Admin panel</a>
             }
           </div>
         </div>
