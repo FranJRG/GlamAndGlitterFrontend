@@ -163,24 +163,9 @@ export class BookCiteComponent implements OnInit {
     this.citeService.getCite(this.id).subscribe({
       next: (data) => {
         this.cite = data;
-        //Formateamos la fecha ya que angular le resta un dia a la que trae la api
-        const date = new Date(data.day); // La fecha en UTC (de la API)
-        const localDate = new Date(
-          date.getUTCFullYear(),
-          date.getUTCMonth(),
-          date.getUTCDate() + 1
-        );
-        const fechaFormateada = `${localDate.getFullYear()}-${(
-          localDate.getMonth() + 1
-        )
-          .toString()
-          .padStart(2, '0')}-${localDate
-          .getDate()
-          .toString()
-          .padStart(2, '0')}`;
         //Seteamos los valores de la peticion a los del formulario
         this.myForm.setValue({
-          day: fechaFormateada,
+          day: data.day,
           startTime: data.startTime.replace(':00', ''), //Formateamos la fecha para que sea válida en tipo Time de la api
           idService: data.idService,
         });
@@ -349,6 +334,7 @@ export class BookCiteComponent implements OnInit {
   modifyCite() {
     if (this.myForm.valid) {
       const eventId = this.cite.eventId;
+      console.log(eventId)
       const { ...cite } = this.myForm.value;
       this.cite = cite;
       //Si la longitud del startTime es 8 es decir HH:mm:ss no hacemos nada si no le ponemos :00 para darle formato
@@ -394,7 +380,7 @@ export class BookCiteComponent implements OnInit {
       this.cite = cite;
       this.cite.startTime = this.cite.startTime + ':00'; //Damos formato a la cita HH:mm:ss
       this.cite.idService = this.service.id;
-      this.cite.eventId = this.generateBase32HexId();
+      this.cite.eventId = this.generateGoogleCalendarId();
       this.citeService.addCite(this.cite).subscribe({
         next: (data) => {
           console.log(data.startTime)
@@ -429,20 +415,30 @@ export class BookCiteComponent implements OnInit {
       this.idWorker = idWorker;
     }
 
-    getRandomInt(min:number,max:number):number {
+    getRandomInt(min: number, max: number): number {
       return Math.floor(Math.random() * (max - min)) + min;
     }
-
-    generateBase32HexId(length = 16) {
-      // Lista de caracteres válidos en base32hex (a-v, 0-9)
-      const base32hexChars = '0123456789abcdefghijklmnopqrstuvw';
     
-      // Generar un ID aleatorio de longitud deseada
+    generateGoogleCalendarId(length = 16): string {
+      // Conjunto de caracteres válidos para IDs de Google Calendar
+      const validChars = 'abcdefghijklmnopqrstuvwxyz0123456789-_';
+    
+      // Asegurar longitud mínima de 5
+      if (length < 5) {
+        throw new Error('ID length must be at least 5 characters');
+      }
+    
+      // Generar ID aleatorio
       let result = '';
       for (let i = 0; i < length; i++) {
-        result += base32hexChars[this.getRandomInt(0, base32hexChars.length)];
+        result += validChars[this.getRandomInt(0, validChars.length)];
       }
-      
+    
+      // Validar que no comienza con un número
+      if (/^\d/.test(result)) {
+        return this.generateGoogleCalendarId(length); // Reintentar si empieza con un número
+      }
+    
       return result;
     }
     
@@ -507,6 +503,7 @@ export class BookCiteComponent implements OnInit {
   createCalendarEvent(id:string){
     const startDateTime = new Date(`${this.cite.day}T${this.cite.startTime}`);
     const endDateTime = addMinutes(startDateTime, parseInt(this.service.duration));
+    console.log(id);
     const event = {
       id: id,
       summary: this.service.name,
@@ -543,7 +540,7 @@ export class BookCiteComponent implements OnInit {
       },
       error: (err) => {
         Toastify({
-          text: 'Something go bad creating the event in Google Calendar',
+          text: 'Something go bad creating the event in Google Calendar ' + err.error,
           duration: 3000,
           gravity: 'bottom',
           position: 'center',
