@@ -19,7 +19,7 @@ import { of, switchMap } from 'rxjs';
 import { CiteService } from '../services/cite.service';
 import { Cite } from '../../interfaces/cite';
 import { GoogleCalendarService } from '../../shared/services/google-calendar.service';
-import { addMinutes, formatISO } from 'date-fns';
+import { addDays, addMinutes, formatISO } from 'date-fns';
 import { User } from '../../interfaces/user';
 import { AuthService } from '../../auth/services/auth.service';
 import { Rating } from '../../interfaces/rating';
@@ -46,7 +46,7 @@ export class BookCiteComponent implements OnInit {
   dateFilter!:string;
   timeFilter!:string;
 
-  workers!:User[];
+  workers:User[] = [];
   worker!:User;
 
   categorySelected: boolean = false;
@@ -165,7 +165,7 @@ export class BookCiteComponent implements OnInit {
         this.cite = data;
         //Seteamos los valores de la peticion a los del formulario
         this.myForm.setValue({
-          day: data.day,
+          day: this.getFormattedDate(data.day.toString()),
           startTime: data.startTime.replace(':00', ''), //Formateamos la fecha para que sea válida en tipo Time de la api
           idService: data.idService,
         });
@@ -182,6 +182,29 @@ export class BookCiteComponent implements OnInit {
         }).showToast(),
     });
   }
+
+  /**
+   * Método para formatear la fecha
+   * @param date 
+   * @returns 
+   */
+  getFormattedDate(date: string): string {
+    const newDate = new Date(date); // Crea el objeto Date con la fecha
+    const newDateWithAddedDay = addDays(newDate, 1); // Agrega 1 día a la fecha
+
+    // Formateamos la fecha agregando ceros a las partes de la fecha
+    const fechaFormateada = `${newDateWithAddedDay.getFullYear()}-${(
+      newDateWithAddedDay.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, '0')}-${newDateWithAddedDay
+      .getDate()
+      .toString()
+      .padStart(2, '0')}`;
+
+    return fechaFormateada;
+  }
+
 
   /**
    * Método para obtener el servicio
@@ -419,26 +442,22 @@ export class BookCiteComponent implements OnInit {
       return Math.floor(Math.random() * (max - min)) + min;
     }
     
-    generateGoogleCalendarId(length = 16): string {
-      // Conjunto de caracteres válidos para IDs de Google Calendar
-      const validChars = 'abcdefghijklmnopqrstuvwxyz0123456789-_';
+    generateGoogleCalendarId(length = 32): string {
+      // Conjunto de caracteres válidos en base32hex (a-v y 0-9)
+      const validChars = 'abcdefghijklmnopqrstuv0123456789';
     
-      // Asegurar longitud mínima de 5
+      // longitud mínima de 5
       if (length < 5) {
         throw new Error('ID length must be at least 5 characters');
       }
-    
+      
       // Generar ID aleatorio
       let result = '';
       for (let i = 0; i < length; i++) {
         result += validChars[this.getRandomInt(0, validChars.length)];
       }
     
-      // Validar que no comienza con un número
-      if (/^\d/.test(result)) {
-        return this.generateGoogleCalendarId(length); // Reintentar si empieza con un número
-      }
-    
+      // Devuelve el ID generado
       return result;
     }
     
@@ -464,7 +483,7 @@ export class BookCiteComponent implements OnInit {
             timeZone: 'Europe/Madrid', // Zona horaria correcta
           },
           attendees: [
-            { email: 'correo@example.com' }, // Lista de asistentes
+            { email: 'correo@example.com' }, // Lista de asistentes (necesaria para crear evento)
           ],
           reminders: {
             useDefault: false,
@@ -503,7 +522,6 @@ export class BookCiteComponent implements OnInit {
   createCalendarEvent(id:string){
     const startDateTime = new Date(`${this.cite.day}T${this.cite.startTime}`);
     const endDateTime = addMinutes(startDateTime, parseInt(this.service.duration));
-    console.log(id);
     const event = {
       id: id,
       summary: this.service.name,

@@ -8,6 +8,7 @@ import 'toastify-js/src/toastify.css';
 import { Services } from '../../interfaces/services';
 import { ServiceService } from '../../service/service.service';
 import { Router } from '@angular/router';
+import { addDays } from 'date-fns';
 
 @Component({
   selector: 'app-pending-reserves',
@@ -126,14 +127,17 @@ export class PendingReservesComponent implements OnInit{
    * @param date
    * @returns
    */
-    getFormattedDate(date: string): string {
-      const newDate = new Date(date);
-      newDate.setDate(newDate.getDate() + 1);
-      const fechaFormateada = `${newDate.getFullYear()}-${(newDate.getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}-${newDate.getDate().toString().padStart(2, '0')}`;
-      return fechaFormateada;
-    }
+  getFormattedDate(date: string): string {
+    const newDate = new Date(date); // Crea el objeto Date con la fecha
+    const newDateWithAddedDay = addDays(newDate, 1); // Agrega 1 día a la fecha
+  
+    // Formateamos la fecha agregando ceros a las partes de la fecha
+    const fechaFormateada = `${newDateWithAddedDay.getFullYear()}-${(newDateWithAddedDay.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}-${newDateWithAddedDay.getDate().toString().padStart(2, '0')}`;
+    
+    return fechaFormateada;
+  }
 
   deleteCite(id: number) {
     this.citeService.deleteCite(id).subscribe({

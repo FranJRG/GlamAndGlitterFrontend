@@ -16,18 +16,19 @@ h2 {
 }
 
 .service-card {
+  position: relative; /* Necesario para posicionar contenido dentro de la tarjeta */
   background-color: #ecedee;
-  border-radius: 15px;
+  border-radius: 100%;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: transform 0.3s ease;
-  padding: 20px;
   min-height: 400px;
+  min-width: 400px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
+
 .service-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
@@ -35,9 +36,28 @@ h2 {
 
 .service-card img {
   width: 100%;
-  height: 200px;
+  height: 100%;
+  border-radius: 100%;
   object-fit: cover;
-  border-radius: 15px;
+  transition: opacity 0.3s ease; /* Efecto suave al cambiar la opacidad */
+}
+
+.service-card:hover img {
+  opacity: 0.3; /* Imagen se desvanece para resaltar el contenido */
+}
+
+.card-content {
+  position: absolute; /* Superpone el contenido sobre la imagen */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centra el contenido */
+  text-align: center;
+  opacity: 0; /* Oculta el contenido inicialmente */
+  transition: opacity 0.3s ease; /* Efecto suave al mostrar el contenido */
+}
+
+.service-card:hover .card-content {
+  opacity: 1; /* Muestra el contenido al hacer hover */
 }
 
 .service-card h3 {
@@ -48,14 +68,15 @@ h2 {
 
 .service-card p {
   font-size: 20px;
-  color: #666;
+  color: #464646;
   text-align: center;
   line-height: 1.5;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: bold;
 }
 
-.categoryTypes{
+.categoryTypes {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -110,7 +131,7 @@ select {
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-select option{
+select option {
   width: 10px;
   font-size: 18px;
 }
@@ -121,23 +142,59 @@ select:focus {
   outline: none;
 }
 
-.categoriesSelect{
+.categoriesSelect {
   display: none;
 }
 
 @media only screen and (max-width: 480px) {
 
-  .services-grid{
+  .service-card {
+    border-radius: 15px;
+    padding: 20px;
+    min-height: 400px;
+    min-width: auto;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .service-card:hover {
+    transform: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .service-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+  }
+
+  .card-content {
+    position: static; 
+    transform: none;
+    opacity: 1;
+    color: #333;
+  }
+
+  button{
+    font-size: 20px !important;
+  }
+
+  .services-grid {
     display: grid;
     grid-template-columns: repeat(1, 1fr) !important;
   }
 
-  .categoriesSelect{
+  .service-card img {
+    border-radius: 15px;
+    object-fit: cover;
+  }
+
+  .categoriesSelect {
     display: block;
   }
 
-  .categoryDiv{
+  .categoryDiv {
     display: none;
   }
-  
 }

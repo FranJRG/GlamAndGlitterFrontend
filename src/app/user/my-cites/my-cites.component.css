@@ -66,11 +66,11 @@ svg{
   .styled-table th,
   .styled-table td {
     padding: 8px;
-    font-size: 0.9rem;
+    font-size: 20px;
   }
 
   .styled-table {
-    width: 100%;
+    width: 380px;
     display: block;
     overflow-x: auto;
   }
@@ -78,7 +78,7 @@ svg{
   .container-table {
     padding: 10px;
     margin-left: 0px;
-    width: 400px;
+    width: 600px;
   }
 
   button {
