@@ -34,7 +34,7 @@
       </tr>
       @for (reserve of reserves; track $index) {
       <tr>
-        <td>{{ reserve.day.toString() }}</td>
+        <td>{{ getFormattedDate(reserve.day.toString()) }}</td>
         <td>{{ reserve.username }}</td>
         <td>{{ getServiceName(reserve.idService) }}</td>
         <td>
