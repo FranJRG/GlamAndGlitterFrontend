@@ -41,7 +41,7 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px;
+  padding: 20px;
 }
 
 .contact-section {
@@ -287,6 +287,14 @@ h3 {
 
   .navbar h1{
     font-size: 50px;
+  }
+
+  .container {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
   .containerCard{
