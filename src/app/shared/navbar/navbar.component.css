@@ -9,6 +9,12 @@
   border-radius: 10px;
 }
 
+.allContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 ul {
   display: flex;
   list-style: none;
@@ -107,7 +113,13 @@ ul li:not(:first-child) {
 
   .navbar-container{
     margin-left: 2px !important;
-    width: 410px;
+    width: 480px;
+  }
+
+  .allContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   ul{

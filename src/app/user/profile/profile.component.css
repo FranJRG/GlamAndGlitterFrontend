@@ -96,6 +96,20 @@
 
   .container{
     display: grid;
+    max-width: 350px;
+  }
+
+  .notification-settings {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ecedee;
+    width: 350px;
+    padding: 10px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 50px;
+    margin-left: -15px !important;
+    border-radius: 10px;
   }
 
   .notifications{

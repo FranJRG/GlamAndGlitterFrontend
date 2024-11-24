@@ -1,6 +1,12 @@
-<div style="margin-left: 225px" class="navbar-container">
-  <ul class="firstUl">
-      <li routerLink="/"><a routerLink="/"><img alt="Logo" src="../../../assets/img/Glam_Glitter-removebg-preview.png" class="logo" /></a>G&G</li>
+<div class="allContainer">
+  <div class="navbar-container">
+    <ul class="firstUl">
+      <li routerLink="/">
+        <a routerLink="/">
+          <img alt="Logo" src="../../../assets/img/Glam_Glitter-removebg-preview.png" class="logo" />
+        </a>
+        G&G
+      </li>
       <li>
         <div class="dropdown">
           <a class="dropbtn" style="font-weight: bold; font-size: 25px;" routerLink="/service/services">Services</a>
@@ -11,28 +17,31 @@
           </div>
         </div>
       </li>
-  </ul>
-  <ul class="secondUl">
-    @if (isLoggued() === false) {
-      <li><a routerLink="/auth/login" style="font-size: 25px !important;">Login</a></li>
-    }@else {
-      @if (existToken()) {
-        <div class="dropdown">
-          <a class="dropbtn" style="font-weight: bold; font-size: 25px;">
-            {{getName()}}
-          </a>
-          <div class="dropdown-content">
-            <a routerLink="/user/profile">Notifications</a>
-            @if (isLoggued()) {
-              <a routerLink="/user/myCites">My quotes</a>
-            }
-            @if(getRole() === "admin") {
-              <a routerLink="/user/adminPanel">Admin panel</a>
-            }
+    </ul>
+  
+    <ul class="secondUl">
+      @if (isLoggued() === false) {
+        <li><a routerLink="/auth/login" style="font-size: 25px !important;">Login</a></li>
+      }@else {
+        @if (existToken()) {
+          <div class="dropdown">
+            <a class="dropbtn" style="font-weight: bold; font-size: 25px;">
+              {{getName()}}
+            </a>
+            <div class="dropdown-content">
+              <a routerLink="/user/profile">Notifications</a>
+              @if (isLoggued()) {
+                <a routerLink="/user/myCites">My quotes</a>
+              }
+              @if(getRole() === "admin") {
+                <a routerLink="/user/adminPanel">Admin panel</a>
+              }
+            </div>
           </div>
-        </div>
+        }
+        <li><a style="margin-right: -60px; font-size: 25px !important;" (click)="logout()">Logout</a></li>
       }
-      <li><a style="margin-right: -60px; font-size: 25px !important;" (click)="logout()">Logout</a></li>
-    }
-  </ul>
+    </ul>
+  </div>
 </div>
+
