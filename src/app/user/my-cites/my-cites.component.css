@@ -62,7 +62,7 @@ svg{
   text-decoration: underline;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 480px) {
   .styled-table th,
   .styled-table td {
     padding: 8px;
