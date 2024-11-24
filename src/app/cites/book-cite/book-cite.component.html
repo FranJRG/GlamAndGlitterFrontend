@@ -24,10 +24,11 @@
           <select
             id="category"
             name="category"
+            class="workersSelect"
             (change)="getServicesByCategory($event)"
           >
             <option selected disabled>
-              ---------Select a category---------
+              ----Select a category----
             </option>
             @for (category of categories; track $index) {
             <option [value]="category.id">{{ category.name }}</option>
@@ -123,7 +124,7 @@
           <div class="form-row full-width">
             <label>Workers</label>
             <div>
-              <select (change)="setWorker($event)">
+              <select class="workersSelect" (change)="setWorker($event)">
                 <option disabled>----Current worker----</option>
                 @if (worker) {
                   <option value="" selected>{{worker.name}}</option>

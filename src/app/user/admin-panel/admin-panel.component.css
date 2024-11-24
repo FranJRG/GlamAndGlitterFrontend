@@ -95,3 +95,15 @@ a {
 a:hover {
   background-color: #0056b3;
 }
+
+@media only screen and (max-width: 480px) {
+
+  .admin-panel{
+    margin-bottom: 30px;
+  }
+
+  .cardTitle p{
+    font-size: 20px;
+  }
+
+}
