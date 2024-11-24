@@ -157,6 +157,8 @@ select:focus {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    aspect-ratio: unset;
+    width: unset;
   }
 
   .service-card:hover {
@@ -166,7 +168,7 @@ select:focus {
 
   .service-card img {
     width: 100%;
-    height: auto;
+    height: 200px;
     border-radius: 15px;
   }
 
