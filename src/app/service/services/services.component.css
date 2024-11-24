@@ -47,17 +47,17 @@ h2 {
 }
 
 .card-content {
-  position: absolute; /* Superpone el contenido sobre la imagen */
+  position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Centra el contenido */
+  transform: translate(-50%, -50%);
   text-align: center;
-  opacity: 0; /* Oculta el contenido inicialmente */
-  transition: opacity 0.3s ease; /* Efecto suave al mostrar el contenido */
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .service-card:hover .card-content {
-  opacity: 1; /* Muestra el contenido al hacer hover */
+  opacity: 1; 
 }
 
 .service-card h3 {
@@ -146,7 +146,7 @@ select:focus {
   display: none;
 }
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 600px) {
 
   .service-card {
     border-radius: 15px;
@@ -156,17 +156,26 @@ select:focus {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    transition: none;
   }
 
   .service-card:hover {
     transform: none;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .service-card:hover .card-content {
+    opacity: 1; 
   }
 
   .service-card img {
     width: 100%;
     height: auto;
     border-radius: 15px;
+    transition: none;
+  }
+  
+  .service-card:hover img {
+    opacity: 1;
   }
 
   .card-content {

@@ -101,7 +101,7 @@ button:hover {
   background-color: rgb(82, 33, 139);
 }
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 600px) {
   
   .valoracion{
     margin-left: 45px !important;
