@@ -170,6 +170,11 @@ select:focus {
     width: 100%;
     height: 200px;
     border-radius: 15px;
+    transition: unset;
+  }
+  
+  .service-card:hover img {
+    opacity: unset;
   }
 
   .card-content {

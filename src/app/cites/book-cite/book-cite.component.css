@@ -188,11 +188,11 @@ hr {
   }
 
   form input{
-    width: 215px;
+    width: 225%;
   }
 
   form button{
-    width: 250px;
+    width: 250%;
   }
 
   .ratingSection {
@@ -211,7 +211,7 @@ hr {
   }
 
   .workersSelect{
-    width: 245px;
+    width: 250%;
     margin-bottom: 20px;
   }
 

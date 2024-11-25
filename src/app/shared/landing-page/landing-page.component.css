@@ -315,6 +315,12 @@ h3 {
     display: none;
   }
 
+  .containerCard:hover {
+    .arrow-left,.arrow-right{
+      display: none;
+    }
+  }
+
   .contact-section form input{
     width: 220px;
   }
