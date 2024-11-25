@@ -1,67 +1,67 @@
 <div class="container">
   <div class="card">
-      <p>You are in the schedule change section, remember to confirm the changes when you are sure</p>
+    <p>
+      You are in the schedule change section, remember to confirm the changes
+      when you are sure
+    </p>
   </div>
 </div>
 
 <div class="container">
-    <div class="container-table">
-      <table class="styled-table">
-        <tr>
-          <th>Day</th>
-          <th>Turns</th>
-        </tr>
-  
-        <!-- Iterar sobre todos los días de la semana -->
-        @for (day of daysOfWeek; track $index) {
-          <tr>
-            <td>{{ day }}</td>
-  
-            <td>
-              <!-- Verificar si hay turnos asignados para ese día -->
-              @if (hasTurnForDay(day)) {
-              <!-- Si tiene turnos asignados, los mostramos -->
-              @for (turn of getTurnsForDay(day); track $index) {
-                    <select class="styled-select" (change)="setSchedule(day,$event,turn.id)">
-                        <option disabled>----Current option----</option>
-                        <option value="{{ turn }}" selected>{{ turn.turn }}</option>
-                        <option disabled>----Change turn to----</option>
-                        @if (turn.turn === "Morning") {
-                            @if (getTurnsForDay(day).length == 1) {
-                                <option value="Afternoon">Afternoon</option>
-                                <option value="Duplicate">Add turn for afternoon too</option>
-                                <option value="Clear">Remove turn from this day</option>
-                            }@else if (getTurnsForDay(day).length > 1) {
-                                <option value="Clear">Remove turn from this day</option>
-                            }
-                        }@else if(turn.turn === "Afternoon"){
-                            @if (getTurnsForDay(day).length == 1) {
-                                <option value="Morning">Morning</option>
-                                <option value="Duplicate">Add turn for morning too</option>
-                                <option value="Clear">Remove from this turn</option>
-                            }@else if (getTurnsForDay(day).length > 1) {
-                                <option value="Clear">Remove turn from this day</option>
-                            }
-                        }
-                    </select>
-                  }
-                } @else {
-                  <select class="styled-select" (change)="setSchedule(day,$event)">
-                      <option disabled selected>Not assigned yet</option>
-                      <option disabled>----Select a new turn----</option>
-                      <option value="Morning">Morning</option>
-                      <option value="Afternoon">Afternoon</option>
-                  </select>
-                }
-            </td>
-          </tr>
-        }
-      </table>
-      <div class="buttonContainer">
-        <button (click)="updateWorkerSchedule()">
-          Confirm changes
-        </button>
-      </div>
+  <div class="container-table">
+    <table class="styled-table">
+      <tr>
+        <th>Day</th>
+        <th>Turns</th>
+      </tr>
+
+      <!-- Iterar sobre todos los días de la semana -->
+      @for (day of daysOfWeek; track $index) {
+      <tr>
+        <td>{{ day }}</td>
+
+        <td class="containerSelect">
+          <!-- Verificar si hay turnos asignados para ese día -->
+          @if (hasTurnForDay(day)) {
+          <!-- Si tiene turnos asignados, los mostramos -->
+          @for (turn of getTurnsForDay(day); track $index) {
+          <select
+            class="styled-select"
+            (change)="setSchedule(day, $event, turn.id)"
+          >
+            <option disabled>----Current option----</option>
+            <option value="{{ turn }}" selected>{{ turn.turn }}</option>
+            <option disabled>----Change turn to----</option>
+            @if (turn.turn === "Morning") { @if (getTurnsForDay(day).length ==
+            1) {
+            <option value="Afternoon">Afternoon</option>
+            <option value="Duplicate">Add turn for afternoon too</option>
+            <option value="Clear">Remove turn from this day</option>
+            }@else if (getTurnsForDay(day).length > 1) {
+            <option value="Clear">Remove turn from this day</option>
+            } }@else if(turn.turn === "Afternoon"){ @if
+            (getTurnsForDay(day).length == 1) {
+            <option value="Morning">Morning</option>
+            <option value="Duplicate">Add turn for morning too</option>
+            <option value="Clear">Remove from this turn</option>
+            }@else if (getTurnsForDay(day).length > 1) {
+            <option value="Clear">Remove turn from this day</option>
+            } }
+          </select>
+          } } @else {
+          <select class="styled-select" (change)="setSchedule(day, $event)">
+            <option disabled selected>Not assigned yet</option>
+            <option disabled>----Select a new turn----</option>
+            <option value="Morning">Morning</option>
+            <option value="Afternoon">Afternoon</option>
+          </select>
+          }
+        </td>
+      </tr>
+      }
+    </table>
+    <div class="buttonContainer">
+      <button (click)="updateWorkerSchedule()">Confirm changes</button>
     </div>
   </div>
-  
+</div>
