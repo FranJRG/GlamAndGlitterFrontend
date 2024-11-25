@@ -160,7 +160,6 @@ export class MyCitesComponent implements OnInit {
     const fechaFormateada = `${newDateWithAddedDay.getFullYear()}-${(newDateWithAddedDay.getMonth() + 1)
       .toString()
       .padStart(2, '0')}-${newDateWithAddedDay.getDate().toString().padStart(2, '0')}`;
-    console.log(fechaFormateada);
     return fechaFormateada;
   }
 
