@@ -148,7 +148,7 @@ button:hover {
   .styled-table th,
   .styled-table td {
     padding: 8px;
-    font-size: 0.9rem;
+    font-size: 18px;
   }
 
   .styled-table {
@@ -163,8 +163,41 @@ button:hover {
     width: 400px;
   }
 
+  .styled-select {
+    background-color: #f0f0f0;
+    color: #333;
+    font-size: 18px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 8px;
+    width: 55%;
+    box-sizing: border-box;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    padding-right: 30px;
+  }
+
+  .containerSelect{
+    display: grid;
+    justify-items: center;
+  }
+  
+  .styled-select:hover {
+    outline: none;
+    background-color: #aaaaaa;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .styled-select option {
+    font-family: serif;
+    font-size: 18px;
+    background-color: #ffffff;
+    padding: 8px;
+  }
+
   button {
-    padding: 6px 12px;
-    font-size: 0.9rem;
+    padding: 10px;
+    font-size: 18px;
   }
 }
