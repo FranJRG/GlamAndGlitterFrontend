@@ -187,16 +187,16 @@ h3 {
   border: 1px solid #e0e0e0;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease;
   width: 300px;
   height: 450px;
   display: flex;
   flex-direction: column;
+  justify-content: left;
 }
 
 .card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
 }
 
 .card-img-top {
@@ -238,6 +238,14 @@ h3 {
   transition: transform 0.3s ease;
 }
 
+.scroll-containerCard .card:first-child {
+  margin-left: 0 !important;
+}
+
+.scroll-containerCard .card:last-child {
+  margin-right: 0 !important;
+}
+
 .arrow-left,
 .arrow-right {
   position: absolute;
@@ -259,12 +267,12 @@ h3 {
 
 .arrow-left {
   left: 20px; 
-  margin-top: 50px;
+  margin-top: 55px;
 }
 
 .arrow-right {
   right: 20px; 
-  margin-top: 50px;
+  margin-top: 55px;
 }
 
 .arrow-left:hover,

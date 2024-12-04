@@ -1,16 +1,110 @@
-
-<div class="container">
-  <div class="cardTitle">
-      <p>Welcome to the reports section</p>
-      <small style="color: red; font-size: 15px;">All information will be relative to the last month</small>
+<div class="dashBoard">
+  <button class="go-back-btn" (click)="goBack()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M320 32c0-9.9-4.5-19.2-12.3-25.2S289.8-1.4 280.2 1l-179.9 45C79 51.3 64 70.5 64 92.5L64 448l-32 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l64 0 192 0 32 0 0-32 0-448zM256 256c0 17.7-10.7 32-24 32s-24-14.3-24-32s10.7-32 24-32s24 14.3 24 32zm96-128l96 0 0 352c0 17.7 14.3 32 32 32l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-32 0 0-320c0-35.3-28.7-64-64-64l-96 0 0 64z"/></svg>
+    Back
+  </button>
+  <div>
+    <button class="generate-pdf-btn" (click)="generatePDF()">Generate report in PDF</button>
+  </div>
+  <div class="firstGrid">
+    <div class="container-table">
+      <table class="styled-table">
+        <tr>
+          <th class="dateOrder" data-toggle="tooltip" data-placement="top" title="Order by date" style="cursor: pointer;" (click)="sortByDate()">
+            Date
+            @if (sortDate) {
+              @if (isSortDate) {
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M182.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8l256 0c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg>
+              }@else {
+                <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M182.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8l256 0c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128z"/></svg>
+              }
+            }
+          </th>
+          <th>User</th>
+          <th>Service Reserved</th>
+          <th>Punctuation</th>
+          <th>Message</th>
+          <th>Worker</th>
+        </tr>
+        @for (reserve of lastCites; track $index) {
+        <tr>
+          <td>{{ getFormattedDate(reserve.day.toString()) }}</td>
+          <td>{{ reserve.username }}</td>
+          <td>{{ reserve.serviceName }}</td>
+          <td>{{ reserve.punctuation != 0 ? reserve.punctuation : 'No valorado' }}</td>
+          <td>{{ reserve.comment != null ? reserve.comment : 'No valorado'}}</td>
+          <td>{{ reserve.workerName }}</td>
+        }
+      </table>
+    </div>
+  
+    <div class="showedReportVelocimeterContainer">
+      <h2 class="report-title">Most requested services 📊</h2>
+      <div class="chart-container">
+        <canvas id="serviceChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="firstGrid">
+    <div class="showedSecondReportVelocimeterContainer">
+      <div class="firstReportContainer">
+        <h4 class="report-title">Average score in the last month 🔢</h4>
+        <div class="graphics">
+          <div class="velocimetro-container">
+            <canvas id="velocimeterChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="secondReportContainer">
+        <h4 class="report-title">Total score from Company 🔢</h4>
+        <div class="graphics">
+          <div class="velocimetro-container">
+            <canvas id="secondVelocimeterChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="comparationsRatingsShowed">
+      <h2 class="report-title">Comparation Ratings ✍️</h2>
+      <div class="smallContainer">
+        <small class="report-small" style="color: red;">We will only show 5 of each one of this month</small>
+      </div>
+      <div class="showedComparationRatingContainer">
+        @if (bestRatings.length > 0 || worstRatings.length > 0) {
+          <div class="bestRating">
+            @if(bestRatings.length > 0){
+              @for (rating of bestRatings; track $index) {
+                <p><b>{{rating.punctuation}}</b>  ({{rating.username}})</p>
+                <p>{{rating.message}}</p>
+                <hr>
+              }
+            }@else {
+              <div class="alert-card">No good ratings this month yet</div>
+            }
+          </div>
+          <div class="lineSeparator"></div>
+          <div class="worstRatings">
+            @if(worstRatings.length > 0){
+              @for (rating of worstRatings; track $index) {
+                <p><b>{{rating.punctuation}}</b>  ({{rating.username}})</p>
+                <p>{{rating.message}}</p>
+                <hr>
+              }
+            }@else {
+                <div class="alert-card">No bad ratings this month yet</div>
+            }
+          </div>
+        }@else {
+          <div class="alert-card">No reviews this month</div>
+        }
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="pdf-button-container">
-  <button class="generate-pdf-btn" (click)="generatePDF()">Generate report in PDF</button>
-</div>
 
-<div id="reportContainer" class="report-container">
+
+<div id="reportContainer" class="report-container hidden">
     <h2 class="report-title">Quotes report 📝</h2>
 
     <div class="container-table">
@@ -47,7 +141,7 @@
     <h2 class="report-title">Most requested services 📊</h2>
     <!-- Mostrar el gráfico -->
     <div class="chart-container">
-      <canvas id="serviceChart"></canvas>
+      <canvas id="serviceChartDownload"></canvas>
     </div>
     
     <div class="reportVelocimeterContainer">
@@ -55,7 +149,7 @@
         <h4 class="report-title">Average score in the last month 🔢</h4>
         <div class="graphics">
           <div class="velocimetro-container">
-            <canvas id="velocimeterChart"></canvas>
+            <canvas id="velocimeterChartDownload"></canvas>
           </div>
         </div>
       </div>
@@ -63,7 +157,7 @@
         <h4 class="report-title">Total score from Company 🔢</h4>
         <div class="graphics">
           <div class="velocimetro-container">
-            <canvas id="secondVelocimeterChart"></canvas>
+            <canvas id="secondVelocimeterChartDownload"></canvas>
           </div>
         </div>
       </div>

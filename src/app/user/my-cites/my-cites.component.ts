@@ -154,7 +154,7 @@ export class MyCitesComponent implements OnInit {
    */
   getFormattedDate(date: string): string {
     const newDate = new Date(date); // Crea el objeto Date con la fecha
-    const newDateWithAddedDay = addDays(newDate,0);
+    const newDateWithAddedDay = addDays(newDate,1);
   
     // Formateamos la fecha agregando ceros a las partes de la fecha
     const fechaFormateada = `${newDateWithAddedDay.getFullYear()}-${(newDateWithAddedDay.getMonth() + 1)

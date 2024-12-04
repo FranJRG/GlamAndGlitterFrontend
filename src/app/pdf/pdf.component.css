@@ -1,3 +1,88 @@
+.dashBoard {
+  display: flex;
+  justify-content: center;
+  gap: 20px; 
+  flex-wrap: wrap; 
+  padding: 20px;
+  background-color: #ecedee;
+  margin-bottom: 20px;
+}
+
+.firstGrid {
+  display: flex; 
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px; 
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.firstGrid .container-table {
+  flex: 1; 
+  min-width: 300px; 
+  background-color: transparent;
+  padding: 20px;
+  border-radius: 18px;
+  overflow-x: auto;
+}
+
+.firstGrid .styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  background-color: transparent;
+}
+
+.firstGrid .styled-table th,
+.firstGrid .styled-table td {
+  padding: 10px 15px; 
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.firstGrid .styled-table tr:nth-child(even) {
+  background-color: transparent;
+}
+
+.firstGrid .styled-table tr:hover {
+  background-color: transparent;
+}
+
+.dashBoard .showedReportVelocimeterContainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.showedSecondReportVelocimeterContainer{
+  display: flex;
+  gap: 50px;
+  flex-direction: row;
+}
+
+.dashBoard .chart-container, .velocimetro-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.comparationsRatingsShowed{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 400px;
+}
+
+.showedComparationRatingContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.report-title {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
 .report-container {
   padding: 20px;
   background-color: #ecedee;
@@ -5,6 +90,14 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   max-width: 1030px;
   margin: 30px auto;
+}
+
+.hidden{
+  visibility: hidden;
+  position: absolute;
+  z-index: -1;
+  top: -9999px;
+  left: -9999px;
 }
 
 .container {
@@ -263,6 +356,30 @@ svg{
 .worstRatings {
   border-left: 4px solid #f44336;
 }
+
+.go-back-btn {
+  background-color: transparent;
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.go-back-btn:hover {
+  transform: translateY(-2px);
+}
+
+.go-back-btn:active {
+  transform: translateY(1px);
+}
+
 
 @media only screen and (max-width: 480px) {
   .styled-table th,

@@ -26,6 +26,7 @@
           <!-- Si tiene turnos asignados, los mostramos -->
           @for (turn of getTurnsForDay(day); track $index) {
           <select
+            title="Select a option"
             class="styled-select"
             (change)="setSchedule(day, $event, turn.id)"
           >
@@ -49,7 +50,7 @@
             } }
           </select>
           } } @else {
-          <select class="styled-select" (change)="setSchedule(day, $event)">
+          <select class="styled-select" title="Select a option" (change)="setSchedule(day, $event)">
             <option disabled selected>Not assigned yet</option>
             <option disabled>----Select a new turn----</option>
             <option value="Morning">Morning</option>

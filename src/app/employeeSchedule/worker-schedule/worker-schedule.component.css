@@ -118,7 +118,9 @@ button:hover {
   padding: 8px 15px;
   border: none;
   border-radius: 8px;
-  width: 37%;
+  width: 55%;
+  overflow: hidden;
+  text-overflow: ellipsis;
   box-sizing: border-box;
   background-color: transparent;
   cursor: pointer;

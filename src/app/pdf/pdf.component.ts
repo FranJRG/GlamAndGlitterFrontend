@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ServiceSummary } from '../interfaces/serviceSummary';
@@ -40,7 +40,8 @@ export class PdfComponent implements OnInit {
 
   constructor(
     private serviceSummaryService: SummaryServiceService,
-    private citeService: CiteService
+    private citeService: CiteService,
+    private location : Location
   ) {}
 
   ngOnInit(): void {
@@ -51,6 +52,11 @@ export class PdfComponent implements OnInit {
     this.getComparationRatings();
   }
 
+  //Con location podemos volver a la ruta de la que hemos venido
+  goBack(){
+    this.location.back();
+  }
+
   getServicesSummary() {
     this.serviceSummaryService.getTopServices().subscribe({
       next: (data) => {
@@ -58,7 +64,7 @@ export class PdfComponent implements OnInit {
         this.porcents = this.serviceSummary.map(
           (summary) => summary.reservationCount
         );
-        this.labels = this.serviceSummary.map((summary) => summary.serviceName);
+        this.labels = this.serviceSummary.map((summary) => summary.serviceName + " (" + summary.reservationCount + ")");
         this.createChart();
       },
       error: (err) =>
@@ -137,6 +143,9 @@ export class PdfComponent implements OnInit {
 
   createVelocimeter(): void {
     const ctx = document.getElementById(
+      'velocimeterChartDownload'
+    ) as HTMLCanvasElement;
+    const ctx2 = document.getElementById(
       'velocimeterChart'
     ) as HTMLCanvasElement;
     new Chart(ctx, {
@@ -145,7 +154,30 @@ export class PdfComponent implements OnInit {
         labels: ['Average Score'],
         datasets: [
           {
-            label: 'Puntuación promedio',
+            label:  `Average Score (${this.averageMedia.averageMedia})`,
+            data: [this.averageMedia.averageMedia], // Mostrar la puntuación promedio
+            backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+            borderColor: ['rgba(75, 192, 192, 1)'],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            min: 0, // Valor mínimo
+            max: 5, // Valor máximo, ajustado para una puntuación de 0 a 5
+          },
+        },
+      },
+    });
+    new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: ['Average Score'],
+        datasets: [
+          {
+            label: `Average Score (${this.averageMedia.averageMedia})`,
             data: [this.averageMedia.averageMedia], // Mostrar la puntuación promedio
             backgroundColor: ['rgba(75, 192, 192, 0.2)'],
             borderColor: ['rgba(75, 192, 192, 1)'],
@@ -166,6 +198,9 @@ export class PdfComponent implements OnInit {
 
   createSecondVelocimeter(): void {
     const ctx = document.getElementById(
+      'secondVelocimeterChartDownload'
+    ) as HTMLCanvasElement;
+    const ctx2 = document.getElementById(
       'secondVelocimeterChart'
     ) as HTMLCanvasElement;
     new Chart(ctx, {
@@ -174,7 +209,30 @@ export class PdfComponent implements OnInit {
         labels: ['Average Score'],
         datasets: [
           {
-            label: 'Puntuación promedio',
+            label: `Average Score (${this.totalMedia.averageMedia})`,
+            data: [this.totalMedia.averageMedia], // Mostrar la puntuación promedio
+            backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+            borderColor: ['rgba(75, 192, 192, 1)'],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            min: 0, // Valor mínimo
+            max: 5, // Valor máximo, ajustado para una puntuación de 0 a 5
+          },
+        },
+      },
+    });
+    new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: ['Average Score'],
+        datasets: [
+          {
+            label: `Average Score (${this.totalMedia.averageMedia})`,
             data: [this.totalMedia.averageMedia], // Mostrar la puntuación promedio
             backgroundColor: ['rgba(75, 192, 192, 0.2)'],
             borderColor: ['rgba(75, 192, 192, 1)'],
@@ -194,8 +252,30 @@ export class PdfComponent implements OnInit {
   }
 
   createChart() {
-    const ctx = document.getElementById('serviceChart') as HTMLCanvasElement;
+    const ctx = document.getElementById('serviceChartDownload') as HTMLCanvasElement;
+    const ctx2 = document.getElementById('serviceChart') as HTMLCanvasElement;
     new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: this.labels,
+        datasets: [
+          {
+            label: 'Number of request',
+            data: this.porcents,
+            backgroundColor: ['#3498db', '#2ecc71', '#e74c3c', '#bcd400'],
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+    new Chart(ctx2, {
       type: 'bar',
       data: {
         labels: this.labels,
@@ -221,6 +301,11 @@ export class PdfComponent implements OnInit {
   generatePDF() {
     const reportContainer = document.getElementById('reportContainer');
     if (reportContainer) {
+
+      reportContainer.classList.remove("hidden");
+      reportContainer.classList.remove("z-index-behind");
+      
+
       html2canvas(reportContainer as HTMLElement, { scale: 2 }).then(
         (canvas) => {
           const pdf = new jsPDF('p', 'mm', 'a4'); // Formato A4 en orientación vertical
@@ -278,6 +363,8 @@ export class PdfComponent implements OnInit {
           pdf.save('services-report.pdf');
         }
       );
+      reportContainer.classList.add("hidden");
+      reportContainer.classList.add("z-index-behind");
     }
   }
 
@@ -311,7 +398,7 @@ export class PdfComponent implements OnInit {
    */
   getFormattedDate(date: string): string {
     const newDate = new Date(date); // Crea el objeto Date con la fecha
-    const newDateWithAddedDay = addDays(newDate, 0);
+    const newDateWithAddedDay = addDays(newDate, 1);
 
     // Formateamos la fecha agregando ceros a las partes de la fecha
     const fechaFormateada = `${newDateWithAddedDay.getFullYear()}-${(

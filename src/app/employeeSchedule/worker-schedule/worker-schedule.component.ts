@@ -46,7 +46,7 @@ export class WorkerScheduleComponent implements OnInit{
   setSchedule(day:string,event:Event,id?:number){
     let turn = (event.target as HTMLSelectElement).value;
     let employeeSchedule:EmployeeSchedule = {
-      "id":id != undefined ? id : 0,
+      "id":id != undefined && id != 0 ? id : 0,
       "day":day,
       "turn":turn
     }

@@ -9,10 +9,10 @@
       </li>
       <li>
         <div class="dropdown">
-          <a class="dropbtn" style="font-weight: bold; font-size: 25px;" routerLink="/service/services">Services</a>
+          <a class="dropbtn" style="font-weight: bold; font-size: 25px;" routerLink="/service/services" routerLinkActive="active">Services</a>
           <div class="dropdown-content">
             @for (category of categories; track $index) {
-              <a style="font-size: 18px; font-weight: normal;" routerLink="/service/services/{{category.id}}">{{category.name}}</a>
+              <a style="font-size: 18px; font-weight: normal;" routerLink="/service/services/{{category.id}}" routerLinkActive="active">{{category.name}}</a>
             }
           </div>
         </div>
@@ -21,20 +21,20 @@
   
     <ul class="secondUl">
       @if (isLoggued() === false) {
-        <li><a routerLink="/auth/login" style="font-size: 25px !important;">Login</a></li>
+        <li><a routerLink="/auth/login" routerLinkActive="active" style="font-size: 25px !important;">Login</a></li>
       }@else {
         @if (existToken()) {
           <div class="dropdown">
-            <a class="dropbtn" style="font-weight: bold; font-size: 25px;">
+            <a class="dropbtn" routerLinkActive="active" style="font-weight: bold; font-size: 25px;">
               {{getName()}}
             </a>
             <div class="dropdown-content">
-              <a routerLink="/user/profile">Notifications</a>
+              <a routerLink="/user/profile" routerLinkActive="active">Notifications</a>
               @if (isLoggued()) {
-                <a routerLink="/user/myCites">My quotes</a>
+                <a routerLink="/user/myCites" routerLinkActive="active">My quotes</a>
               }
               @if(getRole() === "admin") {
-                <a routerLink="/user/adminPanel">Admin panel</a>
+                <a routerLink="/user/adminPanel" routerLinkActive="active">Admin panel</a>
               }
             </div>
           </div>
