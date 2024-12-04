@@ -4,27 +4,64 @@
 <div>
   <div class="categoryTypes">
     <div class="categoryDiv">
-      <input
-        type="radio"
-        id="all"
-        name="category"
-        value="all"
-        (change)="getServices($event)"
-        checked
-      />
+      @if (id != undefined && id != 0) {
+        <input
+          type="radio"
+          id="all"
+          name="category"
+          value="all"
+          (change)="getServices($event)"
+        />
+      }@else {
+        <input
+          type="radio"
+          id="all"
+          name="category"
+          value="all"
+          (change)="getServices($event)"
+          checked
+        />
+      }
       <label for="all">All Services</label>
     </div>
     @for (category of categories; track $index) {
-      <div class="categoryDiv">
-        <input
-          type="radio"
-          id="{{ category.id }}"
-          name="category"
-          value="{{ category.id }}"
-          (change)="getServices($event)"
-        />
-        <label for="{{ category.id }}">{{ category.name }}</label>
-      </div>
+      @if (id != 0 && id != undefined) {
+        @if (category.id == id) {
+          <div class="categoryDiv">
+            <input
+              type="radio"
+              id="{{ category.id }}"
+              name="category"
+              value="{{ category.id }}"
+              (change)="getServices($event)"
+              checked
+            />
+            <label for="{{ category.id }}">{{ category.name }}</label>
+          </div>
+        }@else {
+          <div class="categoryDiv">
+            <input
+              type="radio"
+              id="{{ category.id }}"
+              name="category"
+              value="{{ category.id }}"
+              (change)="getServices($event)"
+            />
+            <label for="{{ category.id }}">{{ category.name }}</label>
+          </div>
+        }
+      }@else {
+        <div class="categoryDiv">
+          <input
+            type="radio"
+            id="{{ category.id }}"
+            name="category"
+            value="{{ category.id }}"
+            (change)="getServices($event)"
+          />
+          <label for="{{ category.id }}">{{ category.name }}</label>
+        </div>
+      }
     }
     <select name="categories" class="categoriesSelect" id="categories" (change)="getServices($event)">
       <option value="all">All categories</option>

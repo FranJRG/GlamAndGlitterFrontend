@@ -18,3 +18,11 @@ p,label,a,button{
 th{
     font-size: 23px;
 }
+
+svg:hover{
+    cursor: pointer;
+}
+
+.toastify{
+    font-size: 18px;
+}

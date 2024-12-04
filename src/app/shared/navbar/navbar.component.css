@@ -109,6 +109,18 @@ ul li:not(:first-child) {
     text-decoration: underline;
 }
 
+.active{
+  font-weight: bold;
+}
+
+.active::after{
+  margin: 5px;
+  content: '*';
+  color: red;
+  vertical-align: middle;
+  font-weight: bold;
+}
+
 @media only screen and (max-width: 480px) {
 
   .navbar-container{
