@@ -13,23 +13,22 @@ import { addDays } from 'date-fns';
 @Component({
   selector: 'app-pending-reserves',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './pending-reserves.component.html',
-  styleUrl: './pending-reserves.component.css'
+  styleUrl: './pending-reserves.component.css',
 })
-export class PendingReservesComponent implements OnInit{
-  
-  pendingReserves:Cite[] = [];
-  services:Services[] = [];
+export class PendingReservesComponent implements OnInit {
+  pendingReserves: Cite[] = [];
+  services: Services[] = [];
 
-  sortDate:boolean = false
-  isSortDate:boolean = true;
-  
-  constructor(private citeService:CiteService,
-    private serviceService:ServiceService,
-    private router:Router
-  ){}
+  sortDate: boolean = false;
+  isSortDate: boolean = true;
 
+  constructor(
+    private citeService: CiteService,
+    private serviceService: ServiceService,
+    private router: Router
+  ) {}
 
   /**
    * Al cargar la página mostramos las citas pendientes
@@ -42,107 +41,106 @@ export class PendingReservesComponent implements OnInit{
    * Método para cargar las citas pendientens
    * Si hay algun error al cargar las citas pendientes mostramos el error correspondiente
    */
-  getPendingCites(){
+  getPendingCites() {
     this.citeService.getPendingCites().subscribe({
-      next : (data) => {
+      next: (data) => {
         this.pendingReserves = data;
         this.getServicesByCites(this.pendingReserves);
       },
-      error : (err) => 
+      error: (err) =>
         Toastify({
-          text: "Something go bad: " + err.error.message,
-          duration: 3000, 
-          gravity: "bottom",
+          text: 'Something go bad: ' + err.error.message,
+          duration: 3000,
+          gravity: 'bottom',
           position: 'center',
-          backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
-        }).showToast()
-    })
+          backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+        }).showToast(),
+    });
   }
 
   /**
    * Obtenemos los servicios de las citas pendientes
-   * Recorremos el array de citas y cargamos los servicios que haya 
+   * Recorremos el array de citas y cargamos los servicios que haya
    * Si hay cualquier error mostramos mensaje de error
-   * @param cites 
+   * @param cites
    */
-  getServicesByCites(cites:Cite[]){
+  getServicesByCites(cites: Cite[]) {
     cites.forEach((cite) => {
       this.serviceService.getService(cite.idService).subscribe({
-        next : (data) => this.services.push(data),
-        error : (err) => 
+        next: (data) => this.services.push(data),
+        error: (err) =>
           Toastify({
-            text: "Something go bad: " + err.error.message,
-            duration: 3000, 
-            gravity: "bottom",
+            text: 'Something go bad: ' + err.error.message,
+            duration: 3000,
+            gravity: 'bottom',
             position: 'center',
-            backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
-          }).showToast()
-      })
-    })
+            backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+          }).showToast(),
+      });
+    });
   }
 
   /**
    * Método para obtener el nombre del servicio
    * Buscamos el servicio en el array de servicios
-   * @param idService 
-   * @returns 
+   * @param idService
+   * @returns
    */
   getServiceName(idService: number): string {
-    const service = this.services.find(service => service.id === idService);
+    const service = this.services.find((service) => service.id === idService);
     return service ? service.name : 'Servicio no encontrado';
   }
 
   /**
-   * Método para establecer el trabajador a la cita 
+   * Método para establecer el trabajador a la cita
    * Si hay cualquier error alertamos al usuario
-   * @param idCite 
-   * @param idWorker 
+   * @param idCite
+   * @param idWorker
    */
-  setWorker(idCite:number,idWorker?:number){
-    this.citeService.setWorker(idCite,idWorker).subscribe({
-      next : (data) => {
+  setWorker(idCite: number, idWorker?: number) {
+    this.citeService.setWorker(idCite, idWorker).subscribe({
+      next: (data) => {
         Toastify({
           text: 'Worker assined is ' + data.name,
           duration: 4000,
           gravity: 'bottom',
           position: 'center',
           backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
-        }).showToast()
-        this.getPendingCites()
-      }
-      ,
-      error : (err) => 
+        }).showToast();
+        this.getPendingCites();
+      },
+      error: (err) =>
         Toastify({
-          text: "Something go bad: " + err.error.message,
-          duration: 3000, 
-          gravity: "bottom",
+          text: 'Something go bad: ' + err.error.message,
+          duration: 3000,
+          gravity: 'bottom',
           position: 'center',
-          backgroundColor: "linear-gradient(to right, #FF4C4C, #FF0000)",
-        }).showToast()
-    })
+          backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+        }).showToast(),
+    });
   }
 
-    /**
+  /**
    * Método para obtener una fecha formateada en formato HH:mm:ss de java time
    * @param date
    * @returns
    */
   getFormattedDate(date: string): string {
     const newDate = new Date(date); // Crea el objeto Date con la fecha
-    const newDateWithAddedDay = addDays(newDate, 1);
-  
+
     // Formateamos la fecha agregando ceros a las partes de la fecha
-    const fechaFormateada = `${newDateWithAddedDay.getFullYear()}-${(newDateWithAddedDay.getMonth() + 1)
+    const fechaFormateada = `${newDate.getFullYear()}-${(newDate.getMonth() + 1)
       .toString()
-      .padStart(2, '0')}-${newDateWithAddedDay.getDate().toString().padStart(2, '0')}`;
-    
+      .padStart(2, '0')}-${newDate.getDate().toString().padStart(2, '0')}`;
     return fechaFormateada;
   }
 
   deleteCite(id: number) {
     this.citeService.deleteCite(id).subscribe({
       next: (data) => {
-        this.pendingReserves = this.pendingReserves.filter((cite) => cite.id !== id);
+        this.pendingReserves = this.pendingReserves.filter(
+          (cite) => cite.id !== id
+        );
         Toastify({
           text:
             'Appointment for date: ' +
@@ -167,10 +165,10 @@ export class PendingReservesComponent implements OnInit{
 
   /**
    * Método para navegar a la ruta que selecciona el trabajador
-   * @param id 
+   * @param id
    */
-  selectWorker(id:number){
-    this.router.navigateByUrl(`/cite/updateCite/${id}`)
+  selectWorker(id: number) {
+    this.router.navigateByUrl(`/cite/updateCite/${id}`);
   }
 
   /**
@@ -183,18 +181,18 @@ export class PendingReservesComponent implements OnInit{
     if (!this.sortDate) {
       this.sortDate = true;
     }
-  
+
     this.pendingReserves.sort((a, b) => {
       const dateA = new Date(a.day).getTime();
       const dateB = new Date(b.day).getTime();
-      
+
       if (this.isSortDate) {
         return dateB - dateA;
       } else {
         return dateA - dateB;
       }
     });
-  
+
     this.isSortDate = !this.isSortDate;
   }
 }

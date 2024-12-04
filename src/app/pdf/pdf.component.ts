@@ -398,18 +398,11 @@ export class PdfComponent implements OnInit {
    */
   getFormattedDate(date: string): string {
     const newDate = new Date(date); // Crea el objeto Date con la fecha
-    const newDateWithAddedDay = addDays(newDate, 1);
-
+  
     // Formateamos la fecha agregando ceros a las partes de la fecha
-    const fechaFormateada = `${newDateWithAddedDay.getFullYear()}-${(
-      newDateWithAddedDay.getMonth() + 1
-    )
+    const fechaFormateada = `${newDate.getFullYear()}-${(newDate.getMonth() + 1)
       .toString()
-      .padStart(2, '0')}-${newDateWithAddedDay
-      .getDate()
-      .toString()
-      .padStart(2, '0')}`;
-
+      .padStart(2, '0')}-${newDate.getDate().toString().padStart(2, '0')}`;
     return fechaFormateada;
   }
 
