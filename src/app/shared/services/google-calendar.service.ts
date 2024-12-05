@@ -30,8 +30,13 @@ export class GoogleCalendarService {
       scope: this.scopes,
       callback: (response: any) => {
         if (response && response.access_token) {
+          //Almacenamos el token en el localStorage
           this.token = response.access_token;
           localStorage.setItem('googleAccessToken', this.token as string);
+          
+          //Almacenamos el momento en el que el token expirará en formato milisegundos
+          const expirationTime = new Date().getTime() + (response.expires_in * 1000);
+          localStorage.setItem('googleTokenExpiration',expirationTime.toString());
         } else {
           Toastify({
             text: 'Something go bad with access token',
@@ -80,51 +85,79 @@ export class GoogleCalendarService {
 
   // Método para crear un nuevo evento en Google Calendar
   createCalendarEvent(event: any): Observable<any> {
-    if (!this.token) {
-      Toastify({
-        text: 'User not autenticated!',
-        duration: 3000,
-        gravity: 'bottom',
-        position: 'center',
-        backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
-      }).showToast();
+    if (!this.token || this.isTokenExpired()) {
+      // Si no hay token o si ha expirado, solicítalo nuevamente
+      this.initializeTokenClient();
     }
 
-    return this.http.post<any>(`${this.apiUrl}/calendars/primary/events`,event);
+    //Realizamos la petición post
+    return this.http.post<any>(
+      `${this.apiUrl}/calendars/primary/events`,
+      event
+    );
   }
 
   //Método para actualizar un evento
   updateEvent(eventId: string, event: any): Observable<any> {
+
+    if (!this.token || this.isTokenExpired()) {
+      // Si no hay token o si ha expirado, solicítalo nuevamente
+      this.initializeTokenClient();
+    }
+  
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
 
-    return this.http.put(`${this.apiUrl}/calendars/primary/events/${eventId}`,event, { headers });
+    //Realizamos la petición de actualización
+    return this.http.put(
+      `${this.apiUrl}/calendars/primary/events/${eventId}`,
+      event,
+      { headers }
+    );
   }
 
- // Método para eliminar un evento por su ID
- deleteEvent(eventId: string): Observable<any> {
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${this.token}`
-  });
+  // Método para eliminar un evento por su ID
+  deleteEvent(eventId: string): Observable<any> {
 
-  return this.http.delete(`${this.apiUrl}/calendars/primary/events/${eventId}`, { headers }).pipe(
-    catchError(error => {
-      Toastify({
-        text: 'Something go bad deleting the event!',
-        duration: 3000,
-        gravity: 'bottom',
-        position: 'center',
-        backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
-      }).showToast();
-      return of(null);
-    })
-  );
-}
+    if (!this.token || this.isTokenExpired()) {
+      // Si no hay token o si ha expirado, solicítalo nuevamente
+      this.initializeTokenClient();
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+
+    return this.http
+      .delete(`${this.apiUrl}/calendars/primary/events/${eventId}`, { headers })
+      .pipe(
+        catchError((error) => {
+          Toastify({
+            text: 'Something go bad deleting the event!',
+            duration: 3000,
+            gravity: 'bottom',
+            position: 'center',
+            backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
+          }).showToast();
+          return of(null);
+        })
+      );
+  }
+
+  private isTokenExpired(): boolean {
+    const expirationTime = localStorage.getItem('googleTokenExpiration');
+    if (expirationTime) {
+      const now = new Date().getTime();
+      return now > Number(expirationTime);
+    }
+    return true; // Si no hay token de expiración, asumimos que ha expirado
+  }
 
   // Método para cerrar sesión y eliminar el token almacenado
   signOut() {
     localStorage.removeItem('googleAccessToken');
+    localStorage.removeItem("googleTokenExpiration");
     this.token = null;
     console.log('Sesión cerrada.');
   }

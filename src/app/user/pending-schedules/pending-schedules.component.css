@@ -62,6 +62,35 @@ svg:hover{
   font-weight: bold;
 }
 
+.cardTitle {
+  animation: fadeInAnimation 2s ease-out forwards;
+  opacity: 0;
+  background-color: #ecedee;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  margin-top: 20px;
+  text-align: center;
+  width: 90%;
+  max-width: 500px;
+}
+
+.cardTitle p {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
 @media only screen and (max-width: 480px) {
   .styled-table th,
@@ -85,5 +114,9 @@ svg:hover{
   button {
     padding: 6px 12px;
     font-size: 0.9rem;
+  }
+
+  .cardTitle p{
+    font-size: 20px;
   }
 }

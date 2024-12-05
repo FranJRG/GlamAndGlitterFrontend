@@ -108,6 +108,7 @@ export class AuthService {
   logout(){
     localStorage.removeItem("token");
     localStorage.getItem("googleAccessToken") != null ? localStorage.removeItem("googleAccessToken") : "";
+    localStorage.getItem('googleTokenExpiration') != null ? localStorage.removeItem("googleTokenExpiration") : "";
     this.router.navigateByUrl("/auth/login");
   }
 
