@@ -192,6 +192,7 @@ select:focus {
   .services-grid {
     display: grid;
     grid-template-columns: repeat(1, 1fr) !important;
+    margin-left: 0px;
   }
 
   .service-card img {

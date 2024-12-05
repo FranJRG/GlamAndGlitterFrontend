@@ -405,7 +405,7 @@ svg{
     font-size: 0.9rem;
   }
 
-  .reportVelocimeterContainer{
+  .showedSecondReportVelocimeterContainer{
     display: grid;
     justify-content: center;
     align-items: center;
