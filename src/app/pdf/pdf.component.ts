@@ -154,7 +154,7 @@ export class PdfComponent implements OnInit {
         labels: ['Average Score'],
         datasets: [
           {
-            label:  `Average Score (${this.averageMedia.averageMedia})`,
+            label:  `Average Score (${this.averageMedia.averageMedia != null ? this.totalMedia.averageMedia : '0 at this moment'})`,
             data: [this.averageMedia.averageMedia], // Mostrar la puntuación promedio
             backgroundColor: ['rgba(75, 192, 192, 0.2)'],
             borderColor: ['rgba(75, 192, 192, 1)'],
@@ -177,7 +177,7 @@ export class PdfComponent implements OnInit {
         labels: ['Average Score'],
         datasets: [
           {
-            label: `Average Score (${this.averageMedia.averageMedia})`,
+            label: `Average Score (${this.averageMedia.averageMedia != null ? this.totalMedia.averageMedia : '0 at this moment'})`,
             data: [this.averageMedia.averageMedia], // Mostrar la puntuación promedio
             backgroundColor: ['rgba(75, 192, 192, 0.2)'],
             borderColor: ['rgba(75, 192, 192, 1)'],
@@ -209,7 +209,7 @@ export class PdfComponent implements OnInit {
         labels: ['Average Score'],
         datasets: [
           {
-            label: `Average Score (${this.totalMedia.averageMedia != null ? this.totalMedia.averageMedia : '0 at this moment'}})`,
+            label: `Average Score (${this.totalMedia.averageMedia != null ? this.totalMedia.averageMedia : '0 at this moment'})`,
             data: [this.totalMedia.averageMedia], // Mostrar la puntuación promedio
             backgroundColor: ['rgba(75, 192, 192, 0.2)'],
             borderColor: ['rgba(75, 192, 192, 1)'],
