@@ -23,8 +23,8 @@ export class AuthService {
   /**
    * Urls para enviar peticiones a la API
    */
-  url:string = "http://localhost:8080/users";
-  urlLogin:string = "http://localhost:8080/signin";
+  url:string = "https://glamandglitter.onrender.com/users";
+  urlLogin:string = "https://glamandglitter.onrender.com/signin";
 
   /**
    * Método para registrar un usuario
