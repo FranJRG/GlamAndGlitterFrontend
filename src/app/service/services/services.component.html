@@ -79,6 +79,7 @@
     @for (service of services; track $index) {
       <div class="service-card">
         <img [src]="service.imageUrl" alt="{{ service.name }}" />
+        <h1>{{service.name}}</h1>
         <div class="card-content">
           <h3 style="color: black;" data-toggle="tooltip" data-placement="top" title="{{service.name}}">
             {{ service.name }} - {{ service.price }} €

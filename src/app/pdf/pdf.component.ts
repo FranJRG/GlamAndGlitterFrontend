@@ -154,7 +154,7 @@ export class PdfComponent implements OnInit {
         labels: ['Average Score'],
         datasets: [
           {
-            label:  `Average Score (${this.averageMedia.averageMedia})`,
+            label:  `Average Score (${this.averageMedia.averageMedia != null ? this.totalMedia.averageMedia : '0 at this moment'})`,
             data: [this.averageMedia.averageMedia], // Mostrar la puntuación promedio
             backgroundColor: ['rgba(75, 192, 192, 0.2)'],
             borderColor: ['rgba(75, 192, 192, 1)'],
@@ -177,7 +177,7 @@ export class PdfComponent implements OnInit {
         labels: ['Average Score'],
         datasets: [
           {
-            label: `Average Score (${this.averageMedia.averageMedia})`,
+            label: `Average Score (${this.averageMedia.averageMedia != null ? this.totalMedia.averageMedia : '0 at this moment'})`,
             data: [this.averageMedia.averageMedia], // Mostrar la puntuación promedio
             backgroundColor: ['rgba(75, 192, 192, 0.2)'],
             borderColor: ['rgba(75, 192, 192, 1)'],
@@ -209,7 +209,7 @@ export class PdfComponent implements OnInit {
         labels: ['Average Score'],
         datasets: [
           {
-            label: `Average Score (${this.totalMedia.averageMedia})`,
+            label: `Average Score (${this.totalMedia.averageMedia != null ? this.totalMedia.averageMedia : '0 at this moment'})`,
             data: [this.totalMedia.averageMedia], // Mostrar la puntuación promedio
             backgroundColor: ['rgba(75, 192, 192, 0.2)'],
             borderColor: ['rgba(75, 192, 192, 1)'],
@@ -232,7 +232,7 @@ export class PdfComponent implements OnInit {
         labels: ['Average Score'],
         datasets: [
           {
-            label: `Average Score (${this.totalMedia.averageMedia})`,
+            label: `Average Score (${this.totalMedia.averageMedia != null ? this.totalMedia.averageMedia : '0 at this moment'})`,
             data: [this.totalMedia.averageMedia], // Mostrar la puntuación promedio
             backgroundColor: ['rgba(75, 192, 192, 0.2)'],
             borderColor: ['rgba(75, 192, 192, 1)'],
@@ -368,6 +368,7 @@ export class PdfComponent implements OnInit {
     }
   }
 
+  //Método para obtener las valoraciones de un servicio concreto
   getRatingFromService(id: number) {
     this.citeService.getRatingService(id).subscribe({
       next: (data) => {
@@ -398,18 +399,11 @@ export class PdfComponent implements OnInit {
    */
   getFormattedDate(date: string): string {
     const newDate = new Date(date); // Crea el objeto Date con la fecha
-    const newDateWithAddedDay = addDays(newDate, 1);
-
+  
     // Formateamos la fecha agregando ceros a las partes de la fecha
-    const fechaFormateada = `${newDateWithAddedDay.getFullYear()}-${(
-      newDateWithAddedDay.getMonth() + 1
-    )
+    const fechaFormateada = `${newDate.getFullYear()}-${(newDate.getMonth() + 1)
       .toString()
-      .padStart(2, '0')}-${newDateWithAddedDay
-      .getDate()
-      .toString()
-      .padStart(2, '0')}`;
-
+      .padStart(2, '0')}-${newDate.getDate().toString().padStart(2, '0')}`;
     return fechaFormateada;
   }
 
