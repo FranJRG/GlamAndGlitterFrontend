@@ -121,7 +121,7 @@ ul li:not(:first-child) {
   font-weight: bold;
 }
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 500px) {
 
   .navbar-container{
     margin-left: 2px !important;
