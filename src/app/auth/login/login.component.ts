@@ -59,7 +59,7 @@ export class LoginComponent {
             }).showToast();
           }else{
             Toastify({
-              text: "Username or password incorrect",
+              text: "Wrong username or password",
               duration: 3000, // Duración en milisegundos
               gravity: "bottom", // 'top' o 'bottom'
               position: 'center', // 'left', 'center' o 'right'

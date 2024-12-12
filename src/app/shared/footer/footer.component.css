@@ -13,7 +13,7 @@ footer {
 
 @media only screen and (max-width: 480px) {
   footer{
-    width: 92%;
+    width: 100%;
   }
 }
 

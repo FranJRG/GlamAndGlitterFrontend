@@ -64,9 +64,18 @@
       }
     }
     <select name="categories" class="categoriesSelect" id="categories" (change)="getServices($event)">
+      @for (category of categories; track $index) {
+        @if (this.id != 0 && this.id != undefined && category.id == this.id) {
+          <option selected value="{{this.id}}">{{category.name}}</option>
+        }
+      }
       <option value="all">All categories</option>
       @for (category of categories; track $index) {
-        <option value="{{category.id}}">{{category.name}}</option>
+        @if (this.id != 0 && this.id != undefined && category.id != this.id) {
+          <option value="{{category.id}}">{{category.name}}</option>
+        }@else if (this.id == 0 || this.id == undefined) {
+          <option value="{{category.id}}">{{category.name}}</option>
+        }      
       }
     </select>
   </div>
