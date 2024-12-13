@@ -78,6 +78,9 @@ h2 {
 }
 
 .service-card h3 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 22px;
   margin: 15px 0 10px 0;
   color: #333;
@@ -163,7 +166,7 @@ select:focus {
   display: none;
 }
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 500px) {
 
   .service-card {
     border-radius: 15px;
