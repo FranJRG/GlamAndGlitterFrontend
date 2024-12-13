@@ -31,7 +31,7 @@
             (change)="setSchedule(day, $event, turn.id)"
           >
             <option disabled>----Current option----</option>
-            <option value="{{ turn }}" selected>{{ turn.turn }}</option>
+            <option value="{{ turn.turn }}" selected>{{ turn.turn }}</option>
             <option disabled>----Change turn to----</option>
             @if (turn.turn === "Morning") { @if (getTurnsForDay(day).length ==
             1) {

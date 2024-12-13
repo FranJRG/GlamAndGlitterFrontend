@@ -10,7 +10,8 @@ export class ScheduleService {
 
   constructor(private http:HttpClient) { }
 
-  url:string = "https://glamandglitter.onrender.com";
+  //url:string = "https://glamandglitter.onrender.com";
+  url:string = "http://localhost:8080";
 
   getWorkerSchedule(id:number):Observable<EmployeeSchedule[]>{
     return this.http.get<EmployeeSchedule[]>(`${this.url}/userSchedule/${id}`);

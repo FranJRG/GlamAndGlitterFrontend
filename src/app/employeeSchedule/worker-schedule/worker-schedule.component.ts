@@ -66,42 +66,52 @@ export class WorkerScheduleComponent implements OnInit{
     return this.schedules.some(schedule => schedule.day === day);
   }
 
-  updateWorkerSchedule(){
-    if(this.updateSchedule.length > 0){
-      this.updateSchedule.forEach((schedule:EmployeeSchedule) => {
-        let turn = schedule.turn;
-        let day = schedule.day;
-        let idUser = this.id;
-        this.scheduleService.updateSchedule(schedule.id,day,turn,this.id).subscribe({
-          next : (data) => 
+  updateWorkerSchedule() {
+    if (this.updateSchedule.length > 0) {
+      //Comprobamos la cantidad de cambios que queremos hacer
+      let pendingUpdates = this.updateSchedule.length;
+  
+      this.updateSchedule.forEach((schedule: EmployeeSchedule) => {
+        this.scheduleService.updateSchedule(schedule.id, schedule.day, schedule.turn, this.id).subscribe({
+          next: () => {
+            // Mostrar mensaje de éxito
             Toastify({
-              text:'Schedule updated succesfully',
+              text: `Schedule for ${schedule.day} updated successfully to ${schedule.turn}`,
               duration: 3000,
               gravity: 'bottom',
               position: 'center',
               backgroundColor: 'linear-gradient(to right, #4CAF50, #2E7D32)',
-            }).showToast()
-          ,
-          error : (err) => 
+            }).showToast();
+  
+            // Reducir el número de actualizaciones pendientes una vez completado y cuando llegue a 0 refrescamos la lista
+            pendingUpdates--;
+            if (pendingUpdates === 0) {
+              this.getWorkerSchedule(); // Actualiza los datos desde el servidor
+            }
+          },
+          error: (err) => {
             Toastify({
-              text: 'Something go bad: ' + err.error.message,
+              text: 'Something went wrong: ' + err.error.message,
               duration: 3000,
               gravity: 'bottom',
               position: 'center',
               backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
-            }).showToast(),
-        })
-        this.getWorkerSchedule();
-      })
-    }else{
+            }).showToast();
+          },
+        });
+      });
+  
+      // Limpiar los cambios pendientes
+      this.updateSchedule = [];
+    } else {
       Toastify({
-        text: 'No changes have been commited',
+        text: 'No changes have been committed',
         duration: 3000,
         gravity: 'bottom',
         position: 'center',
-        backgroundColor: 'linear-gradient(to right, #FF4C4C, #FF0000)',
-      }).showToast()
+        backgroundColor: 'linear-gradient(to right, #FF4C4C,rgb(203, 93, 14))',
+      }).showToast();
     }
-  }
+  }  
 
 }
